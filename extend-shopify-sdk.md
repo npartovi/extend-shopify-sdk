@@ -99,9 +99,13 @@ To ensure this snippet only runs when the Extend SDK is properly initialized, ad
 
 Render the snippet on the same page you added the Extend product offer div by adding the following code to that page.
 
-```javascript
+{% raw %}
+
+```markdown
 {% render ‘extend-product-integration’ %}
 ```
+
+{% endraw %}
 
 <img src="/assets/render-prod-snip.jpg" width="800" />
 
@@ -309,9 +313,13 @@ function findAll(element) {
 
 Render the snippet in template where you added your Extend cart offer div.
 
-```javascript
+{% raw %}
+
+```markdown
 {% render 'extend-cart-integration' %}
 ```
+
+{% endraw %}
 
 <img src="/assets/cart-int-start.jpg" width="800">
 
