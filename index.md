@@ -27,7 +27,7 @@ Before you start integrating with the Extend SDK you'll need to do the following
 
 From the Shopify admin, go to **Online Store** → **Themes** → **Actions** → **Duplicate**
 
-<img src="/assets/shopify-dupe.jpg" width="800" />
+<img src="assets/shopify-dupe.jpg" width="800" />
 
 <div class="info-container">
 <strong>Important note:</strong> Once you start the integration, you should treat this copied theme as your master copy. It is important to not make any changes to your live theme or publish a new theme, as those changes might interfere with the Extend integration.
