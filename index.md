@@ -474,8 +474,8 @@ You need to add this button under each product in the cart that doesn’t have a
 ```html
 <div
   id="extend-cart-offer"
-  data-extend-variant="{{ variantId }}"
-  data-extend-quantity="{{ itemQty }}"
+  data-extend-variant="{% raw %}{{ variantId }}{% endraw %}"
+  data-extend-quantity="{% raw %}{{ itemQty }}{% endraw %}"
 ></div>
 ```
 
