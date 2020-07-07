@@ -27,7 +27,7 @@ Before you start integrating with the Extend SDK you'll need to do the following
 
 From the Shopify admin, go to **Online Store** → **Themes** → **Actions** → **Duplicate**
 
-<img src="assets/shopify-dupe.jpg" />
+<img src="assets/images/shopify-dupe.jpg" />
 
 <div class="info-container">
 <strong>Important note:</strong> Once you start the integration, you should treat this copied theme as your master copy. It is important to not make any changes to your live theme or publish a new theme, as those changes might interfere with the Extend integration.
@@ -39,7 +39,7 @@ In order to configure the SDK to your store, you will need your Store Id.
 
 Go to [merchants.extend.com](https://merchants.extend.com/login)→ **Settings** → **Production/Sandbox credentials**
 
-<img src="assets/merchant-credentials.jpg" />
+<img src="assets/images/merchant-credentials.jpg" />
 
 <h2>Installation</h2>
   
@@ -53,14 +53,14 @@ Add the following scripts into your **theme.liquid** file right before the closi
 
 To verify the scripts are running correctly, **preview** your theme copy, open your browser's console, and type **Extend** or **ExtendShopify** and hit enter. Both scripts should appear in the console.
 
-<img src="assets/sdk-verify.jpg" />
+<img src="assets/images/sdk-verify.jpg" />
 
 <h1>Displaying Product Page Offers</h1>
 <div class="key-line"></div>
 
 The **Product Offer** is used to display one or more protection plan offers directly on the product page and is the shoppers first opportunity to add a warranty plan to the cart. Typically this will show 1-, 2-, and 3-year options for the same plan.
 
-<img src="assets/product-offer-view.jpg" />
+<img src="assets/images/product-offer-view.jpg" />
 
 <h2>Add the Extend Offer Element</h2>
 
@@ -70,7 +70,7 @@ Add an HTML element where you would like to place the Extend offer buttons. For 
 <div id="extend-offer">This is where the buttons will render</div>
 ```
 
-<img src="assets/extend-offer-div.jpg" />
+<img src="assets/images/extend-offer-div.jpg" />
 
 <div class="info-container">
 <strong>Pro Tip</strong>: An easy way to find where to place the parent div element is to open the dev tools on a product page and inspect an element above where you would like the cart offers to appear, copy an attribute, and search for it in one of the liquid files mentioned above.
@@ -78,7 +78,7 @@ Add an HTML element where you would like to place the Extend offer buttons. For 
 
 Verify that the div has been added to the correct spot by temporarily adding some text, saving, and previewing your product page. Once you confirm that the text is showing in the correct spot, make sure to remove it!
 
-<img src="assets/extend-offer-div-test.jpg" />
+<img src="assets/images/extend-offer-div-test.jpg" />
 
 <h2>Create custom product integration snippet</h2>
 
@@ -86,7 +86,7 @@ Inside your shopify theme code editor create a new snippet called **extend-produ
 
 **Themes** → **Snippets** → **Add a new snippet**
 
-<img src="assets/extend-prod-snip.jpg" />
+<img src="assets/images/extend-prod-snip.jpg" />
 
 To ensure this snippet only runs when the Extend SDK is properly initialized, add the following code:
 
@@ -108,7 +108,7 @@ Render the snippet on the same page you added the Extend product offer div by ad
 
 {% endraw %}
 
-<img src="assets/render-prod-snip.jpg" />
+<img src="assets/images/render-prod-snip.jpg" />
 
 <h2>Render Extend warranty buttons on product page</h2>
 
@@ -121,14 +121,14 @@ Now that the snippet is added, you can use the Extend.buttons.render() function 
   Extend.buttons.render('#extend-offer', {referenceId: {{ product.selected_or_first_available_variant.id }}})
 ```
 
-<img src="assets/render-offer.jpg" />
+<img src="assets/images/render-offer.jpg" />
 
 <div class="info-container">
 <strong>Important Note</strong>: {% raw %}<strong>{{ product.selected_or_first_available_variant.id }}</strong>{% endraw %} allows you to get the first selected `variantId` when the page loads in your Shopify store, however, this variable <strong>does not update</strong> when a user changes the variant. The next section covers how to handle that scenario.
 </div>
 Verify that the warranty buttons are rendering by previewing your theme and viewing a product that is **active** and **enabled**. If you don’t know a product that fits this criteria, you can go to the merchant portal [merchants.extend.com](https://merchants.extend.com/login) and find one.
 
-<img src="assets/render-offer-visible.jpg" />
+<img src="assets/images/render-offer-visible.jpg" />
 
 <h2>Troubleshooting Tips:</h2>
 
@@ -150,7 +150,7 @@ Whenever a shopper selects a different variant for a product, you need to pass t
 <strong>Pro Tip</strong>: A common way to find the event that fires when a product variant is changed is to look at the event listeners tied to your product options selector.
 </div>
 
-<img src="assets/evtlist-check.jpg" /> **@nima lets make this a white background**
+<img src="assets/images/evtlist-check.jpg" /> **@nima lets make this a white background**
 
 Verify that you are setting the correct variant by adding a console log right before the Extend.SetActiveProduct() function is called. This ensures you are passing the correct `variantId`. You will also notice that if you change the variant on the page, the offer buttons will re-render.
 
@@ -180,7 +180,7 @@ productForm.addEventListener("change", function () {
 
 **Example 2**: variantId in theme.js file
 
-<img src="assets/set-variant-js.jpg" />
+<img src="assets/images/set-variant-js.jpg" />
 
 <div class="info-container">
 <strong>Important Note</strong>: The variant change function may be in your Assets folder or somewhere else in your Shopify theme.
@@ -191,7 +191,7 @@ productForm.addEventListener("change", function () {
 
 The **Modal Offer** can be used as an interstitial modal before transitioning the customer to a new page after adding a product to cart, or as an opportunity on the cart page. In the example below, the offer modal appears after the customer added the product to the cart without selecting one of the offered protection plans.
 
-<img src="assets/offer-modal.jpg">
+<img src="assets/images/offer-modal.jpg">
 
 <h2>Add event listener to add to cart button</h2>
 
@@ -234,7 +234,7 @@ addToCartButton.addEventListener("click", function (e) {
 });
 ```
 
-<img src="assets/prod-add-to-cart.jpg">
+<img src="assets/images/prod-add-to-cart.jpg">
 
 To launch the offer modal if a warranty is not selected, set `modal: true`. If you do not want to launch the offer modal, set it `modal: false`.
 
@@ -252,7 +252,7 @@ var productForm = document.querySelector(".product-form");
 productForm.submit();
 ```
 
-<img src="assets/product-submit.jpg">
+<img src="assets/images/product-submit.jpg">
 
 **Ajax-carts:**
 
@@ -265,7 +265,7 @@ The cart offer is the last chance your shoppers have to add an extended warranty
 
 **Cart Offer Example**:
 
-<img src="assets/cart-offer-preview.jpg">
+<img src="assets/images/cart-offer-preview.jpg">
 
 <h2>Add the Extend Cart Offer Element</h2>
 
@@ -281,13 +281,13 @@ You need to add this button under each product in the cart that doesn’t have a
 ></div>
 ```
 
-<img src="assets/cart-offer-div.jpg">
+<img src="assets/images/cart-offer-div.jpg">
 
 Verify that the div has been added to the correct spot by temporarily adding some text, saving, and previewing your cart page. Once you confirm that the text is showing in the correct spot, make sure to remove it!
 
 You also need to verify that the `quantity` and `variantId` are being passed into the cart offer div correctly. In your preview, navigate to your cart and inspect the page. You won’t be able to see the Extend cart offer buttons on the page, but you should see the HTML element.
 
-<img src="assets/cart-offer-verify.jpg">
+<img src="assets/images/cart-offer-verify.jpg">
 
 <h2>Create custom cart integration snippet</h2>
 
@@ -295,7 +295,7 @@ Inside your shopify theme code editor create a new snippet called **extend-cart-
 
 **Themes** → **Snippets** → **Add a new snippet**
 
-<img src="assets/create-cart-int.jpg">
+<img src="assets/images/create-cart-int.jpg">
 
 To ensure this snippet only runs when the Extend SDK is properly initialized, add the following code:
 
@@ -376,11 +376,11 @@ function(err) {
   }
 ```
 
-<img src="assets/cart-int-render-button.jpg">
+<img src="assets/images/cart-int-render-button.jpg">
 
 Verify the cart offer buttons are rendering correctly by previewing your theme and going to your cart page that has an active and enabled product in it. You should see the Extend cart offer button in the cart, and when you click it, it should launch the offer modal.
 
-<img src="assets/cart-offer-preview.jpg">
+<img src="assets/images/cart-offer-preview.jpg">
 
 <h1>Extend Cart Normalization</h1>
 <div class="key-line"></div>
@@ -408,7 +408,7 @@ ExtendShopify.normalizeCart({ cart: cart, balance: false }, function (
 
 `ExtendShopify.normalizeCart()` will return a promise that will give you the `data` and `err` object to check if the cart needs to be normalized. If the `data` object exists and the `data.updates` is set to true, you will then call your function to refresh the cart page. Typically reloading the page will work for most Shopify cart pages.
 
-<img src="assets/cart-normalization.jpg">
+<img src="assets/images/cart-normalization.jpg">
 
 <h2>Balanced vs Unbalanced Carts</h2>
 
@@ -425,7 +425,7 @@ If you are using an Ajax cart, the page does not reload whenever an item’s qua
 
 Wrap the cart integration code in a function. ex `initializeCartOffer()`. Then call the `initializeCartOffer()` function at the bottom of your script to run on page load.
 
-<img src="assets/ajax-normalization-1.jpg">
+<img src="assets/images/ajax-normalization-1.jpg">
 
 Now you need to dispatch an event whenever an item in the cart gets updated. To do this, first add an eventListener in your cart integration script.
 
@@ -444,14 +444,14 @@ window.addEventListener("normalizeCart", function () {
 });
 ```
 
-<img src="assets/ajax-normalization-2.jpg">
+<img src="assets/images/ajax-normalization-2.jpg">
 
 Now that you have the eventListener initialized, you need to find where in your code to dispatch a custom event. Find where in your Shopify theme the quantity of a cart item is updated and dispatch an event back to the cart integration script to pull in the new shopify cart object.
 
 **Example:**
 In the example below, the quantity of a cart item is being updated from the `updateCart()` function in the site.js file:
 
-<img src="assets/ajax-normalization-3.jpg">
+<img src="assets/images/ajax-normalization-3.jpg">
 
 <h1>Ajax Side Cart Integration</h1>
 <div class="key-line"></div>
@@ -459,8 +459,8 @@ In the example below, the quantity of a cart item is being updated from the `upd
 Ajax side-carts are quite common, and the integration is similar to that of a regular Ajax cart.
 
 <div style="display: flex; width:800px;" >
-  <img src="assets/ajax-side-cart-1.jpg" width="50%">
-  <img src="assets/ajax-side-cart-2.jpg" width="50%">
+  <img src="assets/images/ajax-side-cart-1.jpg" width="50%">
+  <img src="assets/images/ajax-side-cart-2.jpg" width="50%">
 </div>
 
 <h2>Add the Extend Cart Offer Element</h2>
@@ -479,7 +479,7 @@ You need to add this button under each product in the cart that doesn’t have a
 ></div>
 ```
 
-<img src="assets/ajax-side-cart-div.jpg" width="800px">
+<img src="assets/images/ajax-side-cart-div.jpg" width="800px">
 
 <h2>Create custom ajax side-cart integration snippet</h2>
 
@@ -487,7 +487,7 @@ Inside your shopify theme code editor create a new snippet called **extend-ajax-
 
 **Themes** → **Snippets** → **Add a new snippet**
 
-<img src="assets/create-ajax-side-cart-int.jpg" width="800px">
+<img src="assets/images/create-ajax-side-cart-int.jpg" width="800px">
 
 <h2>Render ajax side-cart offer buttons</h2>
 
@@ -504,7 +504,7 @@ window.addEventListener("refreshSideCart", function () {
 });
 ```
 
-<img src="assets/ajax-side-cart-snip.jpg" width="800px">
+<img src="assets/images/ajax-side-cart-snip.jpg" width="800px">
 
 <h2>Adding warranty from ajax side cart</h2>
 
@@ -516,7 +516,7 @@ Whenever an Extended warranty is added from the ajax side cart, you need to rebu
 window.dispatchEvent(new CustomEvent("cartItemUpdated"));
 ```
 
-<img src="assets/ajax-side-cart-add.jpg" width="800px">
+<img src="assets/images/ajax-side-cart-add.jpg" width="800px">
 
 In the example below we add our eventListener to allow us to run the function that builds the ajax cart. This eventListener will be ran from the custom dispatched event we sent in the previous example.
 
@@ -530,21 +530,21 @@ document.addEventListener("cartItemUpdated", function (e) {
 });
 ```
 
-<img src="assets/ajax-side-cart-update.jpg" width="800px">
+<img src="assets/images/ajax-side-cart-update.jpg" width="800px">
 
 Once the ajax-side-cart is rebuilt, you may also need to dispatch an event back to the ajax side-cart-integration snippet to allow for the script to be run again.
-<img src="assets/ajax-side-cart-rerun-2.jpg" width="800px">
+<img src="assets/images/ajax-side-cart-rerun-2.jpg" width="800px">
 
 <h2>Ajax side-cart normalization</h2>
 
 In order to normalize the ajax side-cart, find where in your theme the ajax side-cart is rebuilt/updated when the quantity of a product is changed and dispatch a custom event to the same eventListener that was setup in your ajax-cart-integration script
 
-<img src="assets/ajax-side-cart-rerun.jpg" width="800px">
+<img src="assets/images/ajax-side-cart-rerun.jpg" width="800px">
 
 **Example**
 
 Once our script is reran and we determine we need to normalize the cart, we will dispatch an event to the themes js file to allow for the ajax side cart to be rebuild/refreshed with the new Shopify cart object.
-<img src="assets/ajax-side-cart-dispatch.jpg" width="800px">
+<img src="assets/images/ajax-side-cart-dispatch.jpg" width="800px">
 
 <h2>Final Review</h2>
 
