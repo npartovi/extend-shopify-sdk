@@ -90,10 +90,9 @@ Inside your shopify theme code editor create a new snippet called **extend-produ
 
 To ensure this snippet only runs when the Extend SDK is properly initialized, add the following code:
 
-```javascript
+```html
 <script>
-  if(window.Extend && window.ExtendShopify)
-  {
+  if (window.Extend && window.ExtendShopify) {
     // Integration code will go here
   }
 </script>
@@ -300,10 +299,9 @@ Inside your shopify theme code editor create a new snippet called **extend-cart-
 
 To ensure this snippet only runs when the Extend SDK is properly initialized, add the following code:
 
-```javascript
+```html
 <script>
-  if (window.Extend && window.ExtendShopify)
-  {
+  if (window.Extend && window.ExtendShopify) {
     // cart integration code goes here
   }
 </script>
