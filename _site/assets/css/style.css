@@ -371,6 +371,8 @@ a.btn { display: none; }
 
 body { font-family: "Nunito Sans", sans-serif; }
 
+body .main-content img { padding-top: 16px; padding-bottom: 16px; }
+
 body .main-content h1 { color: #090637; font-weight: 800; font-size: 26px; }
 
 body .main-content h2 { color: #090637; font-size: 22px; font-weight: 700; }

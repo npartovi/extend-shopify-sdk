@@ -27,6 +27,10 @@ a.btn {
 body {
   font-family: $font-family;
   .main-content {
+    img {
+      padding-top: 16px;
+      padding-bottom: 16px;
+    }
     h1 {
       color: $title-color;
       font-weight: $extra-bold-font;
