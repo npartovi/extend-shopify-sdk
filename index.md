@@ -510,7 +510,9 @@ window.addEventListener("refreshSideCart", function () {
 
 Whenever an Extended warranty is added from the ajax side cart, you need to rebuild your ajax side cart with the new shopify cart object as well as call the ajax-side-cart-integration script. This will add the warranty to the cart as well as remove the cart offer button from the product in your side-cart.
 
-**Pro Tip**: You can add the eventListener to the ajax-side-cart-integration script and dispatch custom events from your theme’s javascript file. This will allow you to rerun the snippet whenever a products quantity is changed or if the product is removed.
+<div class="info-container">
+<strong>Pro Tip:</strong> You can add the eventListener to the ajax-side-cart-integration script and dispatch custom events from your theme’s javascript file. This will allow you to rerun the snippet whenever a products quantity is changed or if the product is removed.
+</div>
 
 ```javascript
 window.dispatchEvent(new CustomEvent("cartItemUpdated"));
