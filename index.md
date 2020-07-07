@@ -483,7 +483,7 @@ You need to add this button under each product in the cart that doesn’t have a
 
 <img src="assets/ajax-side-cart-div.jpg" width="800px">
 
-### Create custom ajax side-cart integration snippet
+<h2>Create custom ajax side-cart integration snippet</h2>
 
 Inside your shopify theme code editor create a new snippet called **extend-ajax-side-cart-integration**. This is where you will call the Extend Apis to handle displaying offers on the product page and adding the warranties to the cart.
 
@@ -491,7 +491,7 @@ Inside your shopify theme code editor create a new snippet called **extend-ajax-
 
 <img src="assets/create-ajax-side-cart-int.jpg" width="800px">
 
-### Render ajax side-cart offer buttons
+<h2>Render ajax side-cart offer buttons</h2>
 
 Copy the code from the **extend-cart-integration** snippet that you created and paste it into the **extend-ajax-side-cart-integration** snippet. This will render the cart offer buttons to your products in your ajax side-cart.
 
