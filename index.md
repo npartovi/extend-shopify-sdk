@@ -331,7 +331,7 @@ var variantId = el.getAttribute("data-extend-variant");
 var quantity = el.getAttribute("data-extend-quantity");
 ```
 
-Use the `warrantyAlreadyInCart()` function to determine if you should show the offer button. **@nima I updated this line**
+Use the `warrantyAlreadyInCart()` function to determine if you should show the offer button.
 
 ```javascript
 if (ExtendShopify.warrantyAlreadyInCart(variantId, cart.items)) {
@@ -548,4 +548,4 @@ Once our script is reran and we determine we need to normalize the cart, we will
 
 <h2>Final Review</h2>
 
-After you have completed the above you should be ready to start selling extended warranties on your store. Before you publish your theme, please make sure to go through the integration checklist, which you can get from your merchant success manager if you have not already received it. **@nima we need to add a link here**
+After you have completed the above you should be ready to start selling extended warranties on your store. Before you publish your theme, please make sure to go through the integration checklist, which you can get from your merchant success manager if you have not already received it. Download here <a href="assets/files/integration-checklist.pdf" target="_blank">Integration Checklist</a>
