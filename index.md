@@ -199,11 +199,11 @@ The **Modal Offer** can be used as an interstitial modal before transitioning th
 Select the add to cart button element on the product page using vanillaJS or jQuery and add an event listener.
 
 ```javascript
-var addToCartButton = document.querySelector( ‘button[name=“add”]’)
+var addToCartButton = document.querySelector("button[name='add']");
 ```
 
 ```javascript
-addToCartButton.addEventListener(‘click’, function(e){})
+addToCartButton.addEventListener("click", function (e) {});
 ```
 
 In order to add the warranty to the cart or launch the offer modal, you need to prevent the default behavior of the add to cart button. You can do this by adding an `event.preventDefault()` or `event.stopImmediatePropagation()` inside the eventListener.
@@ -302,7 +302,7 @@ To ensure this snippet only runs when the Extend SDK is properly initialized, ad
 
 ```javascript
 <script>
-  if (window.Extend && window.ExtendShopify){" "}
+  if (window.Extend && window.ExtendShopify)
   {
     // cart integration code goes here
   }
