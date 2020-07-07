@@ -479,7 +479,7 @@ You need to add this button under each product in the cart that doesn’t have a
 ></div>
 ```
 
-<img src="assets/images/ajax-side-cart-div.jpg" width="800px">
+<img src="assets/images/ajax-side-cart-div.jpg">
 
 <h2>Create custom ajax side-cart integration snippet</h2>
 
@@ -487,7 +487,7 @@ Inside your shopify theme code editor create a new snippet called **extend-ajax-
 
 **Themes** → **Snippets** → **Add a new snippet**
 
-<img src="assets/images/create-ajax-side-cart-int.jpg" width="800px">
+<img src="assets/images/create-ajax-side-cart-int.jpg">
 
 <h2>Render ajax side-cart offer buttons</h2>
 
@@ -504,7 +504,7 @@ window.addEventListener("refreshSideCart", function () {
 });
 ```
 
-<img src="assets/images/ajax-side-cart-snip.jpg" width="800px">
+<img src="assets/images/ajax-side-cart-snip.jpg">
 
 <h2>Adding warranty from ajax side cart</h2>
 
@@ -516,7 +516,7 @@ Whenever an Extended warranty is added from the ajax side cart, you need to rebu
 window.dispatchEvent(new CustomEvent("cartItemUpdated"));
 ```
 
-<img src="assets/images/ajax-side-cart-add.jpg" width="800px">
+<img src="assets/images/ajax-side-cart-add.jpg">
 
 In the example below we add our eventListener to allow us to run the function that builds the ajax cart. This eventListener will be ran from the custom dispatched event we sent in the previous example.
 
@@ -530,21 +530,21 @@ document.addEventListener("cartItemUpdated", function (e) {
 });
 ```
 
-<img src="assets/images/ajax-side-cart-update.jpg" width="800px">
+<img src="assets/images/ajax-side-cart-update.jpg">
 
 Once the ajax-side-cart is rebuilt, you may also need to dispatch an event back to the ajax side-cart-integration snippet to allow for the script to be run again.
-<img src="assets/images/ajax-side-cart-rerun-2.jpg" width="800px">
+<img src="assets/images/ajax-side-cart-rerun-2.jpg">
 
 <h2>Ajax side-cart normalization</h2>
 
 In order to normalize the ajax side-cart, find where in your theme the ajax side-cart is rebuilt/updated when the quantity of a product is changed and dispatch a custom event to the same eventListener that was setup in your ajax-cart-integration script
 
-<img src="assets/images/ajax-side-cart-rerun.jpg" width="800px">
+<img src="assets/images/ajax-side-cart-rerun.jpg">
 
 **Example**
 
 Once our script is reran and we determine we need to normalize the cart, we will dispatch an event to the themes js file to allow for the ajax side cart to be rebuild/refreshed with the new Shopify cart object.
-<img src="assets/images/ajax-side-cart-dispatch.jpg" width="800px">
+<img src="assets/images/ajax-side-cart-dispatch.jpg">
 
 <h2>Final Review</h2>
 
