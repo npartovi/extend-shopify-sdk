@@ -1,4 +1,4 @@
-I"�<h1>Overview</h1>
+I"ѳ<h1>Overview</h1>
 
 <hr />
 
@@ -55,7 +55,8 @@
 <p><img src="assets/images/sdk-verify.jpg" /></p>
 
 <h1>Displaying Product Page Offers</h1>
-<div class="key-line"></div>
+
+<hr />
 
 <p>The <strong>Product Offer</strong> is used to display one or more protection plan offers directly on the product page and is the shoppers first opportunity to add a warranty plan to the cart. Typically this will show 1-, 2-, and 3-year options for the same plan.</p>
 
@@ -180,7 +181,8 @@
 </div>
 
 <h1>Offer Modal and Adding Warranties to the Cart</h1>
-<div class="key-line"></div>
+
+<hr />
 
 <p>The <strong>Modal Offer</strong> can be used as an interstitial modal before transitioning the customer to a new page after adding a product to cart, or as an opportunity on the cart page. In the example below, the offer modal appears after the customer added the product to the cart without selecting one of the offered protection plans.</p>
 
@@ -366,7 +368,8 @@
 <p><img src="assets/images/cart-offer-preview.jpg" /></p>
 
 <h1>Extend Cart Normalization</h1>
-<div class="key-line"></div>
+
+<hr />
 
 <p>As part of the checkout process, customers often update product quantities in their cart. The cart normalization feature will automatically adjust the quantity of Extend Protection Plans as the customer adjusts the quantity of the product they relate to. If a customer increases or decreases the quantity of products, the quantity for the related warranties in the cart should increase or decrease as well. In addition, if a customer has completely removed a product from the cart, any related warranties should be removed from the cart as well so the customer does not accidentally purchase a protection plan without a product.</p>
 
@@ -438,7 +441,8 @@ In the example below, the quantity of a cart item is being updated from the <cod
 <p><img src="assets/images/ajax-normalization-3.jpg" /></p>
 
 <h1>Ajax Side Cart Integration</h1>
-<div class="key-line"></div>
+
+<hr />
 
 <p>Ajax side-carts are quite common, and the integration is similar to that of a regular Ajax cart.</p>
 
@@ -492,7 +496,9 @@ In the example below, the quantity of a cart item is being updated from the <cod
 
 <p>Whenever an Extended warranty is added from the ajax side cart, you need to rebuild your ajax side cart with the new shopify cart object as well as call the ajax-side-cart-integration script. This will add the warranty to the cart as well as remove the cart offer button from the product in your side-cart.</p>
 
-<p><strong>Pro Tip</strong>: You can add the eventListener to the ajax-side-cart-integration script and dispatch custom events from your theme’s javascript file. This will allow you to rerun the snippet whenever a products quantity is changed or if the product is removed.</p>
+<div class="info-container">
+<strong>Pro Tip:</strong> You can add the eventListener to the ajax-side-cart-integration script and dispatch custom events from your theme’s javascript file. This will allow you to rerun the snippet whenever a products quantity is changed or if the product is removed.
+</div>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">window</span><span class="p">.</span><span class="nx">dispatchEvent</span><span class="p">(</span><span class="k">new</span> <span class="nx">CustomEvent</span><span class="p">(</span><span class="dl">"</span><span class="s2">cartItemUpdated</span><span class="dl">"</span><span class="p">));</span>
 </code></pre></div></div>

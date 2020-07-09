@@ -1,4 +1,4 @@
-I"w�<h1>Overview</h1>
+I"�<h1>Overview</h1>
 
 <hr />
 
@@ -55,7 +55,8 @@
 <p><img src="assets/images/sdk-verify.jpg" /></p>
 
 <h1>Displaying Product Page Offers</h1>
-<div class="key-line"></div>
+
+<hr />
 
 <p>The <strong>Product Offer</strong> is used to display one or more protection plan offers directly on the product page and is the shoppers first opportunity to add a warranty plan to the cart. Typically this will show 1-, 2-, and 3-year options for the same plan.</p>
 
@@ -180,7 +181,8 @@
 </div>
 
 <h1>Offer Modal and Adding Warranties to the Cart</h1>
-<div class="key-line"></div>
+
+<hr />
 
 <p>The <strong>Modal Offer</strong> can be used as an interstitial modal before transitioning the customer to a new page after adding a product to cart, or as an opportunity on the cart page. In the example below, the offer modal appears after the customer added the product to the cart without selecting one of the offered protection plans.</p>
 
@@ -366,7 +368,8 @@
 <p><img src="assets/images/cart-offer-preview.jpg" /></p>
 
 <h1>Extend Cart Normalization</h1>
-<div class="key-line"></div>
+
+<hr />
 
 <p>As part of the checkout process, customers often update product quantities in their cart. The cart normalization feature will automatically adjust the quantity of Extend Protection Plans as the customer adjusts the quantity of the product they relate to. If a customer increases or decreases the quantity of products, the quantity for the related warranties in the cart should increase or decrease as well. In addition, if a customer has completely removed a product from the cart, any related warranties should be removed from the cart as well so the customer does not accidentally purchase a protection plan without a product.</p>
 
@@ -462,7 +465,7 @@ In the example below, the quantity of a cart item is being updated from the <cod
 <span class="nt">&gt;&lt;/div&gt;</span>
 </code></pre></div></div>
 
-<p><img src="assets/images/ajax-side-cart-div.jpg" width="800px" /></p>
+<p><img src="assets/images/ajax-side-cart-div.jpg" /></p>
 
 <h2>Create custom ajax side-cart integration snippet</h2>
 
@@ -470,7 +473,7 @@ In the example below, the quantity of a cart item is being updated from the <cod
 
 <p><strong>Themes</strong> → <strong>Snippets</strong> → <strong>Add a new snippet</strong></p>
 
-<p><img src="assets/images/create-ajax-side-cart-int.jpg" width="800px" /></p>
+<p><img src="assets/images/create-ajax-side-cart-int.jpg" /></p>
 
 <h2>Render ajax side-cart offer buttons</h2>
 
@@ -486,18 +489,20 @@ In the example below, the quantity of a cart item is being updated from the <cod
 <span class="p">});</span>
 </code></pre></div></div>
 
-<p><img src="assets/images/ajax-side-cart-snip.jpg" width="800px" /></p>
+<p><img src="assets/images/ajax-side-cart-snip.jpg" /></p>
 
 <h2>Adding warranty from ajax side cart</h2>
 
 <p>Whenever an Extended warranty is added from the ajax side cart, you need to rebuild your ajax side cart with the new shopify cart object as well as call the ajax-side-cart-integration script. This will add the warranty to the cart as well as remove the cart offer button from the product in your side-cart.</p>
 
-<p><strong>Pro Tip</strong>: You can add the eventListener to the ajax-side-cart-integration script and dispatch custom events from your theme’s javascript file. This will allow you to rerun the snippet whenever a products quantity is changed or if the product is removed.</p>
+<div class="info-container">
+<strong>Pro Tip:</strong> You can add the eventListener to the ajax-side-cart-integration script and dispatch custom events from your theme’s javascript file. This will allow you to rerun the snippet whenever a products quantity is changed or if the product is removed.
+</div>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">window</span><span class="p">.</span><span class="nx">dispatchEvent</span><span class="p">(</span><span class="k">new</span> <span class="nx">CustomEvent</span><span class="p">(</span><span class="dl">"</span><span class="s2">cartItemUpdated</span><span class="dl">"</span><span class="p">));</span>
 </code></pre></div></div>
 
-<p><img src="assets/images/ajax-side-cart-add.jpg" width="800px" /></p>
+<p><img src="assets/images/ajax-side-cart-add.jpg" /></p>
 
 <p>In the example below we add our eventListener to allow us to run the function that builds the ajax cart. This eventListener will be ran from the custom dispatched event we sent in the previous example.</p>
 
@@ -510,23 +515,23 @@ In the example below, the quantity of a cart item is being updated from the <cod
 <span class="p">});</span>
 </code></pre></div></div>
 
-<p><img src="assets/images/ajax-side-cart-update.jpg" width="800px" /></p>
+<p><img src="assets/images/ajax-side-cart-update.jpg" /></p>
 
 <p>Once the ajax-side-cart is rebuilt, you may also need to dispatch an event back to the ajax side-cart-integration snippet to allow for the script to be run again.
-<img src="assets/images/ajax-side-cart-rerun-2.jpg" width="800px" /></p>
+<img src="assets/images/ajax-side-cart-rerun-2.jpg" /></p>
 
 <h2>Ajax side-cart normalization</h2>
 
 <p>In order to normalize the ajax side-cart, find where in your theme the ajax side-cart is rebuilt/updated when the quantity of a product is changed and dispatch a custom event to the same eventListener that was setup in your ajax-cart-integration script</p>
 
-<p><img src="assets/images/ajax-side-cart-rerun.jpg" width="800px" /></p>
+<p><img src="assets/images/ajax-side-cart-rerun.jpg" /></p>
 
 <p><strong>Example</strong></p>
 
 <p>Once our script is reran and we determine we need to normalize the cart, we will dispatch an event to the themes js file to allow for the ajax side cart to be rebuild/refreshed with the new Shopify cart object.
-<img src="assets/images/ajax-side-cart-dispatch.jpg" width="800px" /></p>
+<img src="assets/images/ajax-side-cart-dispatch.jpg" /></p>
 
 <h2>Final Review</h2>
 
-<p>After you have completed the above you should be ready to start selling extended warranties on your store. Before you publish your theme, please make sure to go through the integration checklist, which you can get from your merchant success manager if you have not already received it. Download here<a href="assets/files/integration-checklist.pdf" target="_blank">Integration Checklist</a></p>
+<p>After you have completed the above you should be ready to start selling extended warranties on your store. Before you publish your theme, please make sure to go through the integration checklist, which you can get from your merchant success manager if you have not already received it. Download here <a href="assets/files/integration-checklist.pdf" target="_blank">Integration Checklist</a></p>
 :ET

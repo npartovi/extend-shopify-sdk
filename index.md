@@ -56,7 +56,8 @@ To verify the scripts are running correctly, **preview** your theme copy, open y
 <img src="assets/images/sdk-verify.jpg" />
 
 <h1>Displaying Product Page Offers</h1>
-<div class="key-line"></div>
+
+---
 
 The **Product Offer** is used to display one or more protection plan offers directly on the product page and is the shoppers first opportunity to add a warranty plan to the cart. Typically this will show 1-, 2-, and 3-year options for the same plan.
 
@@ -187,7 +188,8 @@ productForm.addEventListener("change", function () {
 </div>
 
 <h1>Offer Modal and Adding Warranties to the Cart</h1>
-<div class="key-line"></div>
+
+---
 
 The **Modal Offer** can be used as an interstitial modal before transitioning the customer to a new page after adding a product to cart, or as an opportunity on the cart page. In the example below, the offer modal appears after the customer added the product to the cart without selecting one of the offered protection plans.
 
@@ -383,7 +385,8 @@ Verify the cart offer buttons are rendering correctly by previewing your theme a
 <img src="assets/images/cart-offer-preview.jpg">
 
 <h1>Extend Cart Normalization</h1>
-<div class="key-line"></div>
+
+---
 
 As part of the checkout process, customers often update product quantities in their cart. The cart normalization feature will automatically adjust the quantity of Extend Protection Plans as the customer adjusts the quantity of the product they relate to. If a customer increases or decreases the quantity of products, the quantity for the related warranties in the cart should increase or decrease as well. In addition, if a customer has completely removed a product from the cart, any related warranties should be removed from the cart as well so the customer does not accidentally purchase a protection plan without a product.
 
@@ -454,7 +457,8 @@ In the example below, the quantity of a cart item is being updated from the `upd
 <img src="assets/images/ajax-normalization-3.jpg">
 
 <h1>Ajax Side Cart Integration</h1>
-<div class="key-line"></div>
+
+---
 
 Ajax side-carts are quite common, and the integration is similar to that of a regular Ajax cart.
 
