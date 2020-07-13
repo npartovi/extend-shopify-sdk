@@ -33,9 +33,9 @@ From the Shopify admin, go to **Online Store** → **Themes** → **Actions** �
 <strong>Important note:</strong> Once you start the integration, you should treat this copied theme as your master copy. It is important to not make any changes to your live theme or publish a new theme, as those changes might interfere with the Extend integration.
 </div>
 
-<h2>Get your Store Id</h2>
+<h2>Get your Store ID</h2>
 
-In order to configure the SDK to your store, you will need your Store Id.
+In order to configure the SDK to your store, you will need your Store ID.
 
 Go to [merchants.extend.com](https://merchants.extend.com/login)→ **Settings** → **Production/Sandbox credentials**
 
@@ -115,7 +115,7 @@ Render the snippet on the same page you added the Extend product offer div by ad
 
 Now that the snippet is added, you can use the `Extend.buttons.render()` function to render the offer buttons on the product page. This function takes in 2 arguments:
 
-- The id of the `#extend-offer` element you added in the previous step
+- The ID of the `#extend-offer` element you added in the previous step
 - An object with a key of referenceId and a value of the selected product `variantId`
 
 ```javascript
@@ -324,7 +324,7 @@ Render the snippet in template where you added your Extend cart offer div.
 
 <h2>Render cart offer buttons</h2>
 
-Call the `findAll` helper method we added in the last step to find all the Extend cart offer divs. Here you need to pass in the Id of the Extend cart offer element (#extend-cart-offer).
+Call the `findAll` helper method we added in the last step to find all the Extend cart offer divs. Here you need to pass in the ID of the Extend cart offer element (#extend-cart-offer).
 
 As you iterate through each item pull out the `variantId` and the `quantity` from the **#extend-cart-offer** div data attributes.
 
