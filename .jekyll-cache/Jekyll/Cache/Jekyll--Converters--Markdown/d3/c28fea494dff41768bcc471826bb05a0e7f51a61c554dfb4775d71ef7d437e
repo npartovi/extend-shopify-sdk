@@ -1,40 +1,4 @@
-<!DOCTYPE html>
-<html lang="en-US">
-  <head>
-
-    
-    <meta charset="UTF-8">
-<!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Extend SDK Client Shopify</title>
-<meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Extend SDK Client Shopify" />
-<meta property="og:locale" content="en_US" />
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
-<meta property="og:site_name" content="Extend SDK Client Shopify" />
-<script type="application/ld+json">
-{"headline":"Extend SDK Client Shopify","url":"http://localhost:4000/","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/extend-shield-logo.png"}},"name":"Extend SDK Client Shopify","@type":"WebSite","@context":"https://schema.org"}</script>
-<!-- End Jekyll SEO tag -->
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#157878">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="stylesheet" href="/assets/css/style.css?v=">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700;800&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <a id="skip-to-content" href="#content">Skip to the content.</a>
-
-    <header class="page-header" role="banner">
-      <img src="assets/images/extend-shield-logo.png"/>
-      <h1 class="project-name">Extend SDK Client Shopify</h1>
-      <h2 class="project-tagline"></h2>
-      
-      
-    </header>
-
-    <main id="content" class="main-content" role="main">
-      <h1>Overview</h1>
+I"_�<h1>Overview</h1>
 
 <hr />
 
@@ -282,7 +246,9 @@
 
 <p><strong>Ajax-carts:</strong></p>
 
-<p><a href="#ajax-add-to-cart">Click here to review section</a></p>
+<ul>
+  <li>Markdown <strong>@nima I think we are missing this sectino</strong></li>
+</ul>
 
 <h1>Cart Offers</h1>
 <div class="key-line"></div>
@@ -297,7 +263,7 @@
 
 <p>Add an HTML element where you would like to place the Extend cart offer buttons. We recommend placing it directly below each product in the cart. In most cases, that is in the <strong>cart.liquid</strong> or the <strong>cart-template.liquid</strong> file.</p>
 
-<p>You need to add this button under each product in the cart that doesn’t have a warranty. Find where the cart items are being iterated on in the template. Then set the <code class="language-plaintext highlighter-rouge">quantity</code> and <code class="language-plaintext highlighter-rouge">variantId</code> of the product to the cart offer div data attributes:</p>
+<p>You need to add this button under each product in the cart that doesn’t have a warranty. Find where the cart items are being iterated on in the template. Then set the quantity and variant_id of the product to the cart offer div data attributes:</p>
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span>
   <span class="na">id=</span><span class="s">"cart-extend-offer"</span>
@@ -384,7 +350,7 @@
 <span class="p">});</span>
 </code></pre></div></div>
 
-<p>The <code class="language-plaintext highlighter-rouge">ExtendShopify.addPlanToCart</code> also takes a callback where you can call the add to cart function to add the product to the cart after the warranty has been added. Typically, reloading the window will suffice for the cart page.</p>
+<p>The <code class="language-plaintext highlighter-rouge">ExtendShopify.addPlanToCart</code> also takes a callback where you can call add to cart function to add the product to the cart after the warranty has been added. Typically, reloading the window will suffice for the cart page.</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// an error occurred</span>
@@ -407,7 +373,7 @@
 
 <p>As part of the checkout process, customers often update product quantities in their cart. The cart normalization feature will automatically adjust the quantity of Extend Protection Plans as the customer adjusts the quantity of the product they relate to. If a customer increases or decreases the quantity of products, the quantity for the related warranties in the cart should increase or decrease as well. In addition, if a customer has completely removed a product from the cart, any related warranties should be removed from the cart as well so the customer does not accidentally purchase a protection plan without a product.</p>
 
-<p>To leverage cart normalization, you need to add the Extend normalize function to the cart integration script. First add the <code class="language-plaintext highlighter-rouge">cart</code> variable:</p>
+<p>To leverage cart normalization, you need to add the Extend normalize function to the cart integration script. First add the cart variable:</p>
 
 <div class="language-liquid highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var cart = <span class="p">{{</span><span class="w"> </span><span class="nv">cart</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="nf">json</span><span class="w"> </span><span class="p">}}</span>
 </code></pre></div></div>
@@ -424,17 +390,17 @@
 <span class="p">});</span>
 </code></pre></div></div>
 
-<p><code class="language-plaintext highlighter-rouge">ExtendShopify.normalizeCart()</code> will return a promise that will give you the <code class="language-plaintext highlighter-rouge">data</code> and <code class="language-plaintext highlighter-rouge">err</code> object to check if the cart needs to be normalized. If the <code class="language-plaintext highlighter-rouge">data</code> object exists and the <code class="language-plaintext highlighter-rouge">data.updates</code> is set to <code class="language-plaintext highlighter-rouge">true</code>, you will then call your function to refresh the cart page. Typically reloading the page will work for most Shopify cart pages.</p>
+<p><code class="language-plaintext highlighter-rouge">ExtendShopify.normalizeCart()</code> will return a promise that will give you the <code class="language-plaintext highlighter-rouge">data</code> and <code class="language-plaintext highlighter-rouge">err</code> object to check if the cart needs to be normalized. If the <code class="language-plaintext highlighter-rouge">data</code> object exists and the <code class="language-plaintext highlighter-rouge">data.updates</code> is set to true, you will then call your function to refresh the cart page. Typically reloading the page will work for most Shopify cart pages.</p>
 
 <p><img src="assets/images/cart-normalization.jpg" /></p>
 
 <h2>Balanced vs Unbalanced Carts</h2>
 
-<p>Now that you have the normalize function in place, you need to decide if you want a <strong>balanced</strong> or <strong>unbalanced</strong> cart.</p>
+<p>Now that you have the normlaice funtion in place, you need to decide if you want a <strong>balanced</strong> or <strong>unbalanced</strong> cart.</p>
 
 <ul>
-  <li><strong>Balanced cart</strong>: Whenever the quantity of a product with a warranty associated with it is increased, the quantity of the extended warranty sku associated with it will also increase to match.</li>
-  <li><strong>Unbalanced cart</strong>: Whenever the quantity of a product with a warranty associated with it is increased, the quantity of the extended warranty sku will remain the same, and it is up to the shopper to decide if he or she wants to add warranties to protect those products.</li>
+  <li>Balanced cart: Whenever the quantity of a product with a warranty associated with it is increased, the quantity of the extended warranty sku associated with it will also increase to match.</li>
+  <li>Unbalanced cart: Whenever the quantity of a product with a warranty associated with it is increased, the quantity of the extended warranty sku will remain the same, and it is up to the shopper to decide if he or she wants to add warranties to protect those products.</li>
 </ul>
 
 <p>Balanced and unbalanced carts can be toggled with the <code class="language-plaintext highlighter-rouge">balance: true/false</code> property</p>
@@ -443,17 +409,17 @@
 
 <p>If you are using an Ajax cart, the page does not reload whenever an item’s quantity is updated. This means that in order to normalize an Ajax cart, you need to identify when the quantity of an item changes and then run the <code class="language-plaintext highlighter-rouge">Extend.normalizeCart()</code> function. Typically, changing the quantity of the items in the cart will trigger a function that will make an API call to shopify to update the cart. You need to get this new updated Shopify cart object and pass it into the <code class="language-plaintext highlighter-rouge">Extend.normalizeCart()</code> function.</p>
 
-<p>Wrap the cart integration code in a function. ex <code class="language-plaintext highlighter-rouge">initializeCartOffer()</code>. Then call the <code class="language-plaintext highlighter-rouge">initializeCartOffer()</code> function at the bottom of your script.</p>
+<p>Wrap the cart integration code in a function. ex <code class="language-plaintext highlighter-rouge">initializeCartOffer()</code>. Then call the <code class="language-plaintext highlighter-rouge">initializeCartOffer()</code> function at the bottom of your script to run on page load.</p>
 
 <p><img src="assets/images/ajax-normalization-1.jpg" /></p>
 
-<p>Now dispatch an event whenever an item in the cart gets updated. To do this, first add an eventListener in your cart integration script.</p>
+<p>Now you need to dispatch an event whenever an item in the cart gets updated. To do this, first add an eventListener in your cart integration script.</p>
 
-<p>Inside the eventListener do the following:</p>
+<p>Then, inside the eventListener you need to do the following:</p>
 
 <ul>
   <li>Make an API call to Shopify to get the most updated cart object</li>
-  <li>Reassign the cart variable to the <code class="language-plaintext highlighter-rouge">newCart</code> object you get from the callback of the API call</li>
+  <li>Reassign the cart variable to the newCart object you get from the callback of the API call</li>
   <li>Call the function where you wrapped your Extend cart integration script in</li>
 </ul>
 
@@ -474,8 +440,6 @@ In the example below, the quantity of a cart item is being updated from the <cod
 
 <p><img src="assets/images/ajax-normalization-3.jpg" /></p>
 
-<p><a name="ajax-add-to-cart"></a></p>
-
 <h1>Ajax Side Cart Integration</h1>
 
 <hr />
@@ -489,9 +453,11 @@ In the example below, the quantity of a cart item is being updated from the <cod
 
 <h2>Add the Extend Cart Offer Element</h2>
 
-<p>Add an HTML element where you would like to place the Extend cart offer buttons. We recommend placing it directly below each product in the cart. Typically this can be found in the <strong>ajax-cart-template.liquid</strong> file or in another similar template file.</p>
+<p>Add an HTML element where you would like to place the Extend cart offer buttons. Typically because of the lack of space, we recommend placing it directly below each product in the cart. Typically this can be found in the <strong>ajax-cart-template.liquid</strong> file or in another similar template file.</p>
 
-<p>You need to add this element under each product in the cart that doesn’t have a warranty. Find where the cart items are being iterated on in the template. Then set the <code class="language-plaintext highlighter-rouge">quantity</code> and <code class="language-plaintext highlighter-rouge">variantId</code> of the product to the cart offer div data attributes:</p>
+<p>&lt;div id=“cart-extend-offer”&gt;&lt;/div&gt;</p>
+
+<p>You need to add this button under each product in the cart that doesn’t have a warranty. Find where the cart items are being iterated on in the template. Then set the <code class="language-plaintext highlighter-rouge">quantity</code> and <code class="language-plaintext highlighter-rouge">variantId</code> of the product to the cart offer div data attributes:</p>
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span>
   <span class="na">id=</span><span class="s">"extend-cart-offer"</span>
@@ -512,9 +478,9 @@ In the example below, the quantity of a cart item is being updated from the <cod
 
 <h2>Render ajax side-cart offer buttons</h2>
 
-<p>Copy the code from the <strong>extend-cart-integration</strong> snippet that you created and paste it into the <strong>extend-ajax-side-cart-integration</strong> snippet. This will render the cart offer buttons in your ajax-side cart.</p>
+<p>Copy the code from the <strong>extend-cart-integration</strong> snippet that you created and paste it into the <strong>extend-ajax-side-cart-integration</strong> snippet. This will render the cart offer buttons to your products in your ajax side-cart.</p>
 
-<p>Then add an eventListener to dispatch events from your <strong>themes.js</strong> file. This will help rerun the script whenever a product is added or the cart needs to be normalized.</p>
+<p>Be sure to also add this event listener as we will use this to dispatch events from your themes js file to help rerun the script whenever a product is added or needs to be normalized.</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">refreshSideCart</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
   <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="dl">"</span><span class="s2">/cart.js</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">newCart</span><span class="p">)</span> <span class="p">{</span>
@@ -526,9 +492,9 @@ In the example below, the quantity of a cart item is being updated from the <cod
 
 <p><img src="assets/images/ajax-side-cart-snip.jpg" /></p>
 
-<h2>Adding warranty from ajax side-cart</h2>
+<h2>Adding warranty from ajax side cart</h2>
 
-<p>Whenever an extended warranty is added from the ajax side cart, you need to rebuild your ajax side-cart with the new shopify cart object as well as call the ajax-side-cart-integration script. This will add the warranty to the cart as well as remove the cart offer button from the product in your side-cart.</p>
+<p>Whenever an Extended warranty is added from the ajax side cart, you need to rebuild your ajax side cart with the new shopify cart object as well as call the ajax-side-cart-integration script. This will add the warranty to the cart as well as remove the cart offer button from the product in your side-cart.</p>
 
 <div class="info-container">
 <strong>Pro Tip:</strong> You can add the eventListener to the ajax-side-cart-integration script and dispatch custom events from your theme’s javascript file. This will allow you to rerun the snippet whenever a products quantity is changed or if the product is removed.
@@ -557,24 +523,16 @@ In the example below, the quantity of a cart item is being updated from the <cod
 
 <h2>Ajax side-cart normalization</h2>
 
-<p>In order to normalize the ajax side‐cart, find where in your theme is rebuilt/updated when the quantity of a product is changed and dispatch a custom event to the same eventListener that was setup in your ajax‐cart integration script.</p>
+<p>In order to normalize the ajax side-cart, find where in your theme the ajax side-cart is rebuilt/updated when the quantity of a product is changed and dispatch a custom event to the same eventListener that was setup in your ajax-cart-integration script</p>
 
 <p><img src="assets/images/ajax-side-cart-rerun.jpg" /></p>
 
-<p><strong>Example:</strong></p>
+<p><strong>Example</strong></p>
 
-<p>Once our script is reran and we determine we need to normalize the cart, we will dispatch an event to the theme’s js file to allow for the ajax side cart to be rebuild/refreshed with the new Shopify cart object.
+<p>Once our script is reran and we determine we need to normalize the cart, we will dispatch an event to the themes js file to allow for the ajax side cart to be rebuild/refreshed with the new Shopify cart object.
 <img src="assets/images/ajax-side-cart-dispatch.jpg" /></p>
 
 <h2>Final Review</h2>
 
-<p>Contratulations, you have finished integrating the Extend client SDK into your store! Before you publish your theme and start selling extended warranties, please make sure to go through the integration checklist, which you can get from your merchant success manager if you have not already received it. Download here <a href="assets/files/integration-checklist.pdf" target="_blank">Integration Checklist</a></p>
-
-
-      <footer class="site-footer">
-        
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
-      </footer>
-    </main>
-  </body>
-</html>
+<p>After you have completed the above you should be ready to start selling extended warranties on your store. Before you publish your theme, please make sure to go through the integration checklist, which you can get from your merchant success manager if you have not already received it. Download here <a href="assets/files/integration-checklist.pdf" target="_blank">Integration Checklist</a></p>
+:ET

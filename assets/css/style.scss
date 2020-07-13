@@ -35,6 +35,7 @@ body {
       color: $title-color;
       font-weight: $extra-bold-font;
       font-size: $title-size;
+      margin-top: 56px !important;
     }
     h2 {
       color: $title-color;
@@ -58,8 +59,8 @@ body {
     }
 
     strong {
-      font-size: $subhead-size;
-      color: $subhead-color;
+      font-size: $copy-size;
+      color: $copy-color;
     }
 
     a {
@@ -76,7 +77,8 @@ body {
 }
 
 .page-header {
-  background: white;
+  background: $info-color;
+  border-bottom: 10px solid $title-color;
 }
 
 .project-name {
