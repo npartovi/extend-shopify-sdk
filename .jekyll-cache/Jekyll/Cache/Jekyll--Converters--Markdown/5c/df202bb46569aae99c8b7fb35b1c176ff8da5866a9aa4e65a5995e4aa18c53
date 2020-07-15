@@ -1,40 +1,4 @@
-<!DOCTYPE html>
-<html lang="en-US">
-  <head>
-
-    
-    <meta charset="UTF-8">
-<!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Extend SDK Client Shopify</title>
-<meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Extend SDK Client Shopify" />
-<meta property="og:locale" content="en_US" />
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
-<meta property="og:site_name" content="Extend SDK Client Shopify" />
-<script type="application/ld+json">
-{"headline":"Extend SDK Client Shopify","url":"http://localhost:4000/","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/extend-shield-logo.png"}},"name":"Extend SDK Client Shopify","@type":"WebSite","@context":"https://schema.org"}</script>
-<!-- End Jekyll SEO tag -->
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#157878">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="stylesheet" href="/assets/css/style.css?v=">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700;800&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <a id="skip-to-content" href="#content">Skip to the content.</a>
-
-    <header class="page-header" role="banner">
-      <img src="assets/images/extend-shield-logo.png"/>
-      <h1 class="project-name">Extend SDK Client Shopify</h1>
-      <h2 class="project-tagline"></h2>
-      
-      
-    </header>
-
-    <main id="content" class="main-content" role="main">
-      <h1>Overview</h1>
+I"�<h1>Overview</h1>
 
 <hr />
 
@@ -49,7 +13,7 @@
 
 <p><strong>Before you start:</strong> Make sure you have installed the Shopify Extend App. Visit <a href="https://merchants.extend.com/login">merchants.extend.com</a> and login with your Shopify account.</p>
 
-<h2>Setting up</h2>
+<h2>Setting Up</h2>
 
 <p>Before you start integrating with the Extend SDK you’ll need to do the following:</p>
 
@@ -69,7 +33,7 @@
 <strong>Important note:</strong> Once you start the integration, you should treat this copied theme as your master copy. It is important to not make any changes to your live theme or publish a new theme, as those changes might interfere with the Extend integration.
 </div>
 
-<h2>Get your store ID</h2>
+<h2>Get your Store ID</h2>
 
 <p>In order to configure the SDK to your store, you will need your Store ID.</p>
 
@@ -90,7 +54,7 @@
 
 <p><img src="assets/images/sdk-verify.jpg" /></p>
 
-<h1>Displaying product page offers</h1>
+<h1>Displaying Product Page Offers</h1>
 
 <hr />
 
@@ -160,7 +124,7 @@
 
 <p><img src="assets/images/render-offer-visible.jpg" /></p>
 
-<h2>Troubleshooting tips:</h2>
+<h2>Troubleshooting Tips:</h2>
 
 <p>If you are having trouble seeing the warranty buttons, please check the following:</p>
 
@@ -265,7 +229,7 @@
 
 <p>To launch the offer modal if a warranty is not selected, set <code class="language-plaintext highlighter-rouge">modal: true</code>. If you do not want to launch the offer modal, set <code class="language-plaintext highlighter-rouge">modal: false</code>.</p>
 
-<h2>Resume add to cart function</h2>
+<h2>Resume Add to Cart function</h2>
 
 <p>Once the warranty has been added to the cart or the shopper has decided to not add a warranty (from the offer modal), you need to resume the add to cart function so that the product gets added to the cart. Inside the done function, trigger your theme’s product form submit function. This can be done in a number of ways, so it is up to you to determine the best solution for your theme. Below are some examples:</p>
 
@@ -293,7 +257,7 @@
 
 <p><img src="assets/images/cart-offer-preview.jpg" /></p>
 
-<h2>Add the Extend cart offer element</h2>
+<h2>Add the Extend Cart Offer Element</h2>
 
 <p>Add an HTML element where you would like to place the Extend cart offer buttons. We recommend placing it directly below each product in the cart. In most cases, that is in the <strong>cart.liquid</strong> or the <strong>cart-template.liquid</strong> file.</p>
 
@@ -433,7 +397,7 @@
 
 <p><img src="assets/images/cart-normalization.jpg" /></p>
 
-<h2>Balanced vs unbalanced carts</h2>
+<h2>Balanced vs Unbalanced Carts</h2>
 
 <p>Now that you have the normalize function in place, you need to decide if you want a <strong>balanced</strong> or <strong>unbalanced</strong> cart.</p>
 
@@ -444,7 +408,7 @@
 
 <p>Balanced and unbalanced carts can be toggled with the <code class="language-plaintext highlighter-rouge">balance: true/false</code> property</p>
 
-<h2>Ajax cart normalization</h2>
+<h2>Ajax Cart Normalization</h2>
 
 <p>If you are using an Ajax cart, the page does not reload whenever an item’s quantity is updated. This means that in order to normalize an Ajax cart, you need to identify when the quantity of an item changes and then run the <code class="language-plaintext highlighter-rouge">Extend.normalizeCart()</code> function. Typically, changing the quantity of the items in the cart will trigger a function that will make an API call to shopify to update the cart. You need to get this new updated Shopify cart object and pass it into the <code class="language-plaintext highlighter-rouge">Extend.normalizeCart()</code> function.</p>
 
@@ -492,7 +456,7 @@ In the example below, the quantity of a cart item is being updated from the <cod
   <img src="assets/images/ajax-side-cart-2.jpg" width="50%" />
 </div>
 
-<h2>Add the Extend cart offer element</h2>
+<h2>Add the Extend Cart Offer Element</h2>
 
 <p>Add an HTML element where you would like to place the Extend cart offer buttons. We recommend placing it directly below each product in the cart. Typically this can be found in the <strong>ajax-cart-template.liquid</strong> file or in another similar template file.</p>
 
@@ -571,15 +535,7 @@ In the example below, the quantity of a cart item is being updated from the <cod
 <p>Once our script is reran and we determine we need to normalize the cart, we will dispatch an event to the theme’s js file to allow for the ajax side cart to be rebuild/refreshed with the new Shopify cart object.
 <img src="assets/images/ajax-side-cart-dispatch.jpg" /></p>
 
-<h2>Final review</h2>
+<h2>Final Review</h2>
 
 <p>Contratulations, you have finished integrating the Extend client SDK into your store! Before you publish your theme and start selling extended warranties, please make sure to go through the integration checklist, which you can get from your merchant success manager if you have not already received it. Download here <a href="assets/files/integration-checklist.pdf" target="_blank">Integration Checklist</a></p>
-
-
-      <footer class="site-footer">
-        
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
-      </footer>
-    </main>
-  </body>
-</html>
+:ET

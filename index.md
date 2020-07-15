@@ -13,9 +13,9 @@ Integrating with the Extend SDK will allow you display offers and sell extended 
 - Add extended warranties to your cart
 - Support quantity matching and cart normalization for extended warranty product SKUs in your cart
 
-**Before you start:** Make sure you have installed the Shopify Extend App. Visit [merchants.extend.com](https://merchants.extend.com/login) and login with Shopify account.
+**Before you start:** Make sure you have installed the Shopify Extend App. Visit [merchants.extend.com](https://merchants.extend.com/login) and login with your Shopify account.
 
-<h2>Setting Up</h2>
+<h2>Setting up</h2>
 
 Before you start integrating with the Extend SDK you'll need to do the following:
 
@@ -33,7 +33,7 @@ From the Shopify admin, go to **Online Store** → **Themes** → **Actions** �
 <strong>Important note:</strong> Once you start the integration, you should treat this copied theme as your master copy. It is important to not make any changes to your live theme or publish a new theme, as those changes might interfere with the Extend integration.
 </div>
 
-<h2>Get your Store ID</h2>
+<h2>Get your store ID</h2>
 
 In order to configure the SDK to your store, you will need your Store ID.
 
@@ -55,7 +55,7 @@ To verify the scripts are running correctly, **preview** your theme copy, open y
 
 <img src="assets/images/sdk-verify.jpg" />
 
-<h1>Displaying Product Page Offers</h1>
+<h1>Displaying product page offers</h1>
 
 ---
 
@@ -131,7 +131,7 @@ Verify that the warranty buttons are rendering by previewing your theme and view
 
 <img src="assets/images/render-offer-visible.jpg" />
 
-<h2>Troubleshooting Tips:</h2>
+<h2>Troubleshooting tips:</h2>
 
 If you are having trouble seeing the warranty buttons, please check the following:
 
@@ -240,7 +240,7 @@ addToCartButton.addEventListener("click", function (e) {
 
 To launch the offer modal if a warranty is not selected, set `modal: true`. If you do not want to launch the offer modal, set `modal: false`.
 
-<h2>Resume Add to Cart function</h2>
+<h2>Resume add to cart function</h2>
 
 Once the warranty has been added to the cart or the shopper has decided to not add a warranty (from the offer modal), you need to resume the add to cart function so that the product gets added to the cart. Inside the done function, trigger your theme’s product form submit function. This can be done in a number of ways, so it is up to you to determine the best solution for your theme. Below are some examples:
 
@@ -269,7 +269,7 @@ The cart offer is the last chance your shoppers have to add an extended warranty
 
 <img src="assets/images/cart-offer-preview.jpg">
 
-<h2>Add the Extend Cart Offer Element</h2>
+<h2>Add the Extend cart offer element</h2>
 
 Add an HTML element where you would like to place the Extend cart offer buttons. We recommend placing it directly below each product in the cart. In most cases, that is in the **cart.liquid** or the **cart-template.liquid** file.
 
@@ -334,6 +334,12 @@ var quantity = el.getAttribute("data-extend-quantity");
 ```
 
 Use the `warrantyAlreadyInCart()` function to determine if you should show the offer button.
+
+you can access the shopify cart object by declaring this variable at the top of your page
+
+```liquid
+var cart = {% raw %}{{ cart | json }}{% endraw %}
+```
 
 ```javascript
 if (ExtendShopify.warrantyAlreadyInCart(variantId, cart.items)) {
@@ -413,7 +419,7 @@ ExtendShopify.normalizeCart({ cart: cart, balance: false }, function (
 
 <img src="assets/images/cart-normalization.jpg">
 
-<h2>Balanced vs Unbalanced Carts</h2>
+<h2>Balanced vs unbalanced carts</h2>
 
 Now that you have the normalize function in place, you need to decide if you want a **balanced** or **unbalanced** cart.
 
@@ -422,7 +428,7 @@ Now that you have the normalize function in place, you need to decide if you wan
 
 Balanced and unbalanced carts can be toggled with the `balance: true/false` property
 
-<h2>Ajax Cart Normalization</h2>
+<h2>Ajax cart normalization</h2>
 
 If you are using an Ajax cart, the page does not reload whenever an item’s quantity is updated. This means that in order to normalize an Ajax cart, you need to identify when the quantity of an item changes and then run the `Extend.normalizeCart()` function. Typically, changing the quantity of the items in the cart will trigger a function that will make an API call to shopify to update the cart. You need to get this new updated Shopify cart object and pass it into the `Extend.normalizeCart()` function.
 
@@ -469,7 +475,7 @@ Ajax side-carts are quite common, and the integration is similar to that of a re
   <img src="assets/images/ajax-side-cart-2.jpg" width="50%">
 </div>
 
-<h2>Add the Extend Cart Offer Element</h2>
+<h2>Add the Extend cart offer element</h2>
 
 Add an HTML element where you would like to place the Extend cart offer buttons. We recommend placing it directly below each product in the cart. Typically this can be found in the **ajax-cart-template.liquid** file or in another similar template file.
 
@@ -552,6 +558,6 @@ In order to normalize the ajax side‐cart, find where in your theme is rebuilt/
 Once our script is reran and we determine we need to normalize the cart, we will dispatch an event to the theme's js file to allow for the ajax side cart to be rebuild/refreshed with the new Shopify cart object.
 <img src="assets/images/ajax-side-cart-dispatch.jpg">
 
-<h2>Final Review</h2>
+<h2>Final review</h2>
 
 Contratulations, you have finished integrating the Extend client SDK into your store! Before you publish your theme and start selling extended warranties, please make sure to go through the integration checklist, which you can get from your merchant success manager if you have not already received it. Download here <a href="assets/files/integration-checklist.pdf" target="_blank">Integration Checklist</a>
