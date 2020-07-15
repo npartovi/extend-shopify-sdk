@@ -545,13 +545,13 @@ Once the ajax side-cart is rebuilt, you may also need to dispatch an event back 
 
 <h2>Ajax side-cart normalization</h2>
 
-In order to normalize the ajax side‐cart, find where in your theme is rebuilt/updated when the quantity of a product is changed and dispatch a custom event to the same eventListener that was setup in your ajax‐cart integration script.
+In order to normalize the ajax side‐cart, find where in your theme the ajax side-cart is rebuilt/updated when the quantity of a product is changed and dispatch a custom event to the same eventListener that was setup in your <strong>ajax-side‐cart-integration</strong> snippet.
 
 <img src="assets/images/ajax-side-cart-rerun.jpg">
 
 **Example:**
 
-Once our script is reran and we determine we need to normalize the cart, we will dispatch an event to the theme's js file to allow for the ajax side cart to be rebuild/refreshed with the new Shopify cart object.
+Once our script is rerun and we determine we need to normalize the cart, we will dispatch an event to the theme's js file to allow for the ajax side-cart to be rebuilt/refreshed with the new Shopify cart object.
 <img src="assets/images/ajax-side-cart-dispatch.jpg">
 
 <h2>Final review</h2>
