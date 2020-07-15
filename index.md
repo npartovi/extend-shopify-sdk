@@ -556,4 +556,4 @@ Once our script is rerun and we determine we need to normalize the cart, we will
 
 <h2>Final review</h2>
 
-Contratulations, you have finished integrating the Extend client SDK into your store! Before you publish your theme and start selling extended warranties, please make sure to go through the integration checklist, which you can get from your merchant success manager if you have not already received it. Download here <a href="assets/files/integration-checklist.pdf" target="_blank">Integration Checklist</a>
+Contratulations, you have finished integrating the Extend client SDK into your store! Before you publish your theme and start selling extended warranties, please make sure to go through the integration checklist, which you can find here <a href="assets/files/integration-checklist.pdf" target="_blank">Integration Checklist</a>
