@@ -517,7 +517,7 @@ window.addEventListener("refreshSideCart", function () {
 Whenever an extended warranty is added from the ajax side-cart, you need to rebuild your ajax side-cart with the new shopify cart object as well as call the **ajax-side-cart-integration** script. This will add the warranty to the cart as well as remove the cart offer button from the product in your side-cart.
 
 <div class="info-container">
-<strong>Pro Tip:</strong> You can add the eventListener to the **ajax-side-cart-integration** script and dispatch custom events from your theme’s javascript file. This will allow you to rerun the snippet whenever a products quantity is changed or if the product is removed.
+<strong>Pro Tip:</strong> You can add the eventListener to the <strong>ajax-side-cart-integration</strong> script and dispatch custom events from your theme’s javascript file. This will allow you to rerun the snippet whenever a products quantity is changed or if the product is removed.
 </div>
 
 ```javascript
@@ -526,7 +526,7 @@ window.dispatchEvent(new CustomEvent("cartItemUpdated"));
 
 <img src="assets/images/ajax-side-cart-add.jpg">
 
-In the example below we add our eventListener to allow us to run the function that builds the ajax cart. This eventListener will be ran from the custom dispatched event we sent in the previous example.
+In the example below we add our eventListener to allow us to run the function that builds the ajax side-cart. This eventListener will be ran from the custom dispatched event we sent in the previous example.
 
 ```javascript
 document.addEventListener("cartItemUpdated", function (e) {
@@ -540,7 +540,7 @@ document.addEventListener("cartItemUpdated", function (e) {
 
 <img src="assets/images/ajax-side-cart-update.jpg">
 
-Once the ajax-side-cart is rebuilt, you may also need to dispatch an event back to the ajax side-cart-integration snippet to allow for the script to be run again.
+Once the ajax side-cart is rebuilt, you may also need to dispatch an event back to the <strong>ajax-side-cart-integration</strong> snippet to allow for the script to be run again.
 <img src="assets/images/ajax-side-cart-rerun-2.jpg">
 
 <h2>Ajax side-cart normalization</h2>
