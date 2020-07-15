@@ -1,40 +1,4 @@
-<!DOCTYPE html>
-<html lang="en-US">
-  <head>
-
-    
-    <meta charset="UTF-8">
-<!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Extend SDK Client Shopify</title>
-<meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Extend SDK Client Shopify" />
-<meta property="og:locale" content="en_US" />
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
-<meta property="og:site_name" content="Extend SDK Client Shopify" />
-<script type="application/ld+json">
-{"headline":"Extend SDK Client Shopify","url":"http://localhost:4000/","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/extend-shield-logo.png"}},"name":"Extend SDK Client Shopify","@type":"WebSite","@context":"https://schema.org"}</script>
-<!-- End Jekyll SEO tag -->
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#157878">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="stylesheet" href="/assets/css/style.css?v=">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700;800&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <a id="skip-to-content" href="#content">Skip to the content.</a>
-
-    <header class="page-header" role="banner">
-      <img src="assets/images/extend-shield-logo.png"/>
-      <h1 class="project-name">Extend SDK Client Shopify</h1>
-      <h2 class="project-tagline"></h2>
-      
-      
-    </header>
-
-    <main id="content" class="main-content" role="main">
-      <h1>Overview</h1>
+I"߷<h1>Overview</h1>
 
 <hr />
 
@@ -243,7 +207,7 @@
 <span class="nx">e</span><span class="p">.</span><span class="nx">stopImmediatePropagation</span><span class="p">();</span>
 </code></pre></div></div>
 
-<p>Inside the add to cart eventListener, add <code class="language-plaintext highlighter-rouge">ExtendShopify.handleAddToCart()</code> function. Make sure to select <code class="language-plaintext highlighter-rouge">quantity</code> value from product form and add to <code class="language-plaintext highlighter-rouge">ExtendShopify.handleAddToCart()</code> function.</p>
+<p>Inside the add to cart eventListener, add <code class="language-plaintext highlighter-rouge">ExtendShopify.handleAddToCart()</code> function. Make sure to select <code class="language-plaintext highlighter-rouge">quantity</code> value from product form and add to <code class="language-plaintext highlighter-rouge">ExtendShopify.handleAddToCart()</code> Function.</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">addToCartButton</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">click</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
@@ -267,7 +231,7 @@
 
 <h2>Resume add to cart function</h2>
 
-<p>Once the warranty has been added to the cart or the shopper has decided to not add a warranty (from the offer modal), you need to resume the add to cart function so that the product gets added to the cart. Inside the done function, trigger your theme’s product form submit function. This can be done in a number of ways, so it is up to you to determine the best solution for your theme.</p>
+<p>Once the warranty has been added to the cart or the shopper has decided to not add a warranty (from the offer modal), you need to resume the add to cart function so that the product gets added to the cart. Inside the done function, trigger your theme’s product form submit function. This can be done in a number of ways, so it is up to you to determine the best solution for your theme. Below are some examples:</p>
 
 <p><strong>Standard add to cart flow (i.e form submission):</strong></p>
 
@@ -280,12 +244,16 @@
 
 <p><img src="assets/images/product-submit.jpg" /></p>
 
+<p><strong>Ajax-carts:</strong></p>
+
+<p><a href="#ajax-add-to-cart">Click here to review section</a></p>
+
 <h1>Cart Offers</h1>
 <div class="key-line"></div>
 
 <p>The cart offer is the last chance your shoppers have to add an extended warranty before they checkout. Here you can display an offer button next to each eligible product in the cart that does not already have a protection plan associated with it.</p>
 
-<p><strong>Cart offer example</strong>:</p>
+<p><strong>Cart Offer Example</strong>:</p>
 
 <p><img src="assets/images/cart-offer-preview.jpg" /></p>
 
@@ -343,7 +311,7 @@
 
 <p>Call the <code class="language-plaintext highlighter-rouge">findAll</code> helper method we added in the last step to find all the Extend cart offer divs. Here you need to pass in the ID of the Extend cart offer element (#extend-cart-offer).</p>
 
-<p>As you iterate through each item, pull out the <code class="language-plaintext highlighter-rouge">variantId</code> and the <code class="language-plaintext highlighter-rouge">quantity</code> from the <strong>#extend-cart-offer</strong> div data attributes.</p>
+<p>As you iterate through each item pull out the <code class="language-plaintext highlighter-rouge">variantId</code> and the <code class="language-plaintext highlighter-rouge">quantity</code> from the <strong>#extend-cart-offer</strong> div data attributes.</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">variantId</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="dl">"</span><span class="s2">data-extend-variant</span><span class="dl">"</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">quantity</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="dl">"</span><span class="s2">data-extend-quantity</span><span class="dl">"</span><span class="p">);</span>
@@ -406,7 +374,7 @@
 
 <hr />
 
-<p>As part of the checkout process, customers often update product quantities in their cart. The cart normalization feature will automatically adjust the quantity of Extend protection plans as the customer adjusts the quantity of the product they relate to. If a customer increases or decreases the quantity of products, the quantity for the related warranties in the cart should increase or decrease as well. In addition, if a customer has completely removed a product from the cart, any related warranties should be removed from the cart so the customer does not accidentally purchase a protection plan without a product.</p>
+<p>As part of the checkout process, customers often update product quantities in their cart. The cart normalization feature will automatically adjust the quantity of Extend Protection Plans as the customer adjusts the quantity of the product they relate to. If a customer increases or decreases the quantity of products, the quantity for the related warranties in the cart should increase or decrease as well. In addition, if a customer has completely removed a product from the cart, any related warranties should be removed from the cart as well so the customer does not accidentally purchase a protection plan without a product.</p>
 
 <p>To leverage cart normalization, you need to add the Extend normalize function to the cart integration script. First add the <code class="language-plaintext highlighter-rouge">cart</code> variable:</p>
 
@@ -435,7 +403,7 @@
 
 <ul>
   <li><strong>Balanced cart</strong>: Whenever the quantity of a product with a warranty associated with it is increased, the quantity of the extended warranty sku associated with it will also increase to match.</li>
-  <li><strong>Unbalanced cart</strong>: Whenever the quantity of a product with a warranty associated with it is increased, the quantity of the extended warranty sku will remain the same, and it is up to the shopper to decide if he or she wants to add warranties to protect those new products.</li>
+  <li><strong>Unbalanced cart</strong>: Whenever the quantity of a product with a warranty associated with it is increased, the quantity of the extended warranty sku will remain the same, and it is up to the shopper to decide if he or she wants to add warranties to protect those products.</li>
 </ul>
 
 <p>Balanced and unbalanced carts can be toggled with the <code class="language-plaintext highlighter-rouge">balance: true/false</code> property</p>
@@ -505,7 +473,7 @@ In the example below, the quantity of a cart item is being updated from the <cod
 
 <h2>Create custom ajax side-cart integration snippet</h2>
 
-<p>Inside your shopify theme code editor create a new snippet called <strong>extend-ajax-side-cart-integration</strong>. This is where you will call the Extend APIs to handle displaying offers on the product page and adding the warranties to the cart.</p>
+<p>Inside your shopify theme code editor create a new snippet called <strong>extend-ajax-side-cart-integration</strong>. This is where you will call the Extend Apis to handle displaying offers on the product page and adding the warranties to the cart.</p>
 
 <p><strong>Themes</strong> → <strong>Snippets</strong> → <strong>Add a new snippet</strong></p>
 
@@ -527,12 +495,12 @@ In the example below, the quantity of a cart item is being updated from the <cod
 
 <p><img src="assets/images/ajax-side-cart-snip.jpg" /></p>
 
-<h2>Adding a warranty from an ajax side-cart</h2>
+<h2>Adding warranty from ajax side-cart</h2>
 
-<p>Whenever an extended warranty is added from the ajax side-cart, you need to rebuild your ajax side-cart with the new shopify cart object as well as call the <strong>ajax-side-cart-integration</strong> script. This will add the warranty to the cart as well as remove the cart offer button from the product in your side-cart.</p>
+<p>Whenever an extended warranty is added from the ajax side cart, you need to rebuild your ajax side-cart with the new shopify cart object as well as call the ajax-side-cart-integration script. This will add the warranty to the cart as well as remove the cart offer button from the product in your side-cart.</p>
 
 <div class="info-container">
-<strong>Pro Tip:</strong> You can add the eventListener to the **ajax-side-cart-integration** script and dispatch custom events from your theme’s javascript file. This will allow you to rerun the snippet whenever a products quantity is changed or if the product is removed.
+<strong>Pro Tip:</strong> You can add the eventListener to the ajax-side-cart-integration script and dispatch custom events from your theme’s javascript file. This will allow you to rerun the snippet whenever a products quantity is changed or if the product is removed.
 </div>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">window</span><span class="p">.</span><span class="nx">dispatchEvent</span><span class="p">(</span><span class="k">new</span> <span class="nx">CustomEvent</span><span class="p">(</span><span class="dl">"</span><span class="s2">cartItemUpdated</span><span class="dl">"</span><span class="p">));</span>
@@ -570,12 +538,4 @@ In the example below, the quantity of a cart item is being updated from the <cod
 <h2>Final review</h2>
 
 <p>Contratulations, you have finished integrating the Extend client SDK into your store! Before you publish your theme and start selling extended warranties, please make sure to go through the integration checklist, which you can get from your merchant success manager if you have not already received it. Download here <a href="assets/files/integration-checklist.pdf" target="_blank">Integration Checklist</a></p>
-
-
-      <footer class="site-footer">
-        
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
-      </footer>
-    </main>
-  </body>
-</html>
+:ET

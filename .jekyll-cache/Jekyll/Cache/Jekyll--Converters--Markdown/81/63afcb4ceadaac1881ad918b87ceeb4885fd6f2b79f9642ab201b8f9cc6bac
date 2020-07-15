@@ -1,40 +1,4 @@
-<!DOCTYPE html>
-<html lang="en-US">
-  <head>
-
-    
-    <meta charset="UTF-8">
-<!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Extend SDK Client Shopify</title>
-<meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Extend SDK Client Shopify" />
-<meta property="og:locale" content="en_US" />
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
-<meta property="og:site_name" content="Extend SDK Client Shopify" />
-<script type="application/ld+json">
-{"headline":"Extend SDK Client Shopify","url":"http://localhost:4000/","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/extend-shield-logo.png"}},"name":"Extend SDK Client Shopify","@type":"WebSite","@context":"https://schema.org"}</script>
-<!-- End Jekyll SEO tag -->
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#157878">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="stylesheet" href="/assets/css/style.css?v=">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700;800&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <a id="skip-to-content" href="#content">Skip to the content.</a>
-
-    <header class="page-header" role="banner">
-      <img src="assets/images/extend-shield-logo.png"/>
-      <h1 class="project-name">Extend SDK Client Shopify</h1>
-      <h2 class="project-tagline"></h2>
-      
-      
-    </header>
-
-    <main id="content" class="main-content" role="main">
-      <h1>Overview</h1>
+I"Y�<h1>Overview</h1>
 
 <hr />
 
@@ -505,7 +469,7 @@ In the example below, the quantity of a cart item is being updated from the <cod
 
 <h2>Create custom ajax side-cart integration snippet</h2>
 
-<p>Inside your shopify theme code editor create a new snippet called <strong>extend-ajax-side-cart-integration</strong>. This is where you will call the Extend APIs to handle displaying offers on the product page and adding the warranties to the cart.</p>
+<p>Inside your shopify theme code editor create a new snippet called <strong>extend-ajax-side-cart-integration</strong>. This is where you will call the Extend Apis to handle displaying offers on the product page and adding the warranties to the cart.</p>
 
 <p><strong>Themes</strong> → <strong>Snippets</strong> → <strong>Add a new snippet</strong></p>
 
@@ -527,12 +491,12 @@ In the example below, the quantity of a cart item is being updated from the <cod
 
 <p><img src="assets/images/ajax-side-cart-snip.jpg" /></p>
 
-<h2>Adding a warranty from an ajax side-cart</h2>
+<h2>Adding warranty from ajax side-cart</h2>
 
-<p>Whenever an extended warranty is added from the ajax side-cart, you need to rebuild your ajax side-cart with the new shopify cart object as well as call the <strong>ajax-side-cart-integration</strong> script. This will add the warranty to the cart as well as remove the cart offer button from the product in your side-cart.</p>
+<p>Whenever an extended warranty is added from the ajax side cart, you need to rebuild your ajax side-cart with the new shopify cart object as well as call the ajax-side-cart-integration script. This will add the warranty to the cart as well as remove the cart offer button from the product in your side-cart.</p>
 
 <div class="info-container">
-<strong>Pro Tip:</strong> You can add the eventListener to the **ajax-side-cart-integration** script and dispatch custom events from your theme’s javascript file. This will allow you to rerun the snippet whenever a products quantity is changed or if the product is removed.
+<strong>Pro Tip:</strong> You can add the eventListener to the ajax-side-cart-integration script and dispatch custom events from your theme’s javascript file. This will allow you to rerun the snippet whenever a products quantity is changed or if the product is removed.
 </div>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">window</span><span class="p">.</span><span class="nx">dispatchEvent</span><span class="p">(</span><span class="k">new</span> <span class="nx">CustomEvent</span><span class="p">(</span><span class="dl">"</span><span class="s2">cartItemUpdated</span><span class="dl">"</span><span class="p">));</span>
@@ -570,12 +534,4 @@ In the example below, the quantity of a cart item is being updated from the <cod
 <h2>Final review</h2>
 
 <p>Contratulations, you have finished integrating the Extend client SDK into your store! Before you publish your theme and start selling extended warranties, please make sure to go through the integration checklist, which you can get from your merchant success manager if you have not already received it. Download here <a href="assets/files/integration-checklist.pdf" target="_blank">Integration Checklist</a></p>
-
-
-      <footer class="site-footer">
-        
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
-      </footer>
-    </main>
-  </body>
-</html>
+:ET
