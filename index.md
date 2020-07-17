@@ -510,7 +510,7 @@ window.addEventListener("refreshSideCart", function () {
 });
 ```
 
-<img src="assets/images/ajax-side-cart-snip.jpg">
+<img src="assets/images/ajax-side-cart-snip.png">
 
 <h2>Adding a warranty from an ajax side-cart</h2>
 
@@ -524,12 +524,12 @@ Whenever an extended warranty is added from the ajax side-cart, you need to rebu
 window.dispatchEvent(new CustomEvent("cartItemUpdated"));
 ```
 
-<img src="assets/images/ajax-side-cart-add.jpg">
+<img src="assets/images/ajax-side-cart-add.png">
 
 In the example below we add our eventListener to allow us to run the function that builds the ajax side-cart. This eventListener will be ran from the custom dispatched event we sent in the previous example.
 
 ```javascript
-document.addEventListener("cartItemUpdated", function (e) {
+window.addEventListener("cartItemUpdated", function (e) {
   Extend.buttons.instance("#extend-cart-offer").destroy();
 
   $.getJSON("/cart.js", function (cart) {
@@ -538,21 +538,21 @@ document.addEventListener("cartItemUpdated", function (e) {
 });
 ```
 
-<img src="assets/images/ajax-side-cart-update.jpg">
+<img src="assets/images/ajax-side-cart-update.png">
 
 Once the ajax side-cart is rebuilt, you may also need to dispatch an event back to the <strong>ajax-side-cart-integration</strong> snippet to allow for the script to be run again.
-<img src="assets/images/ajax-side-cart-rerun-2.jpg">
+<img src="assets/images/ajax-side-cart-rerun-2.png">
 
 <h2>Ajax side-cart normalization</h2>
 
 In order to normalize the ajax side‐cart, find where in your theme the ajax side-cart is rebuilt/updated when the quantity of a product is changed and dispatch a custom event to the same eventListener that was setup in your <strong>ajax-side‐cart-integration</strong> snippet.
 
-<img src="assets/images/ajax-side-cart-rerun.jpg">
+<img src="assets/images/ajax-side-cart-rerun.png">
 
 **Example:**
 
-Once our script is rerun and we determine we need to normalize the cart, we will dispatch an event to the theme's js file to allow for the ajax side-cart to be rebuilt/refreshed with the new Shopify cart object.
-<img src="assets/images/ajax-side-cart-dispatch.jpg">
+Once our script is rerun and we determine we need to normalize the cart, we will dispatch an event to the **extend-side-cart-integration** file to allow for the ajax side-cart to be rebuilt/refreshed with the new Shopify cart object.
+<img src="assets/images/ajax-side-cart-dispatch.png">
 
 <h2>Final review</h2>
 
