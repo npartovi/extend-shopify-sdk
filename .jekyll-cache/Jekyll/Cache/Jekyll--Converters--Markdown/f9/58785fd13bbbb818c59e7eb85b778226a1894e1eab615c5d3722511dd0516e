@@ -1,40 +1,4 @@
-<!DOCTYPE html>
-<html lang="en-US">
-  <head>
-
-    
-    <meta charset="UTF-8">
-<!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Extend SDK Client Shopify</title>
-<meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="Extend SDK Client Shopify" />
-<meta property="og:locale" content="en_US" />
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
-<meta property="og:site_name" content="Extend SDK Client Shopify" />
-<script type="application/ld+json">
-{"headline":"Extend SDK Client Shopify","url":"http://localhost:4000/","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/extend-shield-logo.png"}},"name":"Extend SDK Client Shopify","@type":"WebSite","@context":"https://schema.org"}</script>
-<!-- End Jekyll SEO tag -->
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#157878">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="stylesheet" href="/assets/css/style.css?v=">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700;800&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <a id="skip-to-content" href="#content">Skip to the content.</a>
-
-    <header class="page-header" role="banner">
-      <img src="assets/images/extend-shield-logo.png" width="150px"/>
-      <h1 class="project-name">Extend SDK Client Shopify</h1>
-      <h2 class="project-tagline"></h2>
-      
-      
-    </header>
-
-    <main id="content" class="main-content" role="main">
-      <h1>Overview</h1>
+I"p�<h1>Overview</h1>
 
 <hr />
 
@@ -96,7 +60,7 @@
 
 <p>The <strong>Product Offer</strong> is used to display one or more protection plan offers directly on the product page and is the shoppers first opportunity to add a warranty plan to the cart. Typically this will show 1-, 2-, and 3-year options for the same plan.</p>
 
-<p><img src="assets/images/product-offer-view.png" /></p>
+<p><img src="assets/images/product-offer-view.jpg" /></p>
 
 <h2>Add the Extend Offer Element</h2>
 
@@ -105,7 +69,7 @@
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"extend-offer"</span><span class="nt">&gt;</span>This is where the buttons will render<span class="nt">&lt;/div&gt;</span>
 </code></pre></div></div>
 
-<p><img src="assets/images/extend-offer-div.png" /></p>
+<p><img src="assets/images/extend-offer-div.jpg" /></p>
 
 <div class="info-container">
 <strong>Pro Tip</strong>: An easy way to find where to place the parent div element is to open the dev tools on a product page and inspect an element above where you would like the cart offers to appear, copy an attribute, and search for it in one of the liquid files mentioned above.
@@ -113,7 +77,7 @@
 
 <p>Verify that the div has been added to the correct spot by temporarily adding some text, saving, and previewing your product page. Once you confirm that the text is showing in the correct spot, make sure to remove it!</p>
 
-<p><img src="assets/images/extend-offer-div-test.png" /></p>
+<p><img src="assets/images/extend-offer-div-test.jpg" /></p>
 
 <h2>Create custom product integration snippet</h2>
 
@@ -121,7 +85,7 @@
 
 <p><strong>Themes</strong> → <strong>Snippets</strong> → <strong>Add a new snippet</strong></p>
 
-<p><img src="assets/images/extend-prod-snip.png" /></p>
+<p><img src="assets/images/extend-prod-snip.jpg" /></p>
 
 <p>To ensure this snippet only runs when the Extend SDK is properly initialized, add the following code:</p>
 
@@ -137,7 +101,7 @@
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="o">%</span> <span class="nx">render</span> <span class="dl">'</span><span class="s1">extend-product-integration</span><span class="dl">'</span> <span class="o">%</span><span class="p">}</span>
 </code></pre></div></div>
 
-<p><img src="assets/images/render-prod-snip.png" /></p>
+<p><img src="assets/images/render-prod-snip.jpg" /></p>
 
 <h2>Render Extend warranty buttons on product page</h2>
 
@@ -148,7 +112,7 @@
   <li>An object with a key of referenceId and a value of the selected product <code class="language-plaintext highlighter-rouge">variantId</code></li>
 </ul>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">Extend</span><span class="p">.</span><span class="nx">buttons</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="dl">'</span><span class="s1">#extend-offer</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span><span class="na">referenceId</span><span class="p">:</span> <span class="p">{{</span> <span class="nx">product</span><span class="p">.</span><span class="nx">selected_or_first_available_variant</span><span class="p">.</span><span class="nx">id</span> <span class="p">}}})</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">Extend</span><span class="p">.</span><span class="nx">buttons</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="dl">'</span><span class="s1">#extend-offer</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span><span class="na">referenceId</span><span class="p">:</span> <span class="p">})</span>
 </code></pre></div></div>
 
 <p><img src="assets/images/render-offer.jpg" /></p>
@@ -158,7 +122,7 @@
 </div>
 <p>Verify that the warranty buttons are rendering by previewing your theme and viewing a product that is active and enabled. If you don’t know a product that fits this criteria, you can find one in the merchant portal <a href="https://merchants.extend.com/login">merchants.extend.com</a>.</p>
 
-<p><img src="assets/images/render-offer-visible.png" /></p>
+<p><img src="assets/images/render-offer-visible.jpg" /></p>
 
 <h2>Troubleshooting tips:</h2>
 
@@ -181,7 +145,7 @@
 <strong>Pro Tip</strong>: A common way to find the event that fires when a product variant is changed is to look at the eventListeners tied to your product options selector.
 </div>
 
-<p><img src="assets/images/evtlist-check.png" /></p>
+<p><img src="assets/images/evtlist-check.jpg" /></p>
 
 <p>Verify that you are setting the correct variant by adding a console log right before the <code class="language-plaintext highlighter-rouge">Extend.SetActiveProduct()</code> function is called. This ensures you are passing the correct <code class="language-plaintext highlighter-rouge">variantId</code>. You will also notice that if you change the variant on the page, the offer buttons will re-render.</p>
 
@@ -222,7 +186,7 @@
 
 <p>The <strong>Modal Offer</strong> can be used as an interstitial modal before transitioning the customer to a new page after adding a product to cart, or as an opportunity on the cart page. In the example below, the offer modal appears after the customer added the product to the cart without selecting one of the offered protection plans.</p>
 
-<p><img src="assets/images/offer-modal.png" /></p>
+<p><img src="assets/images/offer-modal.jpg" /></p>
 
 <h2>Add eventListener to add to cart button</h2>
 
@@ -287,7 +251,7 @@
 
 <p><strong>Cart offer example</strong>:</p>
 
-<p><img src="assets/images/cart-offer-preview.png" /></p>
+<p><img src="assets/images/cart-offer-preview.jpg" /></p>
 
 <h2>Add the Extend cart offer element</h2>
 
@@ -316,7 +280,7 @@
 
 <p><strong>Themes</strong> → <strong>Snippets</strong> → <strong>Add a new snippet</strong></p>
 
-<p><img src="assets/images/create-cart-int.png" /></p>
+<p><img src="assets/images/create-cart-int.jpg" /></p>
 
 <p>To ensure this snippet only runs when the Extend SDK is properly initialized, add the following code:</p>
 
@@ -400,7 +364,7 @@
 
 <p>Verify the cart offer buttons are rendering correctly by previewing your theme and going to your cart page that has an active and enabled product in it. You should see the Extend cart offer button in the cart, and when you click it, it should launch the offer modal. When a shopper clicks this offer button, the modal described in the previous section will launch, and the shopper will be able to select which warranty plan he or she would like to purchase.</p>
 
-<p><img src="assets/images/cart-offer-preview.png" /></p>
+<p><img src="assets/images/cart-offer-preview.jpg" /></p>
 
 <h1>Extend Cart Normalization</h1>
 
@@ -509,7 +473,7 @@ In the example below, the quantity of a cart item is being updated from the <cod
 
 <p><strong>Themes</strong> → <strong>Snippets</strong> → <strong>Add a new snippet</strong></p>
 
-<p><img src="assets/images/create-ajax-side-cart-int.png" /></p>
+<p><img src="assets/images/create-ajax-side-cart-int.jpg" /></p>
 
 <h2>Render ajax side-cart offer buttons</h2>
 
@@ -570,12 +534,4 @@ In the example below, the quantity of a cart item is being updated from the <cod
 <h2>Final review</h2>
 
 <p>Contratulations, you have finished integrating the Extend client SDK into your store! Before you publish your theme and start selling extended warranties, please make sure to go through the integration checklist, which you can find here <a href="assets/files/integration-checklist.pdf" target="_blank">Integration Checklist</a></p>
-
-
-      <footer class="site-footer">
-        
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
-      </footer>
-    </main>
-  </body>
-</html>
+:ET
