@@ -19,8 +19,6 @@ To display offers on your webpage you will need:
     </dd>
 </dl>
 
-<br />
-
 # Installation
 
 ---
@@ -36,8 +34,6 @@ Add the following to your page
 
 For more options that can be passed to the `Extend.config()` function, see the [API Reference](#api-reference)
 
-<br />
-
 # Displaying Product Offers and Cart Offers
 
 ---
@@ -49,8 +45,6 @@ Place an html element anywhere you would like to see the product or cart page of
 ```
 
 This element will be used as the container for the displayed warranty offer. If you have specific width or spacing requirements, you can add them directly to this element using css or inline styles.
-
-<br />
 
 # Initialization
 
@@ -98,8 +92,6 @@ const component = Extend.buttons.instance("#extend-offer");
 
 component.setActiveProduct("<DIFFERENT_PRODUCT_REFERENCE_ID>");
 ```
-
-<br />
 
 # Adding a warranty to the cart
 
@@ -151,8 +143,6 @@ $("#add-to-cart").on("click", function (e) {
 });
 ```
 
-<br />
-
 # Displaying a Modal Offer
 
 ---
@@ -178,8 +168,6 @@ Extend.modal.open({
   },
 });
 ```
-
-<br />
 
 # Piecing it all together
 
@@ -244,8 +232,6 @@ $("#add-to-cart").on("click", function (event) {
   }
 });
 ```
-
-<br />
 
 **Full Cart Page Example**
 
