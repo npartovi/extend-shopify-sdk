@@ -1,559 +1,436 @@
----
-layout: default
----
+<p align="center">
+  <img src="https://helloextend-static-assets.s3.amazonaws.com/extend-shield-logo.png" />
+  <h1 align="center">Extend SDK Client</h1>
+</p>
 
-<h1>Overview</h1>
+[![CircleCI](https://circleci.com/gh/helloextend/extend-sdk-client/tree/master.svg?style=shield&circle-token=e1895d388f8e4156db803dc390269298c010a60a)](https://circleci.com/gh/helloextend/extend-sdk-client/tree/master)
 
----
-
-Integrating with the Extend SDK will allow you display offers and sell extended warranty contracts from your online store. This guide will walk you through how to do the following:
-
-- Install the Extend Client SDK
-- Render the extended warranty offers
-- Add extended warranties to your cart
-- Support quantity matching and cart normalization for extended warranty product SKUs in your cart
-
-**Before you start:** Make sure you have installed the Shopify Extend App. Visit [merchants.extend.com](https://merchants.extend.com/login) and login with your Shopify account.
-
-<h2>Setting up</h2>
-
-Before you start integrating with the Extend SDK you'll need to do the following:
-
-- Create a copy of your current theme
-- Get your API credentials
-- Initialize the Extend SDK
-
-<h2>Create a Copy of Your Current Theme</h2>
-
-From the Shopify admin, go to **Online Store** → **Themes** → **Actions** → **Duplicate**
-
-<img src="assets/images/shopify-dupe.png" />
-
-<div class="info-container">
-<strong>Important note:</strong> Once you start the integration, you should treat this copied theme as your master copy. It is important to not make any changes to your live theme or publish a new theme, as those changes might interfere with the Extend integration.
-</div>
-
-<h2>Get your store ID</h2>
-
-In order to configure the SDK to your store, you will need your Store ID.
-
-Go to [merchants.extend.com](https://merchants.extend.com/login)→ **Settings** → **Production/Sandbox credentials**
-
-<img src="assets/images/merchant-credentials.jpg" />
-
-<h2>Installation</h2>
-  
-Add the following scripts into your **theme.liquid** file right before the closing `</head>` tag and press **save**. 
-  
-```html  
-<script src="https://sdk.helloextend.com/extend-sdk-client/v1/extend-sdk-client.min.js"></script>  
-<script src="https://sdk.helloextend.com/extend-sdk-client-shopify-addon/v1/extend-sdk-client-shopify-addon.min.js"></script>  
-<script>Extend.config({ storeId: '<YOUR_EXTEND_STORE_ID>', environment: 'production' : 'demo' })</script>
-```
-
-To verify the scripts are running correctly, **preview** your theme copy, open your browser's console, and type **'Extend'** or **'ExtendShopify'** and hit enter. Both scripts should appear in the console.
-
-<img src="assets/images/sdk-verify.jpg" />
-
-<h1>Displaying product page offers</h1>
+## Getting Started
 
 ---
 
-The **Product Offer** is used to display one or more protection plan offers directly on the product page and is the shoppers first opportunity to add a warranty plan to the cart. Typically this will show 1-, 2-, and 3-year options for the same plan.
+To display offers on your webpage you will need:
 
-<img src="assets/images/product-offer-view.png" />
+<dl>
+    <dt>Your Extend Store ID</dt>
+    <dd>
+        This can be found through the <a href="https://merchants.helloextend.com">Extend Merchant Portal</a> by clicking on the <i>"Settings"</i> navigation tab (<a href="https://dev.merchants.helloextend.com/dashboard/settings">direct link</a>) under <i>"Production Credentials"</i>
+    <img src="https://helloextend-static-assets.s3.amazonaws.com/Credentials.png"/>
+    </dd>
+    <dt>A product referenceId</dt>
+    <dd>This is the unique product identifier that you had specified in your product catalog upload.  We will use this identifier to know which warranty offer to display.  Generally this is the product SKU or similar, however the choice of <b>product reference ID</b> is up to a merchant to decide.  If you are having trouble finding out what your <b>product referenceId</b> is, please file a support request through the <a href="https://merchants.helloextend.com">Extend Merchant Portal</a>.
+    </dd>
+</dl>
 
-<h2>Add the Extend Offer Element</h2>
+<br />
 
-Add an HTML element where you would like to place the Extend offer buttons. For highest conversion rates, we recommend placing it directly above the add to cart button. In most cases, the button is in the **product-template.liquid**, **product.liquid**, or **product.form.liquid** file, but if you have done previous work on your product page the it may be located somewhere else in your theme.
+## Installation
+
+---
+
+Add the following to your page
 
 ```html
-<div id="extend-offer">This is where the buttons will render</div>
-```
-
-<img src="assets/images/extend-offer-div.png" />
-
-<div class="info-container">
-<strong>Pro Tip</strong>: An easy way to find where to place the parent div element is to open the dev tools on a product page and inspect an element above where you would like the cart offers to appear, copy an attribute, and search for it in one of the liquid files mentioned above.
-</div>
-
-Verify that the div has been added to the correct spot by temporarily adding some text, saving, and previewing your product page. Once you confirm that the text is showing in the correct spot, make sure to remove it!
-
-<img src="assets/images/extend-offer-div-test.png" />
-
-<h2>Create custom product integration snippet</h2>
-
-Inside your shopify theme code editor create a new snippet called **extend-product-integration**. This is where you will call the Extend APIs to display offers on the product page and add the warranties to the cart.
-
-**Themes** → **Snippets** → **Add a new snippet**
-
-<img src="assets/images/extend-prod-snip.png" />
-
-To ensure this snippet only runs when the Extend SDK is properly initialized, add the following code:
-
-```html
+<script src="https://sdk.helloextend.com/extend-sdk-client/v1/extend-sdk-client.min.js"></script>
 <script>
-  if (window.Extend && window.ExtendShopify) {
-    // Integration code will go here
-  }
+  Extend.config({ storeId: '<YOUR_EXTEND_STORE_ID>' })
 </script>
 ```
 
-Render the snippet on the same page you added the Extend product offer div by adding the following code to that page.
+For more options that can be passed to the `Extend.config()` function, see the [API Reference](#api-reference)
 
-{% raw %}
+<br />
 
-```javascript
-{% render 'extend-product-integration' %}
-```
-
-{% endraw %}
-
-<img src="assets/images/render-prod-snip.png" />
-
-<h2>Render Extend warranty buttons on product page</h2>
-
-Now that the snippet is added, you can use the `Extend.buttons.render()` function to render the offer buttons on the product page. This function takes in 2 arguments:
-
-- The ID of the `#extend-offer` element you added in the previous step
-- An object with a key of referenceId and a value of the selected product `variantId`
-
-```javascript
-  Extend.buttons.render('#extend-offer', {referenceId:{% raw %} {{ product.selected_or_first_available_variant.id }}{% endraw %}})
-```
-
-<img src="assets/images/render-offer.jpg" />
-
-<div class="info-container">
-<strong>Important Note</strong>: {% raw %}<strong>{{ product.selected_or_first_available_variant.id }}</strong>{% endraw %} allows you to get the first selected <strong>variantId</strong> when the page loads in your Shopify store, however, this variable <strong>does not update</strong> when a user changes the variant. The next section covers how to handle that scenario.
-</div>
-Verify that the warranty buttons are rendering by previewing your theme and viewing a product that is active and enabled. If you don’t know a product that fits this criteria, you can find one in the merchant portal [merchants.extend.com](https://merchants.extend.com/login).
-
-<img src="assets/images/render-offer-visible.png" />
-
-<h2>Troubleshooting tips:</h2>
-
-If you are having trouble seeing the warranty buttons, please check the following:
-
-- Ensure are viewing a product that is **matched** and **active**
-- Verify that your store is **live** (check the merchant portal, at the top of your screen)
-- Verify that you are rendering the snippet on the page that contains offer div
-
-<h2>Handling multiple variants</h2>
-
-Whenever a shopper selects a different variant for a product, you need to pass the `variantId` of the newly selected product to the SDK. This prevents a customer from accidentally purchasing the wrong warranty for a product. Determine how the page is updated when the variant is changed for a product. This is typically via a JavaScript event being dispatched, or by manipulating the window location. Then call the `Extend.setActiveProduct()` function to set the active variant.
-
-```javascript
-  Extend.setActiveProduct('#extend-offer', <VariantId>)
-```
-
-<div class="info-container">
-<strong>Pro Tip</strong>: A common way to find the event that fires when a product variant is changed is to look at the eventListeners tied to your product options selector.
-</div>
-
-<img src="assets/images/evtlist-check.png" />
-
-Verify that you are setting the correct variant by adding a console log right before the `Extend.SetActiveProduct()` function is called. This ensures you are passing the correct `variantId`. You will also notice that if you change the variant on the page, the offer buttons will re-render.
-
-<h2>Examples</h2>
-
-Variant IDs are not accessible in the same way across all Shopify themes, but below are two of the most common scenarios we have seen:
-
-**Example 1**: `variantId` in the url params
-
-In the example below, the `variantId` is available in the url when the product variant changes. To set the active variant, you need to grab the `variantId` from the url and call `Extend.setActiveProduct()`.
-
-```javascript
-var productForm = document.querySelector(".product-form");
-
-productForm.addEventListener("change", function () {
-  var urlParams = new URLSearchParams(window.location.search);
-  var variantId = urlParams.get("variant");
-  if (variantId) {
-    Extend.setActiveProduct("#extend-offer", variantId);
-  }
-});
-```
-
-<div class="info-container">
-<strong>Important note</strong>: sometimes the variantId in the url is only available when the variant changes (and not when you load the page for the first time). You can set the variantId with {% raw %}<strong>{{ product.selected_or_first_available_variant.id }}</strong>{% endraw%} to cover this case.
-</div>
-
-**Example 2**: `variantId` in <strong>theme.js</strong> file
-
-<img src="assets/images/set-variant-js.jpg" />
-
-<div class="info-container">
-<strong>Important Note</strong>: The variant change function may be in your Assets folder or somewhere else in your Shopify theme.
-</div>
-
-<h1>Offer Modal and Adding Warranties to the Cart</h1>
+## Displaying Product Offers and Cart Offers
 
 ---
 
-The **Modal Offer** can be used as an interstitial modal before transitioning the customer to a new page after adding a product to cart, or as an opportunity on the cart page. In the example below, the offer modal appears after the customer added the product to the cart without selecting one of the offered protection plans.
-
-<img src="assets/images/offer-modal.png">
-
-<h2>Add eventListener to add to cart button</h2>
-
-Select the add to cart button element on the product page using vanillaJS or jQuery and add an eventListener.
-
-```javascript
-var addToCartButton = document.querySelector("button[name='add']");
-```
-
-```javascript
-addToCartButton.addEventListener("click", function (e) {});
-```
-
-In order to add the warranty to the cart or launch the offer modal, you need to prevent the default behavior of the add to cart button. You can do this by adding an `event.preventDefault()` or `event.stopImmediatePropagation()` inside the eventListener.
-
-```javascript
-e.preventDefault();
-
-or;
-
-e.stopImmediatePropagation();
-```
-
-Inside the add to cart eventListener, add `ExtendShopify.handleAddToCart()` function. Make sure to select `quantity` value from product form and add to `ExtendShopify.handleAddToCart()` function.
-
-```javascript
-addToCartButton.addEventListener("click", function (e) {
-  e.preventDefault();
-
-  var quantityEl = document.querySelector('[name="quantity"]');
-  var quantity = quantityEl && quantityEl.value;
-
-  ExtendShopify.handleAddToCart("#extend-offer", {
-    quantity: quantity,
-    modal: true,
-    done: function () {
-      // call function to add your product here
-    },
-  });
-});
-```
-
-<img src="assets/images/prod-add-to-cart.jpg">
-
-To launch the offer modal if a warranty is not selected, set `modal: true`. If you do not want to launch the offer modal, set `modal: false`.
-
-<h2>Resume add to cart function</h2>
-
-Once the warranty has been added to the cart or the shopper has decided to not add a warranty (from the offer modal), you need to resume the add to cart function so that the product gets added to the cart. Inside the done function, trigger your theme’s product form submit function. This can be done in a number of ways, so it is up to you to determine the best solution for your theme.
-
-**Standard add to cart flow (i.e form submission):**
-
-```javascript
-// select the form where the add to cart button is in.
-var productForm = document.querySelector(".product-form");
-
-// call the submit method on the form element to trigger the form submission
-productForm.submit();
-```
-
-<img src="assets/images/product-submit.jpg">
-
-<h1>Cart Offers</h1>
-<div class="key-line"></div>
-
-The cart offer is the last chance your shoppers have to add an extended warranty before they checkout. Here you can display an offer button next to each eligible product in the cart that does not already have a protection plan associated with it.
-
-**Cart offer example**:
-
-<img src="assets/images/cart-offer-preview.png">
-
-<h2>Add the Extend cart offer element</h2>
-
-Add an HTML element where you would like to place the Extend cart offer buttons. We recommend placing it directly below each product in the cart. In most cases, that is in the **cart.liquid** or the **cart-template.liquid** file.
-
-You need to add this button under each product in the cart that doesn’t have a warranty. Find where the cart items are being iterated on in the template. Then set the `quantity` and `variantId` of the product to the cart offer div data attributes:
+Place an html element anywhere you would like to see the product or cart page offer with a css selector that you can reference.
 
 ```html
-<div
-  id="cart-extend-offer"
-  data-extend-variant="{% raw %}{{ item.variant.id }}{% endraw %}"
-  data-extend-quantity="{% raw %}{{ item.quantity }}{% endraw %}"
-></div>
+<div id="extend-offer"></div>
 ```
 
-<img src="assets/images/cart-offer-div.jpg">
+This element will be used as the container for the displayed warranty offer. If you have specific width or spacing requirements, you can add them directly to this element using css or inline styles.
 
-Verify that the div has been added to the correct spot by temporarily adding some text, saving, and previewing your cart page. Once you confirm that the text is showing in the correct spot, make sure to remove it!
+<br />
 
-You also need to verify that the `quantity` and `variantId` are being passed into the cart offer div correctly. In your preview, navigate to your cart and inspect the page. You won’t be able to see the Extend cart offer buttons on the page, but you should see the HTML element.
+### Initialization
 
-<img src="assets/images/cart-offer-verify.jpg">
-
-<h2>Create custom cart integration snippet</h2>
-
-Inside your shopify theme code editor create a new snippet called **extend-cart-integration**. This is where you will call the Extend APIs to handle adding warranties to the cart.
-
-**Themes** → **Snippets** → **Add a new snippet**
-
-<img src="assets/images/create-cart-int.png">
-
-To ensure this snippet only runs when the Extend SDK is properly initialized, add the following code:
-
-```html
-<script>
-  if (window.Extend && window.ExtendShopify) {
-    // cart integration code goes here
-  }
-</script>
-```
-
-Add the helper `findAll` function to select all cart offer divs on cart page.
+---
 
 ```javascript
-var slice = Array.prototype.slice;
+/* PRODUCT PAGE OFFER */
+Extend.buttons.render('#extend-offer', {
+  referenceId: '<PRODUCT_REFERENCE_ID>',
+})
 
-function findAll(element) {
-  var items = document.querySelectorAll(element);
-  return items ? slice.call(items, 0) : [];
-}
+/* CART PAGE OFFER */
+Extend.buttons.renderSimpleOffer('#extend-offer', {
+  referenceId: '<PRODUCT_REFERENCE_ID>',
+  onAddToCart({ plan, product, quantity }) {
+    if (plan && product) {
+      // a user has selected a plan.  Add warranty to their cart.
+    }
+})
 ```
 
-Render the snippet in template where you added your Extend cart offer div.
+> Note: To query DOM elements, we use the native <b>document.querySelector</b>. For this reason, we recommend using element ids instead of classes for selector references.
 
-<h2>Render cart offer buttons</h2>
+### Accessing the component instance
 
-Call the `findAll` helper method we added in the last step to find all the Extend cart offer divs. Here you need to pass in the ID of the Extend cart offer element (#extend-cart-offer).
+It's possible to have multiple offers displayed on the same page and each might have their own product referenceId, so each rendered component acts independently of each other. The component instance will be tied to the element/selector passed in during the call to `Extend.buttons.render` and will be used for API calls later in this guide.
 
-As you iterate through each item, pull out the `variantId` and the `quantity` from the **#extend-cart-offer** div data attributes.
+**To retrieve the component instance:**
 
 ```javascript
-var variantId = el.getAttribute("data-extend-variant");
-var quantity = el.getAttribute("data-extend-quantity");
+const component = Extend.buttons.instance('#extend-offer')
 ```
 
-Use the `warrantyAlreadyInCart()` function to determine if you should show the offer button.
+### Handling product selection changes
 
-you can access the shopify cart object by declaring this variable at the top of your page
+If your store has multiple product variants for a single product page (for example, if you have a product that allows a customer to select a color or size option) you'll need to pass the new **product reference id** to the SDK when the change occurs. This prevents a customer from accidentally purchasing the wrong warranty for an incorrect product.
 
-```liquid
-var cart = {% raw %}{{ cart | json }}{% endraw %}
-```
+**Example:**
 
 ```javascript
-if (ExtendShopify.warrantyAlreadyInCart(variantId, cart.items)) {
-  return;
-}
+// calls are done through the component instance
+const component = Extend.buttons.instance('#extend-offer')
+
+component.setActiveProduct('<DIFFERENT_PRODUCT_REFERENCE_ID>')
 ```
 
-Then render the cart offer buttons using the `Extend.buttons.renderSimpleOffer()` function.
+<br />
+
+## Adding a warranty to the cart
+
+---
+
+Typically you would add the a warranty selection to the cart when they
+click on "Add to Cart". You can retrieve the users warranty
+selection by calling `component.getPlanSelection();` and retrieve the
+currently selected product by calling `component.getActiveProduct();`.
+
+**Example**
 
 ```javascript
-Extend.buttons.renderSimpleOffer(el, {
-  referenceId: variantId,
-  onAddToCart: function ({ plan, product }) {
-    ExtendShopify.addPlanToCart(
-      {
-        plan: plan,
-        product: product,
-        quantity: quantity,
-      },
-      function (err) {
-        // an error occurred
-        if (err) {
-          return;
-        } else {
-          // call your here function to reload cart page
-        }
-      }
-    );
-  },
-});
+const component = Extend.buttons.instance('#extend-offer')
+const plan = component.getPlanSelection()
+const product = component.getActiveProduct()
 ```
 
-The `ExtendShopify.addPlanToCart` also takes a callback where you can call the add to cart function to add the product to the cart after the warranty has been added. Typically, reloading the window will suffice for the cart page.
+If a user has selected a warranty option, `getPlanSelection` will return
+a `Plan` object, otherwise it will return `null`. See the
+[API Reference](#api-reference) for details on what is included with the
+`plan` object.
+
+Here is an example of how this might look in a basic store.
 
 ```javascript
-function(err) {
-  // an error occurred
-  if (err) {
-    return
+$('#add-to-cart').on('click', function(e) {
+  e.preventDefault()
+
+  /** get the component instance rendered previously */
+  const component = Extend.buttons.instance('#extend-offer')
+
+  /** get the users plan selection */
+  const plan = component.getPlanSelection()
+  const product = component.getActiveProduct()
+
+  if (plan) {
+    /**
+     * If you are using an ecommerce addon (e.g. Shopify) this is where you
+     * would use the respective add-to-cart helper function.
+     *
+     * For custom integrations, use the plan data to determine which warranty
+     * sku to add to the cart and at what price.
+     */
+    // add plan to cart, then handle form submission
   } else {
-    location.reload()
+    // handle form submission
   }
+})
 ```
 
-<img src="assets/images/cart-int-render-button.jpg">
+<br />
 
-Verify the cart offer buttons are rendering correctly by previewing your theme and going to your cart page that has an active and enabled product in it. You should see the Extend cart offer button in the cart, and when you click it, it should launch the offer modal. When a shopper clicks this offer button, the modal described in the previous section will launch, and the shopper will be able to select which warranty plan he or she would like to purchase.
-
-<img src="assets/images/cart-offer-preview.png">
-
-<h1>Extend Cart Normalization</h1>
+## Displaying a Modal Offer
 
 ---
 
-As part of the checkout process, customers often update product quantities in their cart. The cart normalization feature will automatically adjust the quantity of Extend protection plans as the customer adjusts the quantity of the product they relate to. If a customer increases or decreases the quantity of products, the quantity for the related warranties in the cart should increase or decrease as well. In addition, if a customer has completely removed a product from the cart, any related warranties should be removed from the cart so the customer does not accidentally purchase a protection plan without a product.
+A modal offer can be triggered from anywhere on a page and provides the user with another opportunity to protect their product with a warranty.
 
-To leverage cart normalization, you need to add the Extend normalize function to the cart integration script. First add the `cart` variable:
+<p align="center"><img src="https://helloextend-static-assets.s3.amazonaws.com/ExtendModalOffer.png" /></p>
 
-```liquid
-var cart = {% raw %}{{ cart | json }}{% endraw %}
-```
-
-Then add the **ExtendShopify.normalizeCart** function and pass the Shopify Cart object:
+### Opening the modal offer
 
 ```javascript
-ExtendShopify.normalizeCart({ cart: cart, balance: false }, function (
-  err,
-  data
-) {
-  if (data && data.updates) {
-    location.reload();
-  }
-});
+Extend.modal.open({
+  referenceId: '<PRODUCT_REFERENCE_ID>',
+  /**
+   * This callback will be triggered both when a user declines the offer and if
+   * they choose a plan.  If a plan is chosen, it will be passed into the
+   * callback function, otherwise it will be undefined.
+   */
+  onClose: function(plan, product) {
+    if (plan && product) {
+      // a user has selected a plan.  Add it to their cart.
+    }
+  },
+})
 ```
 
-`ExtendShopify.normalizeCart()` will return a promise that will give you the `data` and `err` object to check if the cart needs to be normalized. If the `data` object exists and the `data.updates` is set to `true`, you will then call your function to refresh the cart page. Typically reloading the page will work for most Shopify cart pages.
+<br />
 
-<img src="assets/images/cart-normalization.jpg">
-
-<h2>Balanced vs unbalanced carts</h2>
-
-Now that you have the normalize function in place, you need to decide if you want a **balanced** or **unbalanced** cart.
-
-- **Balanced cart**: Whenever the quantity of a product with a warranty associated with it is increased, the quantity of the extended warranty sku associated with it will also increase to match.
-- **Unbalanced cart**: Whenever the quantity of a product with a warranty associated with it is increased, the quantity of the extended warranty sku will remain the same, and it is up to the shopper to decide if he or she wants to add warranties to protect those new products.
-
-Balanced and unbalanced carts can be toggled with the `balance: true/false` property
-
-<h2>Ajax cart normalization</h2>
-
-If you are using an Ajax cart, the page does not reload whenever an item’s quantity is updated. This means that in order to normalize an Ajax cart, you need to identify when the quantity of an item changes and then run the `Extend.normalizeCart()` function. Typically, changing the quantity of the items in the cart will trigger a function that will make an API call to shopify to update the cart. You need to get this new updated Shopify cart object and pass it into the `Extend.normalizeCart()` function.
-
-Wrap the cart integration code in a function. ex `initializeCartOffer()`. Then call the `initializeCartOffer()` function at the bottom of your script.
-
-<img src="assets/images/ajax-normalization-1.jpg">
-
-Now dispatch an event whenever an item in the cart gets updated. To do this, first add an eventListener in your cart integration script.
-
-Inside the eventListener do the following:
-
-- Make an API call to Shopify to get the most updated cart object
-- Reassign the cart variable to the `newCart` object you get from the callback of the API call
-- Call the function where you wrapped your Extend cart integration script in
-
-```javascript
-window.addEventListener("normalizeCart", function () {
-  $.getJSON("/cart.js", function (newCart) {
-    cart = newCart;
-    initializeCartOffer();
-  });
-});
-```
-
-<img src="assets/images/ajax-normalization-2.jpg">
-
-Now that you have the eventListener initialized, you need to find where in your code to dispatch a custom event. Find where in your Shopify theme the quantity of a cart item is updated and dispatch an event back to the cart integration script to pull in the new shopify cart object.
-
-**Example:**
-In the example below, the quantity of a cart item is being updated from the `updateCart()` function in the site.js file:
-
-<img src="assets/images/ajax-normalization-3.jpg">
-
-<a name="ajax-add-to-cart"></a>
-
-<h1>Ajax Side Cart Integration</h1>
+## Piecing it all together
 
 ---
 
-Ajax side-carts are quite common, and the integration is similar to that of a regular Ajax cart.
+Combining all of these tools you should now be able to create a complete
+end-to-end warranty offer solution on your online store.
 
-<div style="display: flex; width:800px;" >
-  <img src="assets/images/ajax-side-cart-1.jpg" width="50%">
-  <img src="assets/images/ajax-side-cart-2.jpg" width="50%">
-</div>
-
-<h2>Add the Extend cart offer element</h2>
-
-Add an HTML element where you would like to place the Extend cart offer buttons. We recommend placing it directly below each product in the cart. Typically this can be found in the **ajax-cart-template.liquid** file or in another similar template file.
-
-You need to add this element under each product in the cart that doesn’t have a warranty. Find where the cart items are being iterated on in the template. Then set the `quantity` and `variantId` of the product to the cart offer div data attributes:
+**Full Product Page Example**
 
 ```html
-<div
-  id="extend-cart-offer"
-  data-extend-variant="{% raw %}{{ variantId }}{% endraw %}"
-  data-extend-quantity="{% raw %}{{ itemQty }}{% endraw %}"
-></div>
+<html>
+  <head></head>
+</html>
+<form id="product-form" action="/cart/add">
+  <div id="extend-offer"></div>
+  <button id="add-to-cart" type="submit">Add To Cart</button>
+</form>
+<script></script>
 ```
-
-<img src="assets/images/ajax-side-cart-div.jpg">
-
-<h2>Create custom ajax side-cart integration snippet</h2>
-
-Inside your shopify theme code editor create a new snippet called **extend-ajax-side-cart-integration**. This is where you will call the Extend APIs to handle displaying offers on the product page and adding the warranties to the cart.
-
-**Themes** → **Snippets** → **Add a new snippet**
-
-<img src="assets/images/create-ajax-side-cart-int.png">
-
-<h2>Render ajax side-cart offer buttons</h2>
-
-Copy the code from the **extend-cart-integration** snippet that you created and paste it into the **extend-ajax-side-cart-integration** snippet. This will render the cart offer buttons in your ajax-side cart.
-
-Then add an eventListener to dispatch events from your **themes.js** file. This will help rerun the script whenever a product is added or the cart needs to be normalized.
 
 ```javascript
-window.addEventListener("refreshSideCart", function () {
-  $.getJSON("/cart.js", function (newCart) {
-    cart = newCart;
-    initializeCartOffer();
-  });
-});
+/** configure */
+Extend.config({ storeId: '<EXTEND_STORE_ID>' })
+
+/** initialize offer */
+Extend.buttons.render('#extend-offer', {
+  referenceId: '<PRODUCT_REFERENCE_ID>',
+})
+
+/** bind to add-to-cart click */
+$('#add-to-cart').on('click', function(event) {
+  event.preventDefault()
+
+  /** get the component instance rendered previously */
+  const component = Extend.buttons.instance('#extend-offer')
+
+  /** get the users plan selection */
+  const plan = component.getPlanSelection()
+
+  if (plan) {
+    /**
+     * Add the warranty to the cart using an AJAX call and then submit the form.
+     * Replace this section with your own store specific cart functionality.
+     */
+    YourAjaxLib.addPlanToCart(plan, function() {
+      $('#product-form').submit()
+    })
+  } else {
+    Extend.modal.open({
+      referenceId: '<PRODUCT_REFERENCE_ID>',
+      onClose: function(plan, product) {
+        if (plan && product) {
+          YourAjaxLib.addPlanToCart(plan, product, quantity, function() {
+            $('#product-form').submit()
+          })
+        } else {
+          $('#product-form').submit()
+        }
+      },
+    })
+  }
+})
 ```
 
-<img src="assets/images/ajax-side-cart-snip.png">
+<br />
 
-<h2>Adding a warranty from an ajax side-cart</h2>
+**Full Cart Page Example**
 
-Whenever an extended warranty is added from the ajax side-cart, you need to rebuild your ajax side-cart with the new shopify cart object as well as call the **ajax-side-cart-integration** script. This will add the warranty to the cart as well as remove the cart offer button from the product in your side-cart.
-
-<div class="info-container">
-<strong>Pro Tip:</strong> You can add the eventListener to the <strong>ajax-side-cart-integration</strong> script and dispatch custom events from your theme’s javascript file. This will allow you to rerun the snippet whenever a products quantity is changed or if the product is removed.
+```html
+<html>
+  <head></head>
+</html>
+<div id="cart-item">
+  <h2>Product Title</h2>
+  <div id="extend-offer"></div>
 </div>
-
-```javascript
-window.dispatchEvent(new CustomEvent("cartItemUpdated"));
+<script></script>
 ```
 
-<img src="assets/images/ajax-side-cart-add.png">
-
-In the example below we add our eventListener to allow us to run the function that builds the ajax side-cart. This eventListener will be ran from the custom dispatched event we sent in the previous example.
-
 ```javascript
-window.addEventListener("cartItemUpdated", function (e) {
-  Extend.buttons.instance("#extend-cart-offer").destroy();
+/** configure */
+Extend.config({ storeId: '<EXTEND_STORE_ID>' });
 
-  $.getJSON("/cart.js", function (cart) {
-    cartUpdateCallback(cart);
-  });
+/** get quantity from store page if possible */
+const quantity = document.querySelector('.storeQuantity');
+
+/** initialize offer */
+Extend.buttons.renderSimpleOffer('#extend-offer', {
+  referenceId: '<PRODUCT_REFERENCE_ID>'
+  onAddToCart:
+    function({ plan, product }) {
+        if (plan && product) {
+          // if you can get quantity from store, pass it here.
+          // otherwise, quantity defaults to 1
+          YourAjaxLib.addPlanToCart(plan, product, quantity)
+        }
+    },
 });
 ```
 
-<img src="assets/images/ajax-side-cart-update.png">
+</br>
 
-Once the ajax side-cart is rebuilt, you may also need to dispatch an event back to the <strong>ajax-side-cart-integration</strong> snippet to allow for the script to be run again.
-<img src="assets/images/ajax-side-cart-rerun-2.png">
+## API Reference
 
-<h2>Ajax side-cart normalization</h2>
+---
 
-In order to normalize the ajax side‐cart, find where in your theme the ajax side-cart is rebuilt/updated when the quantity of a product is changed and dispatch a custom event to the same eventListener that was setup in your <strong>ajax-side‐cart-integration</strong> snippet.
+#### Extend.config(config: object)
 
-<img src="assets/images/ajax-side-cart-rerun.png">
+```typescript
+Extend.config({
+  /**
+   * Extend store ID
+   *
+   * @required
+   */
+  storeId: string,
+  /**
+   * A list of product reference IDs for the current page.  This will preload
+   * the offers for each product to improve performance when switching
+   * referenceIds.
+   *
+   * @optional
+   */
+  referenceIds: Array<string>,
+  /**
+   * Optional theme configuration.  A theme passed in as an argument will
+   * override any theme retrieved from the Extend Merchant Portal configuration
+   * and will fallback to a default theme if neither are present.
+   *
+   * @optional
+   */
+  theme: {
+    primaryColor: string
+  },
+  /**
+   * If you are using our demo environment, set this to "demo".
+   *
+   * @optional
+   * @deprecated Soon demo environment will be removed.  Do not use if you can help it.
+   */
+   environment: "demo" | "production"
+})
+```
 
-**Example:**
+#### Extend.buttons.render(selector: string, options: object)
 
-Once our script is rerun and we determine we need to normalize the cart, we will dispatch an event to the **extend-side-cart-integration** file to allow for the ajax side-cart to be rebuilt/refreshed with the new Shopify cart object.
-<img src="assets/images/ajax-side-cart-dispatch.png">
+```typescript
+Extend.buttons.render('#offer-container', {
+  /** @required */
+  referenceId: string,
+  /** @optional */
+  theme: {
+    primaryColor: string,
+  },
+})
+```
 
-<h2>Final review</h2>
+#### Extend.buttons.renderSimpleOffer(selector: string, options: object)
 
-Contratulations, you have finished integrating the Extend client SDK into your store! Before you publish your theme and start selling extended warranties, please make sure to go through the integration checklist, which you can find here <a href="assets/files/integration-checklist.pdf" target="_blank">Integration Checklist</a>
+```typescript
+Extend.buttons.renderSimpleOffer('#offer-container', {
+  /** @required */
+  referenceId: string,
+  onAddToCart?({ plan: PlanSelection, product: ActiveProduct, quantity?: number }): void | Promise<void>,
+  /** @optional */
+  theme: {
+    primaryColor: string
+  }
+})
+```
+
+#### Extend.buttons.instance(selector: string): ButtonsComponent
+
+```typescript
+const component = Extend.buttons.instance('#offer-container')
+```
+
+#### ButtonsComponent#getActiveProduct(): ActiveProduct | null
+
+```typescript
+// usage
+const product = component.getActiveProduct()
+
+// product object structure
+interface ActiveProduct {
+  /**
+   * The referenceId of the active product
+   * @example "sku-12345"
+   */
+  id: string
+  /**
+   * The name of the active product
+   * @example "XBox One X"
+   */
+  name: string
+}
+```
+
+#### ButtonsComponent#setActiveProduct(referenceId: string | number)
+
+```typescript
+component.setActiveProduct('item-12345')
+```
+
+#### ButtonsComponent#getPlanSelection(): PlanSelection | null
+
+```typescript
+// usage
+const plan = component.getPlanSelection()
+
+// plan object structure
+interface PlanSelection {
+  /**
+   * The unique plan identifier for this plan
+   * @example "10001-misc-elec-adh-replace-1y"
+   */
+  planId: string
+  /**
+   * The price of the warranty plan in cents (e.g. 10000 for $100.00)
+   * @example 10000
+   */
+  price: number
+  /**
+   * The coverage term length in months
+   * @example 36
+   */
+  term: number
+}
+```
+
+#### Extend.modal.open(options: object)
+
+```typescript
+Extend.modal.open({
+  /** @required */
+  referenceId: string,
+  /** @optional */
+  theme: {
+    primaryColor: string,
+  },
+  /**
+   * If a user made a warranty selection, the "plan" and "product" will be
+   * passed to this callback function.  If the user declines the offer, "plan"
+   * and "product" will be undefined.  See above for data structure for
+   * "PlanSelection" and "ActiveProduct" arguments.
+   *
+   * This callback function is where you should handle adding the warranty to
+   * the users cart, submitting your product form, etc.
+   */
+  onClose(plan?: PlanSelection, product?: ActiveProduct) {},
+})
+```
