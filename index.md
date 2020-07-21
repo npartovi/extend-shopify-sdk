@@ -1,11 +1,6 @@
-<p align="center">
-  <img src="https://helloextend-static-assets.s3.amazonaws.com/extend-shield-logo.png" />
-  <h1 align="center">Extend SDK Client</h1>
-</p>
-
 [![CircleCI](https://circleci.com/gh/helloextend/extend-sdk-client/tree/master.svg?style=shield&circle-token=e1895d388f8e4156db803dc390269298c010a60a)](https://circleci.com/gh/helloextend/extend-sdk-client/tree/master)
 
-## Getting Started
+# Getting Started
 
 ---
 
@@ -33,7 +28,7 @@ Add the following to your page
 ```html
 <script src="https://sdk.helloextend.com/extend-sdk-client/v1/extend-sdk-client.min.js"></script>
 <script>
-  Extend.config({ storeId: '<YOUR_EXTEND_STORE_ID>' })
+  Extend.config({ storeId: "<YOUR_EXTEND_STORE_ID>" });
 </script>
 ```
 
@@ -84,7 +79,7 @@ It's possible to have multiple offers displayed on the same page and each might 
 **To retrieve the component instance:**
 
 ```javascript
-const component = Extend.buttons.instance('#extend-offer')
+const component = Extend.buttons.instance("#extend-offer");
 ```
 
 ### Handling product selection changes
@@ -95,9 +90,9 @@ If your store has multiple product variants for a single product page (for examp
 
 ```javascript
 // calls are done through the component instance
-const component = Extend.buttons.instance('#extend-offer')
+const component = Extend.buttons.instance("#extend-offer");
 
-component.setActiveProduct('<DIFFERENT_PRODUCT_REFERENCE_ID>')
+component.setActiveProduct("<DIFFERENT_PRODUCT_REFERENCE_ID>");
 ```
 
 <br />
@@ -114,9 +109,9 @@ currently selected product by calling `component.getActiveProduct();`.
 **Example**
 
 ```javascript
-const component = Extend.buttons.instance('#extend-offer')
-const plan = component.getPlanSelection()
-const product = component.getActiveProduct()
+const component = Extend.buttons.instance("#extend-offer");
+const plan = component.getPlanSelection();
+const product = component.getActiveProduct();
 ```
 
 If a user has selected a warranty option, `getPlanSelection` will return
@@ -127,15 +122,15 @@ a `Plan` object, otherwise it will return `null`. See the
 Here is an example of how this might look in a basic store.
 
 ```javascript
-$('#add-to-cart').on('click', function(e) {
-  e.preventDefault()
+$("#add-to-cart").on("click", function (e) {
+  e.preventDefault();
 
   /** get the component instance rendered previously */
-  const component = Extend.buttons.instance('#extend-offer')
+  const component = Extend.buttons.instance("#extend-offer");
 
   /** get the users plan selection */
-  const plan = component.getPlanSelection()
-  const product = component.getActiveProduct()
+  const plan = component.getPlanSelection();
+  const product = component.getActiveProduct();
 
   if (plan) {
     /**
@@ -149,7 +144,7 @@ $('#add-to-cart').on('click', function(e) {
   } else {
     // handle form submission
   }
-})
+});
 ```
 
 <br />
@@ -166,18 +161,18 @@ A modal offer can be triggered from anywhere on a page and provides the user wit
 
 ```javascript
 Extend.modal.open({
-  referenceId: '<PRODUCT_REFERENCE_ID>',
+  referenceId: "<PRODUCT_REFERENCE_ID>",
   /**
    * This callback will be triggered both when a user declines the offer and if
    * they choose a plan.  If a plan is chosen, it will be passed into the
    * callback function, otherwise it will be undefined.
    */
-  onClose: function(plan, product) {
+  onClose: function (plan, product) {
     if (plan && product) {
       // a user has selected a plan.  Add it to their cart.
     }
   },
-})
+});
 ```
 
 <br />
@@ -204,46 +199,46 @@ end-to-end warranty offer solution on your online store.
 
 ```javascript
 /** configure */
-Extend.config({ storeId: '<EXTEND_STORE_ID>' })
+Extend.config({ storeId: "<EXTEND_STORE_ID>" });
 
 /** initialize offer */
-Extend.buttons.render('#extend-offer', {
-  referenceId: '<PRODUCT_REFERENCE_ID>',
-})
+Extend.buttons.render("#extend-offer", {
+  referenceId: "<PRODUCT_REFERENCE_ID>",
+});
 
 /** bind to add-to-cart click */
-$('#add-to-cart').on('click', function(event) {
-  event.preventDefault()
+$("#add-to-cart").on("click", function (event) {
+  event.preventDefault();
 
   /** get the component instance rendered previously */
-  const component = Extend.buttons.instance('#extend-offer')
+  const component = Extend.buttons.instance("#extend-offer");
 
   /** get the users plan selection */
-  const plan = component.getPlanSelection()
+  const plan = component.getPlanSelection();
 
   if (plan) {
     /**
      * Add the warranty to the cart using an AJAX call and then submit the form.
      * Replace this section with your own store specific cart functionality.
      */
-    YourAjaxLib.addPlanToCart(plan, function() {
-      $('#product-form').submit()
-    })
+    YourAjaxLib.addPlanToCart(plan, function () {
+      $("#product-form").submit();
+    });
   } else {
     Extend.modal.open({
-      referenceId: '<PRODUCT_REFERENCE_ID>',
-      onClose: function(plan, product) {
+      referenceId: "<PRODUCT_REFERENCE_ID>",
+      onClose: function (plan, product) {
         if (plan && product) {
-          YourAjaxLib.addPlanToCart(plan, product, quantity, function() {
-            $('#product-form').submit()
-          })
+          YourAjaxLib.addPlanToCart(plan, product, quantity, function () {
+            $("#product-form").submit();
+          });
         } else {
-          $('#product-form').submit()
+          $("#product-form").submit();
         }
       },
-    })
+    });
   }
-})
+});
 ```
 
 <br />
@@ -329,14 +324,14 @@ Extend.config({
 #### Extend.buttons.render(selector: string, options: object)
 
 ```typescript
-Extend.buttons.render('#offer-container', {
+Extend.buttons.render("#offer-container", {
   /** @required */
   referenceId: string,
   /** @optional */
   theme: {
     primaryColor: string,
   },
-})
+});
 ```
 
 #### Extend.buttons.renderSimpleOffer(selector: string, options: object)
@@ -356,14 +351,14 @@ Extend.buttons.renderSimpleOffer('#offer-container', {
 #### Extend.buttons.instance(selector: string): ButtonsComponent
 
 ```typescript
-const component = Extend.buttons.instance('#offer-container')
+const component = Extend.buttons.instance("#offer-container");
 ```
 
 #### ButtonsComponent#getActiveProduct(): ActiveProduct | null
 
 ```typescript
 // usage
-const product = component.getActiveProduct()
+const product = component.getActiveProduct();
 
 // product object structure
 interface ActiveProduct {
@@ -371,26 +366,26 @@ interface ActiveProduct {
    * The referenceId of the active product
    * @example "sku-12345"
    */
-  id: string
+  id: string;
   /**
    * The name of the active product
    * @example "XBox One X"
    */
-  name: string
+  name: string;
 }
 ```
 
 #### ButtonsComponent#setActiveProduct(referenceId: string | number)
 
 ```typescript
-component.setActiveProduct('item-12345')
+component.setActiveProduct("item-12345");
 ```
 
 #### ButtonsComponent#getPlanSelection(): PlanSelection | null
 
 ```typescript
 // usage
-const plan = component.getPlanSelection()
+const plan = component.getPlanSelection();
 
 // plan object structure
 interface PlanSelection {
@@ -398,17 +393,17 @@ interface PlanSelection {
    * The unique plan identifier for this plan
    * @example "10001-misc-elec-adh-replace-1y"
    */
-  planId: string
+  planId: string;
   /**
    * The price of the warranty plan in cents (e.g. 10000 for $100.00)
    * @example 10000
    */
-  price: number
+  price: number;
   /**
    * The coverage term length in months
    * @example 36
    */
-  term: number
+  term: number;
 }
 ```
 
@@ -432,5 +427,5 @@ Extend.modal.open({
    * the users cart, submitting your product form, etc.
    */
   onClose(plan?: PlanSelection, product?: ActiveProduct) {},
-})
+});
 ```
