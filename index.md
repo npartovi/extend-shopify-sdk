@@ -1,5 +1,3 @@
-[![CircleCI](https://circleci.com/gh/helloextend/extend-sdk-client/tree/master.svg?style=shield&circle-token=e1895d388f8e4156db803dc390269298c010a60a)](https://circleci.com/gh/helloextend/extend-sdk-client/tree/master)
-
 # Getting Started
 
 ---
@@ -19,7 +17,7 @@ To display offers on your webpage you will need:
 
 <br />
 
-## Installation
+# Installation
 
 ---
 
@@ -36,7 +34,7 @@ For more options that can be passed to the `Extend.config()` function, see the [
 
 <br />
 
-## Displaying Product Offers and Cart Offers
+# Displaying Product Offers and Cart Offers
 
 ---
 
@@ -50,7 +48,7 @@ This element will be used as the container for the displayed warranty offer. If 
 
 <br />
 
-### Initialization
+# Initialization
 
 ---
 
@@ -72,7 +70,7 @@ Extend.buttons.renderSimpleOffer('#extend-offer', {
 
 > Note: To query DOM elements, we use the native <b>document.querySelector</b>. For this reason, we recommend using element ids instead of classes for selector references.
 
-### Accessing the component instance
+## Accessing the component instance
 
 It's possible to have multiple offers displayed on the same page and each might have their own product referenceId, so each rendered component acts independently of each other. The component instance will be tied to the element/selector passed in during the call to `Extend.buttons.render` and will be used for API calls later in this guide.
 
@@ -82,7 +80,7 @@ It's possible to have multiple offers displayed on the same page and each might 
 const component = Extend.buttons.instance("#extend-offer");
 ```
 
-### Handling product selection changes
+## Handling product selection changes
 
 If your store has multiple product variants for a single product page (for example, if you have a product that allows a customer to select a color or size option) you'll need to pass the new **product reference id** to the SDK when the change occurs. This prevents a customer from accidentally purchasing the wrong warranty for an incorrect product.
 
@@ -97,7 +95,7 @@ component.setActiveProduct("<DIFFERENT_PRODUCT_REFERENCE_ID>");
 
 <br />
 
-## Adding a warranty to the cart
+# Adding a warranty to the cart
 
 ---
 
@@ -149,7 +147,7 @@ $("#add-to-cart").on("click", function (e) {
 
 <br />
 
-## Displaying a Modal Offer
+# Displaying a Modal Offer
 
 ---
 
@@ -157,7 +155,7 @@ A modal offer can be triggered from anywhere on a page and provides the user wit
 
 <p align="center"><img src="https://helloextend-static-assets.s3.amazonaws.com/ExtendModalOffer.png" /></p>
 
-### Opening the modal offer
+## Opening the modal offer
 
 ```javascript
 Extend.modal.open({
@@ -177,7 +175,7 @@ Extend.modal.open({
 
 <br />
 
-## Piecing it all together
+# Piecing it all together
 
 ---
 
@@ -279,7 +277,7 @@ Extend.buttons.renderSimpleOffer('#extend-offer', {
 
 </br>
 
-## API Reference
+# API Reference
 
 ---
 
