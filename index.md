@@ -93,7 +93,7 @@ const component = Extend.buttons.instance("#extend-offer");
 component.setActiveProduct("<DIFFERENT_PRODUCT_REFERENCE_ID>");
 ```
 
-# Adding a warranty to the cart
+# Adding a Warranty to the Cart
 
 ---
 
@@ -169,7 +169,7 @@ Extend.modal.open({
 });
 ```
 
-# Piecing it all together
+# Piecing It All Together
 
 ---
 
