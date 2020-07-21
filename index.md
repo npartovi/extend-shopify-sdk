@@ -279,8 +279,6 @@ Extend.buttons.renderSimpleOffer('#extend-offer', {
 });
 ```
 
-</br>
-
 # API Reference
 
 ---
