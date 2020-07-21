@@ -72,7 +72,9 @@ Extend.buttons.renderSimpleOffer('#extend-offer', {
 })
 ```
 
-> Note: To query DOM elements, we use the native <b>document.querySelector</b>. For this reason, we recommend using element ids instead of classes for selector references.
+<div class="info-container">
+  <strong>Note:</strong> To query DOM elements, we use the native <b>document.querySelector</b>. For this reason, we recommend using element ids instead of classes for selector references.
+</div>
 
 ## Accessing the component instance
 
