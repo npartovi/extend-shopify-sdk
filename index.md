@@ -285,7 +285,7 @@ Extend.buttons.renderSimpleOffer('#extend-offer', {
 
 ---
 
-#### Extend.config(config: object)
+### Extend.config(config: object)
 
 ```typescript
 Extend.config({
@@ -323,7 +323,7 @@ Extend.config({
 })
 ```
 
-#### Extend.buttons.render(selector: string, options: object)
+### Extend.buttons.render(selector: string, options: object)
 
 ```typescript
 Extend.buttons.render("#offer-container", {
@@ -336,7 +336,7 @@ Extend.buttons.render("#offer-container", {
 });
 ```
 
-#### Extend.buttons.renderSimpleOffer(selector: string, options: object)
+### Extend.buttons.renderSimpleOffer(selector: string, options: object)
 
 ```typescript
 Extend.buttons.renderSimpleOffer('#offer-container', {
