@@ -350,13 +350,13 @@ Extend.buttons.renderSimpleOffer('#offer-container', {
 })
 ```
 
-#### Extend.buttons.instance(selector: string): ButtonsComponent
+### Extend.buttons.instance(selector: string): ButtonsComponent
 
 ```typescript
 const component = Extend.buttons.instance("#offer-container");
 ```
 
-#### ButtonsComponent#getActiveProduct(): ActiveProduct | null
+### ButtonsComponent#getActiveProduct(): ActiveProduct | null
 
 ```typescript
 // usage
@@ -377,13 +377,13 @@ interface ActiveProduct {
 }
 ```
 
-#### ButtonsComponent#setActiveProduct(referenceId: string | number)
+### ButtonsComponent#setActiveProduct(referenceId: string | number)
 
 ```typescript
 component.setActiveProduct("item-12345");
 ```
 
-#### ButtonsComponent#getPlanSelection(): PlanSelection | null
+### ButtonsComponent#getPlanSelection(): PlanSelection | null
 
 ```typescript
 // usage
@@ -409,7 +409,7 @@ interface PlanSelection {
 }
 ```
 
-#### Extend.modal.open(options: object)
+### Extend.modal.open(options: object)
 
 ```typescript
 Extend.modal.open({
