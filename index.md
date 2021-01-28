@@ -2,418 +2,211 @@
 layout: default
 ---
 
-# Getting Started
+<h1 id="intro">Welcome to the <code style="font-size: 1.3rem;">ExtendAnalytics</code> API reference!</h1>
 
----
+This reference outlines all of the different functions available to you on the `ExtendAnalytics` object. Each section includes a description of what the function does, when it should be invoked, and what parameters to provide it. This reference should be used in conjunction with the <a href="https://www.google.com">Extend Analytics SDK Integration Guide.</a>
 
-To display offers on your webpage you will need:
+<h4 id="table-of-contents">Table of Contents:</h4>
 
-<dl>
-    <dt>Your Extend Store ID</dt>
-    <dd>
-        This can be found through the <a href="https://merchants.helloextend.com">Extend Merchant Portal</a> by clicking on the <i>"Settings"</i> navigation tab (<a href="https://dev.merchants.helloextend.com/dashboard/settings">direct link</a>) under <i>"Production Credentials"</i>
-    <img src="https://helloextend-static-assets.s3.amazonaws.com/Credentials.png"/>
-    </dd>
-    <dt>A product referenceId</dt>
-    <dd>This is the unique product identifier that you had specified in your product catalog upload.  We will use this identifier to know which warranty offer to display.  Generally this is the product SKU or similar, however the choice of <b>product reference ID</b> is up to a merchant to decide.  If you are having trouble finding out what your <b>product referenceId</b> is, please file a support request through the <a href="https://merchants.helloextend.com">Extend Merchant Portal</a>.
-    </dd>
-</dl>
+- <ins>[ExtendAnalytics.config](#config)</ins>
+- <ins>[ExtendAnalytics.setSelectedPlan](#setSelectedPlan)</ins>
+- <ins>[ExtendAnalytics.trackOfferViewed](#trackOfferViewed)</ins>
+- <ins>[ExtendAnalytics.trackOfferSold](#trackOfferSold)</ins>
+- <ins>[ExtendAnalytics.trackOfferAddedToCart](#trackOfferAddedToCart)</ins>
+- <ins>[Shared Interface and Type Glossary](#shared-interface-glossary)</ins>
 
-# Installation
+<h2 id="config" class="section-function">ExtendAnalytics.config</h2>
 
----
+This function provides the Analytics SDK with your `storeId` so our system knows which store is invoking the api calls. It must be invoked prior to using any of the other Analytics SDK functions.
 
-Add the following to your page
+\*\*\*Nima Edit
 
-```html
-<script src="https://sdk.helloextend.com/extend-sdk-client/v1/extend-sdk-client.min.js"></script>
-<script>
-  Extend.config({ storeId: "<YOUR_EXTEND_STORE_ID>" });
-</script>
-```
-
-For more options that can be passed to the `Extend.config()` function, see the [API Reference](#api-reference)
-
-# Displaying Product Offers and Cart Offers
-
----
-
-Place an html element anywhere you would like to see the product or cart page offer with a css selector that you can reference.
-
-```html
-<div id="extend-offer"></div>
-```
-
-This element will be used as the container for the displayed warranty offer. If you have specific width or spacing requirements, you can add them directly to this element using css or inline styles.
-
-# Initialization
+`ExtendAnalytics.config` takes in a storeId and initializes the Extend Analytics SDK. This will ensure all `ExtendAnalytics` functions will be tracked with your specific storeId. This function should be called upon page load or on startup of your application.
 
 ---
 
 ```javascript
-/* PRODUCT PAGE OFFER */
-Extend.buttons.render('#extend-offer', {
-  referenceId: '<PRODUCT_REFERENCE_ID>',
-})
+// Example Implementation
 
-/* CART PAGE OFFER */
-Extend.buttons.renderSimpleOffer('#extend-offer', {
-  referenceId: '<PRODUCT_REFERENCE_ID>',
-  onAddToCart({ plan, product, quantity }) {
-    if (plan && product) {
-      // a user has selected a plan.  Add warranty to their cart.
-    }
-})
+ExtendAnalytics.config({ storeId: "<YOUR_EXTEND_STORE_ID>" });
 ```
 
-<div class="info-container">
-  <strong>Note:</strong> To query DOM elements, we use the native <b>document.querySelector</b>. For this reason, we recommend using element ids instead of classes for selector references.
-</div>
-
-## Accessing the component instance
-
-It's possible to have multiple offers displayed on the same page and each might have their own product referenceId, so each rendered component acts independently of each other. The component instance will be tied to the element/selector passed in during the call to `Extend.buttons.render` and will be used for API calls later in this guide.
-
-**To retrieve the component instance:**
-
-```javascript
-const component = Extend.buttons.instance("#extend-offer");
-```
-
-## Handling product selection changes
-
-If your store has multiple product variants for a single product page (for example, if you have a product that allows a customer to select a color or size option) you'll need to pass the new **product reference id** to the SDK when the change occurs. This prevents a customer from accidentally purchasing the wrong warranty for an incorrect product.
-
-**Example:**
-
-```javascript
-// calls are done through the component instance
-const component = Extend.buttons.instance("#extend-offer");
-
-component.setActiveProduct("<DIFFERENT_PRODUCT_REFERENCE_ID>");
-```
-
-# Adding a Warranty to the Cart
-
----
-
-Typically you would add the a warranty selection to the cart when they
-click on "Add to Cart". You can retrieve the users warranty
-selection by calling `component.getPlanSelection();` and retrieve the
-currently selected product by calling `component.getActiveProduct();`.
-
-**Example**
-
-```javascript
-const component = Extend.buttons.instance("#extend-offer");
-const plan = component.getPlanSelection();
-const product = component.getActiveProduct();
-```
-
-If a user has selected a warranty option, `getPlanSelection` will return
-a `Plan` object, otherwise it will return `null`. See the
-[API Reference](#api-reference) for details on what is included with the
-`plan` object.
-
-Here is an example of how this might look in a basic store.
-
-```javascript
-$("#add-to-cart").on("click", function (e) {
-  e.preventDefault();
-
-  /** get the component instance rendered previously */
-  const component = Extend.buttons.instance("#extend-offer");
-
-  /** get the users plan selection */
-  const plan = component.getPlanSelection();
-  const product = component.getActiveProduct();
-
-  if (plan) {
-    /**
-     * If you are using an ecommerce addon (e.g. Shopify) this is where you
-     * would use the respective add-to-cart helper function.
-     *
-     * For custom integrations, use the plan data to determine which warranty
-     * sku to add to the cart and at what price.
-     */
-    // add plan to cart, then handle form submission
-  } else {
-    // handle form submission
-  }
-});
-```
-
-# Displaying a Modal Offer
-
----
-
-A modal offer can be triggered from anywhere on a page and provides the user with another opportunity to protect their product with a warranty.
-
-<p align="center"><img src="https://helloextend-static-assets.s3.amazonaws.com/ExtendModalOffer.png" /></p>
-
-## Opening the modal offer
-
-```javascript
-Extend.modal.open({
-  referenceId: "<PRODUCT_REFERENCE_ID>",
-  /**
-   * This callback will be triggered both when a user declines the offer and if
-   * they choose a plan.  If a plan is chosen, it will be passed into the
-   * callback function, otherwise it will be undefined.
-   */
-  onClose: function (plan, product) {
-    if (plan && product) {
-      // a user has selected a plan.  Add it to their cart.
-    }
-  },
-});
-```
-
-# Piecing It All Together
-
----
-
-Combining all of these tools you should now be able to create a complete
-end-to-end warranty offer solution on your online store.
-
-**Full Product Page Example**
-
-```html
-<html>
-  <head></head>
-</html>
-<form id="product-form" action="/cart/add">
-  <div id="extend-offer"></div>
-  <button id="add-to-cart" type="submit">Add To Cart</button>
-</form>
-<script></script>
-```
-
-```javascript
-/** configure */
-Extend.config({ storeId: "<EXTEND_STORE_ID>" });
-
-/** initialize offer */
-Extend.buttons.render("#extend-offer", {
-  referenceId: "<PRODUCT_REFERENCE_ID>",
-});
-
-/** bind to add-to-cart click */
-$("#add-to-cart").on("click", function (event) {
-  event.preventDefault();
-
-  /** get the component instance rendered previously */
-  const component = Extend.buttons.instance("#extend-offer");
-
-  /** get the users plan selection */
-  const plan = component.getPlanSelection();
-
-  if (plan) {
-    /**
-     * Add the warranty to the cart using an AJAX call and then submit the form.
-     * Replace this section with your own store specific cart functionality.
-     */
-    YourAjaxLib.addPlanToCart(plan, function () {
-      $("#product-form").submit();
-    });
-  } else {
-    Extend.modal.open({
-      referenceId: "<PRODUCT_REFERENCE_ID>",
-      onClose: function (plan, product) {
-        if (plan && product) {
-          YourAjaxLib.addPlanToCart(plan, product, quantity, function () {
-            $("#product-form").submit();
-          });
-        } else {
-          $("#product-form").submit();
-        }
-      },
-    });
-  }
-});
-```
-
-**Full Cart Page Example**
-
-```html
-<html>
-  <head></head>
-</html>
-<div id="cart-item">
-  <h2>Product Title</h2>
-  <div id="extend-offer"></div>
-</div>
-<script></script>
-```
-
-```javascript
-/** configure */
-Extend.config({ storeId: '<EXTEND_STORE_ID>' });
-
-/** get quantity from store page if possible */
-const quantity = document.querySelector('.storeQuantity');
-
-/** initialize offer */
-Extend.buttons.renderSimpleOffer('#extend-offer', {
-  referenceId: '<PRODUCT_REFERENCE_ID>'
-  onAddToCart:
-    function({ plan, product }) {
-        if (plan && product) {
-          // if you can get quantity from store, pass it here.
-          // otherwise, quantity defaults to 1
-          YourAjaxLib.addPlanToCart(plan, product, quantity)
-        }
-    },
-});
-```
-
-# API Reference
-
----
-
-### Extend.config(config: object)
+<h3 class="interface">Interface</h3>
 
 ```typescript
-Extend.config({
-  /**
-   * Extend store ID
-   *
-   * @required
-   */
-  storeId: string,
-  /**
-   * A list of product reference IDs for the current page.  This will preload
-   * the offers for each product to improve performance when switching
-   * referenceIds.
-   *
-   * @optional
-   */
-  referenceIds: Array<string>,
-  /**
-   * Optional theme configuration.  A theme passed in as an argument will
-   * override any theme retrieved from the Extend Merchant Portal configuration
-   * and will fallback to a default theme if neither are present.
-   *
-   * @optional
-   */
-  theme: {
-    primaryColor: string
-  },
-  /**
-   * If you are using our demo environment, set this to "demo".
-   *
-   * @optional
-   * @deprecated Soon demo environment will be removed.  Do not use if you can help it.
-   */
-   environment: "demo" | "production"
-})
-```
-
-### Extend.buttons.render(selector: string, options: object)
-
-```typescript
-Extend.buttons.render("#offer-container", {
-  /** @required */
-  referenceId: string,
-  /** @optional */
-  theme: {
-    primaryColor: string,
-  },
-});
-```
-
-### Extend.buttons.renderSimpleOffer(selector: string, options: object)
-
-```typescript
-Extend.buttons.renderSimpleOffer('#offer-container', {
-  /** @required */
-  referenceId: string,
-  onAddToCart?({ plan: PlanSelection, product: ActiveProduct, quantity?: number }): void | Promise<void>,
-  /** @optional */
-  theme: {
-    primaryColor: string
-  }
-})
-```
-
-### Extend.buttons.instance(selector: string): ButtonsComponent
-
-```typescript
-const component = Extend.buttons.instance("#offer-container");
-```
-
-### ButtonsComponent#getActiveProduct(): ActiveProduct | null
-
-```typescript
-// usage
-const product = component.getActiveProduct();
-
-// product object structure
-interface ActiveProduct {
-  /**
-   * The referenceId of the active product
-   * @example "sku-12345"
-   */
-  id: string;
-  /**
-   * The name of the active product
-   * @example "XBox One X"
-   */
-  name: string;
+interface Config {
+  storeId: string;
 }
 ```
 
-### ButtonsComponent#setActiveProduct(referenceId: string | number)
+<h3>Attributes</h3>
 
-```typescript
-component.setActiveProduct("item-12345");
+| Attribute                    | Data type | Description                    |
+| :--------------------------- | :-------- | :----------------------------- |
+| storeId <br/> _**required**_ | string    | Your assigned Extend `storeId` |
+
+<h2 id="setSelectedPlan" class="section-function">ExtendAnalytics.setSelectedPlan</h2>
+
+This function should be invoked each time a customer clicks to select a warranty plan. For example, if a customer clicks on the "1 year" warrant offer button, you should invoke this function, passing `productId`, `offerType`, and `planId`. This function allows the SDK to add the correct plan to the browser's local storage, which will be checked by analytics SDK functions in the checkout flow.
+
+\*\*\*Nima Edit
+
+`ExtendAnalytics.setSelectedPlan` takes in your products `productId`, the Extend warranty `planId`, and a `OfferType`. This function should be invoked each time a customer clicks on a Extend button offer. This will track what Extend warranty offer was selected by the user. This also allows our to `ExtendAnalytics.trackOfferSold` function to grab the users selected Extend offer automatically.
+
+```javascript
+// Example Implementation
+
+ExtendAnalytics.setSelectedPlan({ offerType, productId, planId });
 ```
 
-### ButtonsComponent#getPlanSelection(): PlanSelection | null
+<h3 class="interface">Interface</h3>
 
 ```typescript
-// usage
-const plan = component.getPlanSelection();
-
-// plan object structure
-interface PlanSelection {
-  /**
-   * The unique plan identifier for this plan
-   * @example "10001-misc-elec-adh-replace-1y"
-   */
+interface SetSelectedPlan {
+  productId: string;
+  offerType: OfferType;
   planId: string;
-  /**
-   * The price of the warranty plan in cents (e.g. 10000 for $100.00)
-   * @example 10000
-   */
-  price: number;
-  /**
-   * The coverage term length in months
-   * @example 36
-   */
-  term: number;
 }
 ```
 
-### Extend.modal.open(options: object)
+<h3>Attributes</h3>
+
+| Attribute                      | Data type | Description                                                                                            |
+| :----------------------------- | :-------- | :----------------------------------------------------------------------------------------------------- |
+| productId <br/> _**required**_ | string    | the ID of the product for warranty being rendered                                                      |
+| offerType <br/> _**required**_ | object    | object containing the offer area and component data (see <a href="#glossary-offer-type">OfferType<a/>) |
+| planId <br/> _**required**_    | string    | the ID of the warranty plan being offered                                                              |
+
+<h2 id="trackOfferViewed" class="section-function">ExtendAnalytics.trackOfferViewed</h2>
+
+This function is used to track when a user views a warranty offer. Therefore, it should be invoked whenever an offer is rendered on the screen to a customer, and the `productId` and `offerType` should be passed as arguments.
+
+\*\*\* Nimas edit
+
+`ExtendAnalytics.trackOfferViewed` takes in your products `productId` and a `OfferType`. This function should be called whenever an offer is rendered on the screen to a user and passed the appropriated arguments. This function is used to track when a user views a Extend warranty offer.
+
+```javascript
+// Example Implementation
+
+ExtendAnalytics.trackOfferViewed({ productId, offerType });
+```
+
+<h3 class="interface">Interface</h3>
 
 ```typescript
-Extend.modal.open({
-  /** @required */
-  referenceId: string,
-  /** @optional */
-  theme: {
-    primaryColor: string,
-  },
-  /**
-   * If a user made a warranty selection, the "plan" and "product" will be
-   * passed to this callback function.  If the user declines the offer, "plan"
-   * and "product" will be undefined.  See above for data structure for
-   * "PlanSelection" and "ActiveProduct" arguments.
-   *
-   * This callback function is where you should handle adding the warranty to
-   * the users cart, submitting your product form, etc.
-   */
-  onClose(plan?: PlanSelection, product?: ActiveProduct) {},
-});
+interface TrackOfferViewed {
+  productId: string;
+  offerType: OfferType;
+}
+```
+
+<h3>Attributes</h3>
+
+| Attribute                      | Data type | Description                                                     |
+| :----------------------------- | :-------- | :-------------------------------------------------------------- |
+| productId <br/> _**required**_ | string    | the ID of the product associated with the warranty being viewed |
+| offerType <br/> _**required**_ | OfferType | see OfferType                                                   |
+
+<h2 id="trackOfferSold" class="section-function">ExtendAnalytics.trackOfferSold</h2>
+
+This function is used to track when a customer has purchased a warranty. Therefore, it should be invoked on order creation for each product that was sold with a warranty, and the `productId` and `productQuantity` should be passed as arguments.
+
+\*\*\* Nimas edit
+
+`ExtendAnalytics.trackOfferSold` takes in your products `productId` and the quantity of the purchased product `productQuantity`. This function should be called whenever a product is checked out from your cart page and has an associated Extend warranty in the cart. This will help track the product along with the Extend offer sold for your store.
+
+```javascript
+// Example Implementation
+
+ExtendAnalytics.trackOfferSold({ productId, productQuantity });
+```
+
+<h3 class="interface">Interface</h3>
+
+```typescript
+interface TrackOfferSold {
+  productId: string;
+  productQuantity: number;
+}
+```
+
+<h3>Attributes</h3>
+
+| Attribute                      | Data type | Description                                                           |
+| :----------------------------- | :-------- | :-------------------------------------------------------------------- |
+| productId <br/> _**required**_ | string    | the ID of the product associated with the warranty that was purchased |
+| productQuantity _**reuired**_  | number    | the quantity of the associated product that was purchased             |
+
+<h2 id="trackOfferAddedToCart" class="section-function">ExtendAnalytics.trackOfferAddedToCart</h2>
+
+This function is used to track when a customer has added a warranty to the cart. Therefore, invoke this function when a customer adds a product to the cart with a warranty, and pass the `productId` and `productQuantity` as arguments.
+
+\*\*\* Nimas edit
+
+`ExtendAnalytics.trackOfferAddedToCart` takes in your products `productId` and the quantity of the purchased product `productQuantity`. This function is used to track when a customer has added a warranty to the cart. Invoke this function when a customer adds a product to the cart with an Extend warranty.
+
+```javascript
+// Example Implementation
+
+ExtendAnalytics.trackOfferAddedToCart({ productId, productQuantity });
+```
+
+<h3 class="interface">Interface</h3>
+
+```typescript
+interface TrackOfferAddToCart {
+  productId: string;
+  productQuantity: number;
+}
+```
+
+<h3>Attributes</h3>
+
+| Attribute                      | Data type | Description                                                                   |
+| :----------------------------- | :-------- | :---------------------------------------------------------------------------- |
+| productId <br/> _**required**_ | string    | the ID of the product associated with the warranty that was added to the cart |
+| productQuantity _**required**_ | number    | the quantity of the associated product that was added to the cart             |
+
+<h2 id="shared-interface-glossary" class="section-function">Shared Interface and Type Glossary</h2>
+
+<h3><code id="glossary-offer-type" class="glossary-interface" style="font-size:1.3rem;">OfferType</code></h3>
+
+<h3 class="interface">Interface</h3>
+
+```typescript
+interface OfferType {
+  area: OfferTypeArea;
+  component: OfferTypeComponent;
+}
+```
+
+<h3>Attributes</h3>
+
+| Attribute                      | Data type          | Description                                                |
+| :----------------------------- | :----------------- | :--------------------------------------------------------- |
+| area <br/> _**required**_      | OfferTypeArea      | predfined string indicating where the offer was rendered   |
+| component <br/> _**required**_ | OfferTypeComponent | predefined string indicating which offer type was rendered |
+
+<br/>
+<h3><code id="glossary-offer-type-area" class="glossary-interface" style="font-size:1.3rem;">OfferTypeArea</code></h3>
+
+<h3 class="interface">Type</h3>
+
+```typescript
+type OfferTypeArea =
+  | "product_page"
+  | "product_modal"
+  | "collection"
+  | "cart_page"
+  | "cart_page_load"
+  | "app"
+  | "post_purchase_modal";
+```
+
+<h3><code id="glossary-offer-type-component" class="glossary-interface" style="font-size:1.3rem;">OfferTypeComponent</code></h3>
+
+<h3 class="interface">Type</h3>
+
+```typescript
+type OfferTypeComponent = "buttons" | "modal" | "app";
 ```
