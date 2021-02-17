@@ -454,6 +454,15 @@ This function provides a convenient way to get product information when the only
 | storefrontApiToken <br/> _**required**_ | string    | The storefront API token required to make GraphQL calls                                                                 |
 | done <br/> _**required**_               | function  | Callback function that will have parameters (err, data) where data is the graphql product options object                |
 
+<h3 class="interface">Interface</h3>
+
+```typescript
+interface ProductOption {
+  optionEntityId: number;
+  valueEntityId: number;
+}
+```
+
 <h2>BigCommerce.handleAddToCart(element: ElementRef, opts: HandleAddToCartOpts)</h2>
 
 <h3>Attributes</h3>
