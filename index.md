@@ -6,7 +6,7 @@ layout: default
 
 ---
 
-Integrating with the Extend SDK will allow you to display offers and sell extended warranty contracts in your online store. This guide will walk you through how to do the following:
+Integrating with the Extend SDKs will allow you to display offers and sell extended warranty contracts in your online store. This guide will walk you through how to do the following:
 
 - Install the Extend Client SDK
 - Render the extended warranty offers
@@ -19,7 +19,7 @@ Integrating with the Extend SDK will allow you to display offers and sell extend
 
 ---
 
-- Generate a Stencil-CLI access token (if using a stencil theme. See here for instructions on how to do this)
+- Generate a Stencil-CLI access token (if using a stencil theme. See <a href="https://developer.bigcommerce.com/stencil-docs/installing-stencil-cli/live-previewing-a-theme" target="_blank" rel="noopener noreferrer" >here</a> for instructions on how to do this)
 
 - Make a copy of the theme you intend to customize and download it to your
 
@@ -44,19 +44,23 @@ Add the following scripts into your <b>base.html</b> file (if using a stencil th
 
 ```javascript
 <script src="https://sdk.helloextend.com/extend-sdk-client/v1/extend-sdk-client.min.js"></script>
-<script src="http://sdk.helloextend.com/extend-sdk-client-bigcommerce-addon/v1/extend-sdk-client-bigcommerce-addon.min.js"></script>
+<script src="https://sdk.helloextend.com/extend-sdk-client-bigcommerce-addon/v1/extend-sdk-client-bigcommerce-addon.min.js"></script>
 <script>Extend.config({ storeId: '<YOUR_EXTEND_STORE_ID>', environment: 'production' })</script>
 ```
 
 To verify the scripts are running correctly, <b>preview</b> your theme copy, open your browser’s console, type <b>‘Extend’</b> or <b>‘ExtendBigCommerce’</b> and hit enter. Both scripts should appear in the console.
 
+<img src="assets/bc1.png">
+
 <h2>Add Extend Offer Element</h2>
 
 Add an HTML element where you would like to place the Extend offer buttons. For highest conversion rates, we recommend placing it directly above the add to cart button. In most cases, the button is in the add-to-cart.html file, but if you have done previous work on your product page it may be located somewhere else in your theme.
 
-```javascript
+```html
 <div id="extend-offer">This is where the buttons will render</div>
 ```
+
+<img src="assets/bc2.png">
 
 <div class="info-container">
 <strong>Important Note:</strong> An easy way to find where to place the parent div element is to open the dev tools on a product page and inspect an element above where you would like the cart offers to appear, copy an attribute, and search for it in one of the liquid files mentioned above.
@@ -65,15 +69,17 @@ Add an HTML element where you would like to place the Extend offer buttons. For 
 
 Verify that the div has been added to the correct spot by temporarily adding some text, saving, and previewing your product page. Once you confirm that the text is showing in the correct spot, make sure to remove it!
 
+<img src="assets/bc3.png">
+
 <h2>Render Extend Warranty buttons on product page</h2>
 
 Now that the offers element is added, you can use the Extend.buttons.render() function to render the offer buttons on the product page. This function takes in 2 arguments:
 
 - The ID of the `#extend-offer` element you added in the previous step
-- An object with a key of referenceId and a value of the selected product `variantId`
+- An object with a key of referenceId and a value of the selected product `sku`
 
 ```javascript
-Extend.buttons.render('#extend-offer', {referenceId: {{{json product.sku}}}})
+Extend.buttons.render('#extend-offer', {referenceId: <sku>})
 ```
 
 <h2>Handling Multiple Variants</h2>
@@ -90,13 +96,34 @@ In order to prevent a customer from accidentally purchasing the wrong warranty f
 
 Verify that you are setting the correct variant by adding a console log right before the `Extend.setActiveProduct()` function is called. This ensures you are passing the correct variantId. You will also notice that if you change the variant on the page, the offer buttons will re-render.
 
-Example Using a Cornerstone-based Stencil Theme
+<b>Example</b> - Using a Cornerstone-based Stencil Theme
 
-The Cornerstone theme handles variant changes using a method called `productOptionsChanged(`) in the <b>product-details.js</b> file. This method exposes the sku of the selected variant. To set the active product include the following line, accessing the sku off of the productAttributesData object:
+The Cornerstone theme handles variant changes using a method called `productOptionsChanged()` in the <b>product-details.js</b> file. This method exposes the sku of the selected variant. To set the active product include the following line, accessing the sku off of the productAttributesData object:
+
+```javascript
+utils.api.productAttributes.optionChange(
+  productId,
+  $form.serialize(),
+  "products/bulk-discount-rates",
+  (err, response) => {
+    const productAttributesData = response.data || {};
+    const productAttributesContent = response.content || {};
+    this.updateProductAttributes(productAttributesData);
+    this.updateView(productAttributesData, productAttributesContent);
+    // ===== Extend SDK ===== //
+    Extend.buttons
+      .instance("#extend-offer")
+      .setActiveProduct(productAttributesData.sku);
+    // ===== End Extend SDK ===== //
+  }
+);
+```
 
 <h2>Add the Extend offer modal and add warranties to the cart</h2>
 
 The <b>Modal Offer</b> is a modal rendered before navigating the customer to a new page and adding a product to cart, or as an opportunity on the cart page. In the example below, the offer modal appears after the customer added the product to the cart without selecting one of the offered protection plans.
+
+<img src="assets/bc4.png">
 
 <b>Example 1</b> - Add an eventListener to the Add to Cart button
 Select the Add to Cart button element on the product page using vanillaJS or jQuery and add an eventListener.
@@ -111,7 +138,7 @@ addToCartButton.addEventListener("click", function (event) {});
 
 In order to add the warranty to the cart or launch the offer modal, you need to prevent the default behavior of the Add to Cart button. You can do this by adding an `event.preventDefault()` or `event.stopImmediatePropagation()` inside the eventListener
 
-Inside the Add to Cart eventListener, add `ExtendBigCommerce.handleAddToCart()` function. Make sure to select quantity value from product form and add to `ExtendBigCommerce.handleAddToCart()` function.
+Use the `ExtendBigCommerce.handleAddToCart()` function inside the add to cart event listener. Make sure to select quantity value from product form and add to `ExtendBigCommerce.handleAddToCart()` function.
 
 ```javascript
 addToCartButton.addEventListener("click", function (e) {
@@ -152,6 +179,8 @@ if (window.ExtendBigCommerce && window.Extend) {
 
 The cart offer is the last chance your shoppers have to add an extended warranty before they checkout. Here you can display an offer button next to each eligible product in the cart that does not already have a protection plan associated with it.
 
+<img src="assets/bc5.png">
+
 Add an HTML element where you would like to place the Extend cart offer buttons. We recommend placing the element directly below each product in the cart. In the case of Cornerstone Stencil themes, this is in the content.html (and cart-preview.html for mini-cart).
 
 You need to add this button under each product in the cart that does not have a warranty. Find where the cart items are being iterated on in the template. Then set the `quantity` and `sku` of the product to the cart offer div data attributes:
@@ -175,7 +204,8 @@ Find the appropriate javascript file for the shopping cart (cart.js in the case 
 
 ```javascript
 function findAll(element) {
-  const items = document.querySelectorAll(element);
+  var slice = Array.prototype.slice;
+  var items = document.querySelectorAll(element);
   return items ? slice.call(items, 0) : [];
 }
 
@@ -242,6 +272,8 @@ Extend.buttons.renderSimpleOffer(el, {
 
 Verify the cart offer buttons are rendering correctly by previewing your theme and going to your cart page that has an active and enabled product in it. You should see the Extend cart offer button in the cart, and when you click it, it should launch the offer modal. When a shopper clicks this offer button, the modal described in the previous section will launch, and the shopper will be able to select which warranty plan he or she would like to purchase.
 
+<img src="assets/bc6.png">
+
 <h2>Setting the Image for Custom Items</h2>
 
 Because the Extend BigCommerce SDK uses Custom Items to create protection plans dynamically, the Extend cart image must be included in your theme, and image markup included in your templates wherever cart items are displayed.
@@ -279,11 +311,14 @@ To leverage cart normalization, you’ll need to include the cart normalize func
 Place the following snippet in your cart logic so that it runs when your cart initially loads, as well as any time the cart content is refreshed.
 
 ```javascript
-ExtendBigCommerce.normalizeCart({ balance: false }, function (err, data) {
-  if (data && data.updates) {
-    return window.location.reload();
+ExtendBigCommerce.normalizeCart(
+  { cart: cart, balance: false },
+  function (err, data) {
+    if (data && data.updates) {
+      return window.location.reload();
+    }
   }
-});
+);
 ```
 
 If you are using the stencil Cornerstone theme, this can be done by using this function within the cart.js file. Place the above snippet within the onReady() function, and again in the getContent callback within refreshContent().
@@ -341,12 +376,14 @@ If you are using Custom items for other functionality besides Extend, you can di
 
 <h2>BigCommerce.addCartItem(opts: CartAddOpts, callback?: function)</h2>
 
+This function adds a product from your catalog to the cart.
+
 <h3>Attributes</h3>
 
-| Attribute                     | Data type | Description                                                                 |
-| :---------------------------- | :-------- | :-------------------------------------------------------------------------- |
-| opts <br/> _**required**_     | object    | CartAddOpts                                                                 |
-| callback <br/> _**optional**_ | function  | Callback function that will be executed after the item is added to the cart |
+| Attribute                     | Data type | Description                                                                                                       |
+| :---------------------------- | :-------- | :---------------------------------------------------------------------------------------------------------------- |
+| opts <br/> _**required**_     | object    | CartAddOpts                                                                                                       |
+| callback <br/> _**optional**_ | function  | Callback function that will have parameters (err, cart) that will be executed after the item is added to the cart |
 
 <h3>CartAddOpts Object</h3>
 
@@ -367,9 +404,9 @@ interface ItemOption {
 }
 ```
 
-<h2>BigCommerce.addPlanToCart(opts: AddToCartOpts, callback: function)</h2>
+<h2>BigCommerce.addPlanToCart(opts: AddToCartOpts, callback?: function)</h2>
 
-This function adds an Extend warranty plan to the cart.
+This function adds an Extend warranty plan to the cart as a custom item.
 
 <div class="info-container">
 <b>Important Note:</b> If you are looking to add a product and its associated warranty to the cart, please see <b>#handleAddToCart</b> instead.
@@ -377,10 +414,10 @@ This function adds an Extend warranty plan to the cart.
 
 <h3>Attributes</h3>
 
-| Attribute                     | Data type | Description                                                                 |
-| :---------------------------- | :-------- | :-------------------------------------------------------------------------- |
-| opts <br/> _**required**_     | object    | AddToCartOpts                                                               |
-| callback <br/> _**optional**_ | function  | Callback function that will be executed after the item is added to the cart |
+| Attribute                     | Data type | Description                                                                        |
+| :---------------------------- | :-------- | :--------------------------------------------------------------------------------- |
+| opts <br/> _**required**_     | object    | AddToCartOpts                                                                      |
+| callback <br/> _**optional**_ | function  | Callback function that will be executed after the Extend plan is added to the cart |
 
 <h3>AddToCartOpts Object</h3>
 
@@ -397,17 +434,17 @@ This function provides a convenient way to remove an item from the cart. In some
 
 <h3>Attributes</h3>
 
-| Attribute                     | Data type | Description                                                                     |
-| :---------------------------- | :-------- | :------------------------------------------------------------------------------ |
-| opts <br/> _**required**_     | object    | CartRemoveOpts                                                                  |
-| callback <br/> _**optional**_ | function  | Callback function that will be executed after the item is removed from the cart |
+| Attribute                     | Data type | Description                                                                                                           |
+| :---------------------------- | :-------- | :-------------------------------------------------------------------------------------------------------------------- |
+| opts <br/> _**required**_     | object    | CartRemoveOpts                                                                                                        |
+| callback <br/> _**optional**_ | function  | Callback function that will have parameters (err, cart) that will be executed after the item is removed from the cart |
 
 <h3>CartRemoveOpts Object</h3>
 
 | Attribute                   | Data type | Description                                               |
 | :-------------------------- | :-------- | :-------------------------------------------------------- |
 | cartId <br/> _**required**_ | string    | The sku for the product associated with the warranty plan |
-| itemId <br/> _**required**_ | string    | The warranty plan to be added to the cart                 |
+| itemId <br/> _**required**_ | string    | The item you wish to remove from the cart                 |
 
 <h2>BigCommerce.getCart(callback?: CartCallBack)</h2>
 
@@ -415,9 +452,9 @@ This function provides a convenient way to fetch the BigCommerce cart in the eve
 
 <h3>Attributes</h3>
 
-| Attribute                     | Data type | Description                                                       |
-| :---------------------------- | :-------- | :---------------------------------------------------------------- |
-| callback <br/> _**optional**_ | function  | Callback function that will be executed after the cart is fetched |
+| Attribute                     | Data type | Description                                                                                             |
+| :---------------------------- | :-------- | :------------------------------------------------------------------------------------------------------ |
+| callback <br/> _**optional**_ | function  | Callback function that will have parameters (err, cart) that will be executed after the cart is fetched |
 
 <h2>BigCommerce.getProductById(opts: GetProductByIdOpts)</h2>
 
@@ -479,7 +516,7 @@ interface ProductOption {
 | modal <br/> _**optional**_    | boolean   | If a shopper attempts to add a product to cart without selecting a warranty plan, setting modal to true will render the Offers modal. |
 | quantity <br/> _**optional**_ | number    | The number of warranty plans to be added to cart. This should match the number of products added to cart.                             |
 | cart <br/> _**optional**_     | object    | BigCommerce cart object for the current cart                                                                                          |
-| done <br/> _**required**_     | function  | Callback function that will have parameters (err, data) where data is the graphql product options object                              |
+| done <br/> _**required**_     | function  | Callback function that will have parameters (err, data)                                                                               |
 
 <h2>BigCommerce.normalizeCart(optsOrCb: NormalizeCartOptions | Callback)</h2>
 
@@ -532,7 +569,7 @@ interface NormalizeCartOptions {
 
 This function accepts a BigCommerce `sku` and the BigCommerce. The function iterates through the BigCommerce cart items and returns a boolean indicating if there is already a warranty in the cart for that product `sku`. This function is almost always used on the cart page to determine whether or not to render a <a href="https://helloextend.github.io/client-integrations/extend-shopify-sdk#render-cart-offer-buttons" target="_blank" rel="noopener noreferrer">cart offer button</a> for a line item in the cart.
 
-| Attribute                 | Data type | Description                                                        |
-| :------------------------ | :-------- | :----------------------------------------------------------------- |
-| sku <br/> _**required**_  | string    | This BigCommerce `sku` of the product to be checked for a warranty |
-| cart <br/> _**required**_ | object    | BigCommerce cart object for the current cart                       |
+| Attribute                 | Data type | Description                                                       |
+| :------------------------ | :-------- | :---------------------------------------------------------------- |
+| sku <br/> _**required**_  | string    | The BigCommerce `sku` of the product to be checked for a warranty |
+| cart <br/> _**required**_ | object    | BigCommerce cart object for the current cart                      |
