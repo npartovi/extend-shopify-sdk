@@ -2,574 +2,829 @@
 layout: default
 ---
 
-<h1>Overview</h1>
+## Getting Started
 
 ---
 
-Integrating with the Extend SDKs will allow you to display offers and sell extended warranty contracts in your online store. This guide will walk you through how to do the following:
+To display offers on your webpage you will need:
 
-- Install the Extend Client SDK
-- Render the extended warranty offers
-- Add extended warranties to your cart
-- Support quantity matching and cart normalization for extended warranty product SKUs in your cart
+<dl>
+    <dt>Your Extend Store ID</dt>
+    <dd>
+        This can be found through the <a href="https://merchants.helloextend.com">Extend Merchant Portal</a> by clicking on the <i>"Settings"</i> navigation tab (<a href="https://dev.merchants.helloextend.com/dashboard/settings">direct link</a>) under <i>"Production Credentials"</i>
+    <img src="https://helloextend-static-assets.s3.amazonaws.com/Credentials.png"/>
+    </dd>
+    <dt>A product referenceId</dt>
+    <dd>This is the unique product identifier that you had specified in your product catalog upload.  We will use this identifier to know which warranty offer to display.  Generally this is the product SKU or similar, however the choice of <b>product reference ID</b> is up to a merchant to decide.  If you are having trouble finding out what your <b>product referenceId</b> is, please file a support request through the <a href="https://merchants.helloextend.com">Extend Merchant Portal</a>.
+    </dd>
+</dl>
 
-<strong>Before you start:</strong> Make sure you have an Extend store created. You can obtain this via the merchant portal (merchants.extend.com) or reach out to your MSM if you have not yet been given an Extend store ID.
+<br />
 
-<h1>Setup</h1>
-
----
-
-- Generate a Stencil-CLI access token (if using a stencil theme. See <a href="https://developer.bigcommerce.com/stencil-docs/installing-stencil-cli/live-previewing-a-theme" target="_blank" rel="noopener noreferrer" >here</a> for instructions on how to do this)
-
-- Make a copy of the theme you intend to customize and download it to your
-
-- Setup your local development environment using stencil CLI setup
-
-- Log in to your merchant account with extend at merchants.extend.com and retrieve your Extend store id. If you do not have a merchant account, contact your Merchant Success Manager to have one created for you.
-
-- Generate a BigCommerce API account in your BigCommerce account, and provide these credentials to your Merchant Success Manager or Solution Engineer at Extend. See the section labeled “Obtaining Store API Credentials” <a href="https://developer.bigcommerce.com/api-docs/getting-started/authentication/rest-api-authentication#obtaining-store-api-credentials#obtaining-store-api-credentials" target="_blank" rel="noopener noreferrer">here</a>. You will need to set the following scopes for this API Account:
-
-  - <b>Orders:</b> read-only
-  - <b>Order Transactions:</b> read-only
-  - <b>Products:</b> read-only
-  - <b>Carts:</b> modify
-  - <b>Store Information:</b> read-only
-  - <b>Sites & Routes:</b> read-only
-
-<h1>Installation</h1>
+## Installation
 
 ---
 
-Add the following scripts into your <b>base.html</b> file (if using a stencil theme) right before the closing `</head>` tag and press <b>save</b>. If using a Blueprint theme or custom theme, please ensure the script tags are present in the `<head>` of each page where a shopper can add items to the cart, including the cart page.
-
-```javascript
-<script src="https://sdk.helloextend.com/extend-sdk-client/v1/extend-sdk-client.min.js"></script>
-<script src="https://sdk.helloextend.com/extend-sdk-client-bigcommerce-addon/v1/extend-sdk-client-bigcommerce-addon.min.js"></script>
-<script>Extend.config({ storeId: '<YOUR_EXTEND_STORE_ID>', environment: 'production' })</script>
-```
-
-To verify the scripts are running correctly, <b>preview</b> your theme copy, open your browser’s console, type <b>‘Extend’</b> or <b>‘ExtendBigCommerce’</b> and hit enter. Both scripts should appear in the console.
-
-<img src="assets/bc1.png">
-
-<h2>Add Extend Offer Element</h2>
-
-Add an HTML element where you would like to place the Extend offer buttons. For highest conversion rates, we recommend placing it directly above the add to cart button. In most cases, the button is in the add-to-cart.html file, but if you have done previous work on your product page it may be located somewhere else in your theme.
+Add the following to your page
 
 ```html
-<div id="extend-offer">This is where the buttons will render</div>
+<script src="https://sdk.helloextend.com/extend-sdk-client/v1/extend-sdk-client.min.js"></script>
+<script>
+  Extend.config({ storeId: "<YOUR_EXTEND_STORE_ID>" });
+</script>
 ```
 
-<img src="assets/bc2.png">
+For more options that can be passed to the `Extend.config()` function, see the [API Reference](#api-reference)
 
-<div class="info-container">
-<strong>Important Note:</strong> An easy way to find where to place the parent div element is to open the dev tools on a product page and inspect an element above where you would like the cart offers to appear, copy an attribute, and search for it in one of the liquid files mentioned above.
+<br />
 
-</div>
+## Displaying Product Offers and Cart Offers
 
-Verify that the div has been added to the correct spot by temporarily adding some text, saving, and previewing your product page. Once you confirm that the text is showing in the correct spot, make sure to remove it!
+---
 
-<img src="assets/bc3.png">
+Place an html element anywhere you would like to see the product or cart page offer with a css selector that you can reference.
 
-<h2>Render Extend Warranty buttons on product page</h2>
-
-Now that the offers element is added, you can use the Extend.buttons.render() function to render the offer buttons on the product page. This function takes in 2 arguments:
-
-- The ID of the `#extend-offer` element you added in the previous step
-- An object with a key of referenceId and a value of the selected product `sku`
-
-```javascript
-Extend.buttons.render('#extend-offer', {referenceId: <sku>})
+```html
+<div id="extend-offer"></div>
 ```
 
-<h2>Handling Multiple Variants</h2>
+This element will be used as the container for the displayed warranty offer. If you have specific width or spacing requirements, you can add them directly to this element using css or inline styles.
 
-In order to prevent a customer from accidentally purchasing the wrong warranty for a product, the warranty offers need to be updated every time a shopper selects a different variant for a product. This is done by passing the variant `sku` of the newly selected product to the `Extend.setActiveProduct` function. Therefore, you will need to determine how your store updates the product page when a different product variant is selected. This is typically done by dispatching a JavaScript event or by manipulating the window location. Add an event listener to the page and invoke `Extend.setActiveProduct()` with the newly selected `sku`.
+<br />
+
+### Initialization
+
+---
 
 ```javascript
-  Extend.setActiveProduct('#extend-offer', <sku>)
+/* PRODUCT PAGE OFFER */
+Extend.buttons.render('#extend-offer', {
+  referenceId: '<PRODUCT_REFERENCE_ID>',
+})
+
+/* CART PAGE OFFER */
+Extend.buttons.renderSimpleOffer('#extend-offer', {
+  referenceId: '<PRODUCT_REFERENCE_ID>',
+  onAddToCart({ plan, product, quantity }) {
+    if (plan && product) {
+      // a user has selected a plan.  Add warranty to their cart.
+    }
+})
 ```
 
-<div class="info-container">
-  <strong>Important Note:</strong> A common way to find the event that fires when a product variant is changed is to look at the eventListeners tied to your product options selector.
-</div>
+> Note: To query DOM elements, we use the native <b>document.querySelector</b>. For this reason, we recommend using element ids instead of classes for selector references.
 
-Verify that you are setting the correct variant by adding a console log right before the `Extend.setActiveProduct()` function is called. This ensures you are passing the correct variantId. You will also notice that if you change the variant on the page, the offer buttons will re-render.
+### Accessing the component instance
 
-<b>Example</b> - Using a Cornerstone-based Stencil Theme
+It's possible to have multiple offers displayed on the same page and each might have their own product referenceId, so each rendered component acts independently of each other. The component instance will be tied to the element/selector passed in during the call to `Extend.buttons.render` and will be used for API calls later in this guide.
 
-The Cornerstone theme handles variant changes using a method called `productOptionsChanged()` in the <b>product-details.js</b> file. This method exposes the sku of the selected variant. To set the active product include the following line, accessing the sku off of the productAttributesData object:
+**To retrieve the component instance:**
 
 ```javascript
-utils.api.productAttributes.optionChange(
-  productId,
-  $form.serialize(),
-  "products/bulk-discount-rates",
-  (err, response) => {
-    const productAttributesData = response.data || {};
-    const productAttributesContent = response.content || {};
-    this.updateProductAttributes(productAttributesData);
-    this.updateView(productAttributesData, productAttributesContent);
-    // ===== Extend SDK ===== //
-    Extend.buttons
-      .instance("#extend-offer")
-      .setActiveProduct(productAttributesData.sku);
-    // ===== End Extend SDK ===== //
-  }
-);
+const component = Extend.buttons.instance("#extend-offer");
 ```
 
-<h2>Add the Extend offer modal and add warranties to the cart</h2>
+### Handling product selection changes
 
-The <b>Modal Offer</b> is a modal rendered before navigating the customer to a new page and adding a product to cart, or as an opportunity on the cart page. In the example below, the offer modal appears after the customer added the product to the cart without selecting one of the offered protection plans.
+If your store has multiple product variants for a single product page (for example, if you have a product that allows a customer to select a color or size option) you'll need to pass the new **product reference id** to the SDK when the change occurs. This prevents a customer from accidentally purchasing the wrong warranty for an incorrect product.
 
-<img src="assets/bc4.png">
-
-<b>Example 1</b> - Add an eventListener to the Add to Cart button
-Select the Add to Cart button element on the product page using vanillaJS or jQuery and add an eventListener.
+**Example:**
 
 ```javascript
-var addToCartButton = document.querySelector("<button_selector>");
+// calls are done through the component instance
+const component = Extend.buttons.instance("#extend-offer");
+
+component.setActiveProduct("<DIFFERENT_PRODUCT_REFERENCE_ID>");
 ```
 
+<br />
+
+## Adding a warranty to the cart
+
+---
+
+Typically you would add the a warranty selection to the cart when they
+click on "Add to Cart". You can retrieve the users warranty
+selection by calling `component.getPlanSelection();` and retrieve the
+currently selected product by calling `component.getActiveProduct();`.
+
+**Example**
+
 ```javascript
-addToCartButton.addEventListener("click", function (event) {});
+const component = Extend.buttons.instance("#extend-offer");
+const plan = component.getPlanSelection();
+const product = component.getActiveProduct();
 ```
 
-In order to add the warranty to the cart or launch the offer modal, you need to prevent the default behavior of the Add to Cart button. You can do this by adding an `event.preventDefault()` or `event.stopImmediatePropagation()` inside the eventListener
+If a user has selected a warranty option, `getPlanSelection` will return
+a `Plan` object, otherwise it will return `null`. See the
+[API Reference](#api-reference) for details on what is included with the
+`plan` object.
 
-Use the `ExtendBigCommerce.handleAddToCart()` function inside the add to cart event listener. Make sure to select quantity value from product form and add to `ExtendBigCommerce.handleAddToCart()` function.
+Here is an example of how this might look in a basic store.
 
 ```javascript
-addToCartButton.addEventListener("click", function (e) {
+$("#add-to-cart").on("click", function (e) {
   e.preventDefault();
 
-  var quantityEl = document.querySelector('[name="quantity"]');
-  var quantity = quantityEl && quantityEl.value;
+  /** get the component instance rendered previously */
+  const component = Extend.buttons.instance("#extend-offer");
 
-  ExtendBigCommerce.handleAddToCart("#extend-offer", {
-    quantity: quantity,
-    modal: true,
-    done: function () {
-      // call function to add your product here
-    },
-  });
+  /** get the users plan selection */
+  const plan = component.getPlanSelection();
+  const product = component.getActiveProduct();
+
+  if (plan) {
+    /**
+     * If you are using an ecommerce addon (e.g. Shopify) this is where you
+     * would use the respective add-to-cart helper function.
+     *
+     * For custom integrations, use the plan data to determine which warranty
+     * sku to add to the cart and at what price.
+     */
+    // add plan to cart, then handle form submission
+  } else {
+    // handle form submission
+  }
 });
 ```
 
-<b>Example 2</b> - Modify Existing Add to Cart Handler
+<br />
 
-Alternatively, the following code can be added directly to the existing add to cart handler.
+## Displaying a Modal Offer
 
-```javascript
-if (window.ExtendBigCommerce && window.Extend) {
-  popModal();
-  const quantityInput = document.querySelector('input[id="qty[]"]');
-  const quantity = quantityInput && quantityInput.value;
+---
 
-  window.ExtendBigCommerce.handleAddToCart("#extend-offer", {
-    quantity,
-    modal: true,
-    // done: popModal,
-  });
-}
-```
+A modal offer can be triggered from anywhere on a page and provides the user with another opportunity to protect their product with a warranty.
 
-<h2>Display Cart Offers</h2>
+<p align="center"><img src="https://helloextend-static-assets.s3.amazonaws.com/ExtendModalOffer.png" /></p>
 
-The cart offer is the last chance your shoppers have to add an extended warranty before they checkout. Here you can display an offer button next to each eligible product in the cart that does not already have a protection plan associated with it.
-
-<img src="assets/bc5.png">
-
-Add an HTML element where you would like to place the Extend cart offer buttons. We recommend placing the element directly below each product in the cart. In the case of Cornerstone Stencil themes, this is in the content.html (and cart-preview.html for mini-cart).
-
-You need to add this button under each product in the cart that does not have a warranty. Find where the cart items are being iterated on in the template. Then set the `quantity` and `sku` of the product to the cart offer div data attributes:
-
-```html
-<div
-  id="extend-cart-offer"
-  data-extend-item-id="<id>"
-  data-extend-sku="<sku>"
-  data-extend-quantity="<quantity>"
-></div>
-```
-
-You can verify that the div has been added to the correct spot by temporarily adding some text, saving, and previewing your cart page. Once you confirm that the text is showing in the correct spot, make sure to remove it.
-
-You also need to verify that the `quantity` and `sku` and `cartItemId` are being passed into the cart offer div correctly. In your preview, navigate to your cart and inspect the page. You won’t be able to see the Extend cart offer buttons on the page, but you should see the HTML element.
-
-<h2>Render Cart Offer Buttons</h2>
-
-Find the appropriate javascript file for the shopping cart (cart.js in the case of Cornerstone Stencil themes) and include the following two helper methods:
+### Opening the modal offer
 
 ```javascript
-function findAll(element) {
-  var slice = Array.prototype.slice;
-  var items = document.querySelectorAll(element);
-  return items ? slice.call(items, 0) : [];
-}
-
-function addPlanToCart(sku, plan, quantity, cart) {
-  ExtendBigCommerce.addPlanToCart(
-    {
-      sku: sku,
-      plan: plan,
-      quantity: quantity,
-      cart: cart,
-    },
-    function (err) {
-      if (err) {
-        return;
-      } else {
-        window.location.reload();
-      }
+Extend.modal.open({
+  referenceId: "<PRODUCT_REFERENCE_ID>",
+  /**
+   * This callback will be triggered both when a user declines the offer and if
+   * they choose a plan.  If a plan is chosen, it will be passed into the
+   * callback function, otherwise it will be undefined.
+   */
+  onClose: function (plan, product) {
+    if (plan && product) {
+      // a user has selected a plan.  Add it to their cart.
     }
-  );
-}
-```
-
-Call the `findAll` helper method we added in the last step to find all the Extend cart offer divs. Here you need to pass in the ID of the Extend cart offer element `(#extend-cart-offer)`.
-
-As you iterate through each item, pull out the `sku` and the `quantity` from the `#extend-cart-offer` div data attributes.
-
-```javascript
-var sku = el.getAttribute("data-extend-sku");
-var quantity = el.getAttribute("data-extend-quantity");
-```
-
-Use the `warrantyAlreadyInCart()` function to determine if you should show the offer button.
-
-```javascript
-if (ExtendBigCommerce.warrantyAlreadyInCart(sku, cart)) {
-  return;
-}
-```
-
-Then render the cart offer buttons using the `Extend.buttons.renderSimpleOffer()` function.
-
-```javascript
-Extend.buttons.renderSimpleOffer(el, {
-  referenceId: sku,
-  onAddToCart: function ({ plan }) {
-    ExtendBigCommerce.addPlanToCart(
-      {
-        sku: sku,
-        plan: plan,
-        quantity: quantity,
-        cart: cart,
-      },
-      function (err) {
-        if (err) {
-          return;
-        } else {
-          window.location.reload();
-        }
-      }
-    );
   },
 });
 ```
 
-Verify the cart offer buttons are rendering correctly by previewing your theme and going to your cart page that has an active and enabled product in it. You should see the Extend cart offer button in the cart, and when you click it, it should launch the offer modal. When a shopper clicks this offer button, the modal described in the previous section will launch, and the shopper will be able to select which warranty plan he or she would like to purchase.
+<br />
 
-<img src="assets/bc6.png">
-
-<h2>Setting the Image for Custom Items</h2>
-
-Because the Extend BigCommerce SDK uses Custom Items to create protection plans dynamically, the Extend cart image must be included in your theme, and image markup included in your templates wherever cart items are displayed.
-
-If you are using a Stencil theme built off of Cornerstone, you can do this by taking the following steps:
-
-- Add the image file to your assets/img folder
-- Set the image in the config.json file on both the settings and settings.variations properties.
-  - `"default_image_extend": "/assets/img/extend_logo.png"`
-- Update each template where cart items are displayed to include the following above where the existing item image is rendered:
-
-{% raw %}
-
-```html
-{{#if type == 'Custom'}}
-<img
-  class="cart-item-fixed-image"
-  data-sizes="auto"
-  src="{{cdn 'img/extend_logo.png'}}"
-  data-src="{{cdn ../theme_settings.default_image_extend}}"
-  alt="Extend Protection Plan"
-  title="Extend Protection Plan"
-/>
-{{else}}
-```
-
-{% endraw %}
-
-<h2>Cart Normalization</h2>
-
-As part of the checkout process, customers often update product quantities in their cart. The cart normalization feature will automatically adjust the quantity of Extend protection plans as the customer adjusts the quantity of the associated product. If a customer increases or decreases the quantity of products, the quantity for the related warranties in the cart should increase or decrease as well. In addition, if a customer has completely removed a product from the cart, any related warranties should be removed from the cart so the customer does not accidentally purchase a protection plan without a product.
-
-To leverage cart normalization, you’ll need to include the cart normalize function provided by the BigCommerce SDK in your cart.
-
-Place the following snippet in your cart logic so that it runs when your cart initially loads, as well as any time the cart content is refreshed.
-
-```javascript
-ExtendBigCommerce.normalizeCart(
-  { cart: cart, balance: false },
-  function (err, data) {
-    if (data && data.updates) {
-      return window.location.reload();
-    }
-  }
-);
-```
-
-If you are using the stencil Cornerstone theme, this can be done by using this function within the cart.js file. Place the above snippet within the onReady() function, and again in the getContent callback within refreshContent().
-
-`ExtendBigCommerce.normalizeCart` will return a promise that will give you the `data` and `err` object to check if the cart needs to be normalized. If the data object exists and `data.updates` is set to `true`, you will then call your function to refresh the cart page. Typically reloading the page will work for most BigCommerce cart pages.
-
-<h2>Balanced vs unbalanced carts</h2>
-
-Now that you have the normalize function in place, you need to decide if you want a <b>balanced</b> or <b>unbalanced</b> cart.
-
-- <b>Balanced cart:</b> Whenever the quantity of a product with a warranty associated with it is increased, the quantity of the extended warranty sku associated with it will also increase to match.
-- <b>Unbalanced cart:</b> Whenever the quantity of a product with a warranty associated with it is increased, the quantity of the extended warranty sku will remain the same, and it is up to the shopper to decide if he or she wants to add warranties to protect those new products.
-
-Balanced and unbalanced carts can be toggled with the `balance: true/false` property.
-
-<h2>Disabling Protection Plan Links within the Cart</h2>
-
-First, navigate to the template that renders the shopping cart contents (in the case of Cornerstone Stencil templates, this will be templates/cart/content.html). Locate where the cart item links are rendered and conditionally remove the href values for warranty cart items.
-
-For example, because the Extend BigCommerce SDK utilizes custom item types for warranty plans, you can target items with type ‘Custom’ by changing this line:
-
-{% raw %}
-
-```html
-<h2 class="cart-item-name">
-  <a class="cart-item-name__label" href="{{url}}">{{name}}</a>
-</h2>
-```
-
-{% endraw %}
-
-To this:
-
-{% raw %}
-
-```html
-{{#if type '==' 'Custom'}}
-<h2 class="cart-item-name">
-  <a class="cart-item-name__label">{{name}}</a>
-</h2>
-{{else}}
-<h2 class="cart-item-name">
-  <a class="cart-item-name__label" href="{{url}}">{{name}}</a>
-</h2>
-{{/if}}
-```
-
-{% endraw %}
-
-If you are using Custom items for other functionality besides Extend, you can disable links on warranty items by targeting cart items with skus that contain the string ‘;xtd;’
-
-<h1>ExtendBigCommerce API Reference</h1>
+## Piecing it all together
 
 ---
 
-<h2>BigCommerce.addCartItem(opts: CartAddOpts, callback?: function)</h2>
+Combining all of these tools you should now be able to create a complete
+end-to-end warranty offer solution on your online store.
 
-This function adds a product from your catalog to the cart.
+**Full Product Page Example**
 
-<h3>Attributes</h3>
-
-| Attribute                     | Data type | Description                                                                                                       |
-| :---------------------------- | :-------- | :---------------------------------------------------------------------------------------------------------------- |
-| opts <br/> _**required**_     | object    | CartAddOpts                                                                                                       |
-| callback <br/> _**optional**_ | function  | Callback function that will have parameters (err, cart) that will be executed after the item is added to the cart |
-
-<h3>CartAddOpts Object</h3>
-
-| Attribute                             | Data type        | Description                                               |
-| :------------------------------------ | :--------------- | :-------------------------------------------------------- |
-| cartId <br/> _**required**_           | string           | The BigCommerce UUID for the current cart                 |
-| productId <br/> _**required**_        | number           | Product associated with the warranty plan                 |
-| variantId <br/> _**required**_        | number           | Variant associated with the warranty plan                 |
-| quantity <br/> _**required**_         | number           | The product quantity to add                               |
-| optionSelections <br/> _**optional**_ | ItemOption array | Specific options selected by the shopper for this product |
-
-<h3 class="interface">Interface</h3>
-
-```typescript
-interface ItemOption {
-  optionId: string;
-  optionValue: string;
-}
+```html
+<html>
+  <head></head>
+</html>
+<form id="product-form" action="/cart/add">
+  <div id="extend-offer"></div>
+  <button id="add-to-cart" type="submit">Add To Cart</button>
+</form>
+<script></script>
 ```
-
-<h2>BigCommerce.addPlanToCart(opts: AddToCartOpts, callback?: function)</h2>
-
-This function adds an Extend warranty plan to the cart as a custom item.
-
-<div class="info-container">
-<b>Important Note:</b> If you are looking to add a product and its associated warranty to the cart, please see <b>#handleAddToCart</b> instead.
-</div>
-
-<h3>Attributes</h3>
-
-| Attribute                     | Data type | Description                                                                        |
-| :---------------------------- | :-------- | :--------------------------------------------------------------------------------- |
-| opts <br/> _**required**_     | object    | AddToCartOpts                                                                      |
-| callback <br/> _**optional**_ | function  | Callback function that will be executed after the Extend plan is added to the cart |
-
-<h3>AddToCartOpts Object</h3>
-
-| Attribute                     | Data type | Description                                                |
-| :---------------------------- | :-------- | :--------------------------------------------------------- |
-| sku <br/> _**required**_      | string    | The sku for the product associated with the warranty plan  |
-| plan <br/> _**required**_     | string    | The warranty plan to be added to the cart                  |
-| cart <br/> _**optional**_     | object    | BigCommerce cart object for the current cart               |
-| quantity <br/> _**optional**_ | number    | The number of plans to add (defaults to 1 if not provided) |
-
-<h2>BigCommerce.deleteCartItem(opts: CartRemoveOpts, callback?: function)</h2>
-
-This function provides a convenient way to remove an item from the cart. In some cases it may be necessary to make an explicit call to remove an item from the cart in order to sort cart items properly (i.e. to ensure that a warranty item is directly beneath the corresponding product).
-
-<h3>Attributes</h3>
-
-| Attribute                     | Data type | Description                                                                                                           |
-| :---------------------------- | :-------- | :-------------------------------------------------------------------------------------------------------------------- |
-| opts <br/> _**required**_     | object    | CartRemoveOpts                                                                                                        |
-| callback <br/> _**optional**_ | function  | Callback function that will have parameters (err, cart) that will be executed after the item is removed from the cart |
-
-<h3>CartRemoveOpts Object</h3>
-
-| Attribute                   | Data type | Description                                               |
-| :-------------------------- | :-------- | :-------------------------------------------------------- |
-| cartId <br/> _**required**_ | string    | The sku for the product associated with the warranty plan |
-| itemId <br/> _**required**_ | string    | The item you wish to remove from the cart                 |
-
-<h2>BigCommerce.getCart(callback?: CartCallBack)</h2>
-
-This function provides a convenient way to fetch the BigCommerce cart in the event that the current cart object is not available.
-
-<h3>Attributes</h3>
-
-| Attribute                     | Data type | Description                                                                                             |
-| :---------------------------- | :-------- | :------------------------------------------------------------------------------------------------------ |
-| callback <br/> _**optional**_ | function  | Callback function that will have parameters (err, cart) that will be executed after the cart is fetched |
-
-<h2>BigCommerce.getProductById(opts: GetProductByIdOpts)</h2>
-
-This function provides a convenient way to fetch product details by productId in the event that required product information (e.g. sku) is not accessible.
-
-| Attribute                 | Data type | Description        |
-| :------------------------ | :-------- | :----------------- |
-| opts <br/> _**required**_ | function  | GetProductByIdOpts |
-
-<h3>GetProductByIdOpts Object</h3>
-
-| Attribute                               | Data type | Description                                                                                      |
-| :-------------------------------------- | :-------- | :----------------------------------------------------------------------------------------------- |
-| productId <br/> _**required**_          | string    | The productId of the product being fetched                                                       |
-| storefrontApiToken <br/> _**required**_ | string    | The storefront API token required to make GraphQL calls                                          |
-| done <br/> _**required**_               | function  | Callback function that will have parameters (err, data) where data is the graphql product object |
-
-<h2>BigCommerce.getProductBySelectedOptions(opts: GetProductBySelectedOptionsOpts)</h2>
-
-This function provides a convenient way to get product information when the only available data is the specific product attributes selected by the user.
-
-<h3>Attributes</h3>
-
-| Attribute                 | Data type | Description                     |
-| :------------------------ | :-------- | :------------------------------ |
-| opts <br/> _**optional**_ | object    | GetProductBySelectedOptionsOpts |
-
-<h3>GetProductBySelectedOptionsOpts Object</h3>
-
-| Attribute                               | Data type | Description                                                                                                             |
-| :-------------------------------------- | :-------- | :---------------------------------------------------------------------------------------------------------------------- |
-| productId <br/> _**required**_          | string    | The productId of the product being fetched                                                                              |
-| productOptions <br/> _**required**_     | string    | ProductOptions array interface defines the structure for product options if they are included in an add to cart request |
-| storefrontApiToken <br/> _**required**_ | string    | The storefront API token required to make GraphQL calls                                                                 |
-| done <br/> _**required**_               | function  | Callback function that will have parameters (err, data) where data is the graphql product options object                |
-
-<h3 class="interface">Interface</h3>
-
-```typescript
-interface ProductOption {
-  optionEntityId: number;
-  valueEntityId: number;
-}
-```
-
-<h2>BigCommerce.handleAddToCart(element: ElementRef, opts: HandleAddToCartOpts)</h2>
-
-<h3>Attributes</h3>
-
-| Attribute                    | Data type | Description                                       |
-| :--------------------------- | :-------- | :------------------------------------------------ |
-| element <br/> _**required**_ | object    | The html element used to add products to the cart |
-| opts <br/> _**optional**_    | object    | HandleAddToCartOpts                               |
-
-<h3>HandleAddToCartOpts Object</h3>
-
-| Attribute                     | Data type | Description                                                                                                                           |
-| :---------------------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------ |
-| modal <br/> _**optional**_    | boolean   | If a shopper attempts to add a product to cart without selecting a warranty plan, setting modal to true will render the Offers modal. |
-| quantity <br/> _**optional**_ | number    | The number of warranty plans to be added to cart. This should match the number of products added to cart.                             |
-| cart <br/> _**optional**_     | object    | BigCommerce cart object for the current cart                                                                                          |
-| done <br/> _**required**_     | function  | Callback function that will have parameters (err, data)                                                                               |
-
-<h2>BigCommerce.normalizeCart(optsOrCb: NormalizeCartOptions | Callback)</h2>
-
-This function accepts and updates the BigCommerce cart object to ensure that the line item quantity of a warranty is not greater than the line item quantity of its associated product and returns an object containing the updated cart and cart updates. Therefore, this function should be executed every time the cart is updated in order to ensure a user cannot buy a warranty for a product not in the cart. While optional, a callback should almost always be passed as a second argument. This callback will be executed after the cart normalizes and should therefore be used to update the quantity input selectors on the page with their updated values, typically via a hard refresh.
-
-<b>Use case:</b> Cart normalization
 
 ```javascript
-ExtendBigCommerce.normalizeCart(
-  { cart: cart, balance: false },
-  function (err, data) {
-    if (data && data.updates) {
-      hardRefresh();
-    }
+/** configure */
+Extend.config({ storeId: "<EXTEND_STORE_ID>" });
+
+/** initialize offer */
+Extend.buttons.render("#extend-offer", {
+  referenceId: "<PRODUCT_REFERENCE_ID>",
+});
+
+/** bind to add-to-cart click */
+$("#add-to-cart").on("click", function (event) {
+  event.preventDefault();
+
+  /** get the component instance rendered previously */
+  const component = Extend.buttons.instance("#extend-offer");
+
+  /** get the users plan selection */
+  const plan = component.getPlanSelection();
+
+  if (plan) {
+    /**
+     * Add the warranty to the cart using an AJAX call and then submit the form.
+     * Replace this section with your own store specific cart functionality.
+     */
+    YourAjaxLib.addPlanToCart(plan, function () {
+      $("#product-form").submit();
+    });
+  } else {
+    Extend.modal.open({
+      referenceId: "<PRODUCT_REFERENCE_ID>",
+      onClose: function (plan, product) {
+        if (plan && product) {
+          YourAjaxLib.addPlanToCart(plan, product, quantity, function () {
+            $("#product-form").submit();
+          });
+        } else {
+          $("#product-form").submit();
+        }
+      },
+    });
   }
-);
+});
+```
+
+<br />
+
+**Full Cart Page Example**
+
+```html
+<html>
+  <head></head>
+</html>
+<div id="cart-item">
+  <h2>Product Title</h2>
+  <div id="extend-offer"></div>
+</div>
+<script></script>
+```
+
+```javascript
+/** configure */
+Extend.config({ storeId: '<EXTEND_STORE_ID>' });
+
+/** get quantity from store page if possible */
+const quantity = document.querySelector('.storeQuantity');
+
+/** initialize offer */
+Extend.buttons.renderSimpleOffer('#extend-offer', {
+  referenceId: '<PRODUCT_REFERENCE_ID>'
+  onAddToCart:
+    function({ plan, product }) {
+        if (plan && product) {
+          // if you can get quantity from store, pass it here.
+          // otherwise, quantity defaults to 1
+          YourAjaxLib.addPlanToCart(plan, product, quantity)
+        }
+    },
+});
+```
+
+<br />
+
+## API Reference
+
+---
+
+#### Extend.config(config: object)
+
+```typescript
+Extend.config({
+  /**
+   * Extend store ID
+   *
+   * @required
+   */
+  storeId: string,
+  /**
+   * A list of product reference IDs for the current page.  This will preload
+   * the offers for each product to improve performance when switching
+   * referenceIds.
+   *
+   * @optional
+   */
+  referenceIds: Array<string>,
+  /**
+   * Optional theme configuration.  A theme passed in as an argument will
+   * override any theme retrieved from the Extend Merchant Portal configuration
+   * and will fallback to a default theme if neither are present.
+   *
+   * @optional
+   */
+  theme: {
+    primaryColor: string
+  },
+  /**
+   * If you are using our demo environment, set this to "demo".
+   *
+   * @optional
+   * @deprecated Soon demo environment will be removed.  Do not use if you can help it.
+   */
+   environment: "demo" | "production"
+})
+```
+
+#### Extend.buttons.render(selector: string, options: object)
+
+```typescript
+Extend.buttons.render("#offer-container", {
+  /** @required */
+  referenceId: string,
+  /** @optional */
+  theme: {
+    primaryColor: string,
+  },
+});
+```
+
+#### Extend.buttons.renderSimpleOffer(selector: string, options: object)
+
+```typescript
+Extend.buttons.renderSimpleOffer('#offer-container', {
+  /** @required */
+  referenceId: string,
+  onAddToCart?({ plan: PlanSelection, product: ActiveProduct, quantity?: number }): void | Promise<void>,
+  /** @optional */
+  theme: {
+    primaryColor: string
+  }
+})
+```
+
+#### Extend.buttons.instance(selector: string): ButtonsComponent
+
+```typescript
+const component = Extend.buttons.instance("#offer-container");
+```
+
+#### ButtonsComponent#getActiveProduct(): ActiveProduct | null
+
+```typescript
+// usage
+const product = component.getActiveProduct();
+
+// product object structure
+interface ActiveProduct {
+  /**
+   * The referenceId of the active product
+   * @example "sku-12345"
+   */
+  id: string;
+  /**
+   * The name of the active product
+   * @example "XBox One X"
+   */
+  name: string;
+}
+```
+
+#### ButtonsComponent#setActiveProduct(referenceId: string | number)
+
+```typescript
+component.setActiveProduct("item-12345");
+```
+
+#### ButtonsComponent#getPlanSelection(): PlanSelection | null
+
+```typescript
+// usage
+const plan = component.getPlanSelection();
+
+// plan object structure
+interface PlanSelection {
+  /**
+   * The unique plan identifier for this plan
+   * @example "10001-misc-elec-adh-replace-1y"
+   */
+  planId: string;
+  /**
+   * The price of the warranty plan in cents (e.g. 10000 for $100.00)
+   * @example 10000
+   */
+  price: number;
+  /**
+   * The coverage term length in months
+   * @example 36
+   */
+  term: number;
+}
+```
+
+#### Extend.modal.open(options: object)
+
+```typescript
+Extend.modal.open({
+  /** @required */
+  referenceId: string,
+  /** @optional */
+  theme: {
+    primaryColor: string,
+  },
+  /**
+   * If a user made a warranty selection, the "plan" and "product" will be
+   * passed to this callback function.  If the user declines the offer, "plan"
+   * and "product" will be undefined.  See above for data structure for
+   * "PlanSelection" and "ActiveProduct" arguments.
+   *
+   * This callback function is where you should handle adding the warranty to
+   * the users cart, submitting your product form, etc.
+   */
+  onClose(plan?: PlanSelection, product?: ActiveProduct) {},
+});
+```
+
+<h2 id='debug-mode'>Debug Mode</h2>
+
+The Extend SDK has a debug feature that is useful for the testing the integration of the SDK in your store. This will help you determine if you are correctly integrating with the methods in the SDK.
+
+Debug mode can be activated in the SDK by passing in `debug: true` to the [`Extend.config`](#config) method. When debug mode is activated, all methods will log an error to the browser's console if the methods are configured incorrectly, such as missing required arguments, incorrect quantity values, etc.
+
+Please be sure to disable debug mode in production to prevent unwanted logs in the browser
+
+<br>
+<br>
+<h1 id="intro">Integrating with Extend analytics</h1>
+
+Extend analytics is used to capture the purchasing behavior of your customers, in order to provide you metrics and analytics about the performance of your Extend warranties and related products in your store.
+
+This document outlines all of the different methods available to you on the `Extend` object. Each section includes a description of what the method does, when it should be invoked, and what parameters to provide it, as well as best practices for implementing into your website.
+
+- API Reference
+  - [Extend.trackOfferViewed](#track-offer-viewed)
+  - [Extend.trackProductAddedToCart](#track-product-added-to-cart)
+  - [Extend.trackOfferAddedToCart](#track-offer-added-to-cart)
+  - [Extend.trackOfferRemovedFromCart](#track-offer-removed-from-cart)
+  - [Extend.trackOfferUpdated](#track-offer-updated)
+  - [Extend.trackProductRemovedFromCart](#track-product-removed-from-cart)
+  - [Extend.trackProductUpdated](#track-product-updated)
+  - [Extend.trackCartCheckout](#track-cart-checkout)
+  - [Extend.trackLinkClicked](#track-link-clicked)
+  - [Shared Interface and Type Glossary](#shared-interface-glossary)
+
+<h1>API Reference</h1>
+
+<h2 id="track-offer-viewed" class="section-function">Extend.trackOfferViewed</h2>
+
+---
+
+`Extend.trackOfferViewed` takes in your product's `productId` and an `OfferType`. This method should be called whenever an Extend warranty offer is rendered on the screen to a user.
+
+<b>NOTE:</b> trackOfferViewed will be automatically called in the SDK whenever the offer buttons are rendered or whenever the Extend modal is opened. You will not need to worry about calling this functions yourself.
+
+```javascript
+Extend.trackOfferViewed({
+  productId: "<PRODUCT_REFERENCE_ID>",
+  offerType,
+});
+```
+
+<h3 class="interface">Interface</h3>
+
+```typescript
+interface TrackOfferViewed {
+  productId: string;
+  offerType: OfferType;
+}
 ```
 
 <h3>Attributes</h3>
 
-| Attribute                                 | Data type | Description                                                                                                                                                                         |
-| :---------------------------------------- | :-------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| normalizeCartOptions <br/> _**required**_ | object    | <a href="https://helloextend.github.io/client-integrations/extend-shopify-sdk#api-normalize-cart-options-object" target="_blank" rel="noopener noreferrer">NormalizeCartOptions</a> |
-| callback <br/> _**optional**_             | function  | Callback function that will be executed after the `normalizeCart` function is invoked (Typically refreshes the cart)                                                                |
+| Attribute                      | Data type | Description                                                     |
+| :----------------------------- | :-------- | :-------------------------------------------------------------- |
+| productId <br/> _**required**_ | string    | the ID of the product associated with the warranty being viewed |
+| offerType <br/> _**required**_ | OfferType | see [OfferType](#glossary-offer-type)                           |
 
-<h3>NormalizeCartOptions Object</h3>
+<h2 id="track-product-added-to-cart" class="section-function">Extend.trackProductAddedToCart</h2>
 
-| Attribute                    | Data type | Description                                                                        |
-| :--------------------------- | :-------- | :--------------------------------------------------------------------------------- |
-| cart <br/> _**optional**_    | object    | BigCommerce cart object to be normalized                                           |
-| balance <br/> _**required**_ | boolean   | When set to `true` warranty quantity will be equal the associated product quantity |
+---
 
-<h3>Interface</h3>
+`Extend.trackProductAddedToCart` takes in your product's `productId` and the number of units the customer wishes to add to the cart, as `productQuantity`. This method should be called when a user adds a product to the cart.
+
+```javascript
+Extend.trackProductAddedToCart({
+  productid: "<PRODUCT_REFERENCE_ID>",
+  productQuantity: "<PRODUCT_QUANTITY>",
+});
+```
+
+<h3 class="interface">Interface</h3>
 
 ```typescript
-interface NormalizeCartOptions {
-  balance?: boolean;
-  cart?: Cart;
+interface TrackProductAdded {
+  productId: string;
+  productQuantity: number;
 }
 ```
 
-<h3>Normalize cart response object</h3>
+<h3>Attributes</h3>
 
-| Attribute     | Data type      | Description                                                     |
-| :------------ | :------------- | :-------------------------------------------------------------- |
-| cart <br/>    | object         | Normalized Cart Object                                          |
-| updates <br/> | object or null | Object containing each updated sku and their updated quantities |
+| Attribute                            | Data type | Description                                                                                                                                                                                                        |
+| :----------------------------------- | :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| productId <br/> _**required**_       | string    | The ID of the product in your store. Should match the `referenceId` used in the [Create Product](https://developers.extend.com/2021-01-01#tag/Products/paths/~1stores~1{storeId}~1products/post) request to Extend |
+| productQuantity <br/> _**required**_ | number    | The initial amount of units the customer added to the cart                                                                                                                                                         |
 
-<h2>BigCommerce.warrantyAlreadyInCart(sku: string, cart: Cart)</h2>
+<h2 id="track-offer-added-to-cart" class="section-function">Extend.trackOfferAddedToCart</h2>
 
-This function accepts a BigCommerce `sku` and the BigCommerce. The function iterates through the BigCommerce cart items and returns a boolean indicating if there is already a warranty in the cart for that product `sku`. This function is almost always used on the cart page to determine whether or not to render a <a href="https://helloextend.github.io/client-integrations/extend-shopify-sdk#render-cart-offer-buttons" target="_blank" rel="noopener noreferrer">cart offer button</a> for a line item in the cart.
+---
 
-| Attribute                 | Data type | Description                                                       |
-| :------------------------ | :-------- | :---------------------------------------------------------------- |
-| sku <br/> _**required**_  | string    | The BigCommerce `sku` of the product to be checked for a warranty |
-| cart <br/> _**required**_ | object    | BigCommerce cart object for the current cart                      |
+`Extend.trackOfferAddedToCart` takes in your product's `productId` and the `productQuantity`, along with the Extend warranty's `planId` and `offerType`. This method is used to track when a customer has added an Extend warranty to the cart. Invoke this method when a customer adds an Extend warranty to the cart for a specific product.
+
+```javascript
+Extend.trackOfferAddedToCart({
+  productId: "<PRODUCT_REFERENCE_ID>",
+  productQuantity: "<PRODUCT_QUANTITY>",
+  planId: "<EXTEND_WARRANTY_PLAN_ID>",
+  offerType: `OfferType`,
+});
+```
+
+<h3 class="interface">Interface</h3>
+
+```typescript
+interface TrackOfferAddedToCart {
+  productId: string;
+  productQuantity: number;
+  planId: string;
+  offerType: OfferType;
+}
+```
+
+<h3>Attributes</h3>
+
+| Attribute                      | Data type | Description                                                                                                                                                                                                                                                                 |
+| :----------------------------- | :-------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| productId <br/> _**required**_ | string    | The ID of the product associated with the warranty that was added to the cart. The product ID should match the `referenceId` used in the [Create Product](https://developers.extend.com/2021-01-01#tag/Products/paths/~1stores~1{storeId}~1products/post) request to Extend |
+| productQuantity _**required**_ | number    | The quantity of the associated product that was added to the cart                                                                                                                                                                                                           |
+| planId <br/> _**required**_    | string    | The `id` property on the Extend warranty product returned from the [Get Offers](https://developers.extend.com/2021-01-01#operation/getOffer) request                                                                                                                        |
+| offerType <br/> _**required**_ | OfferType | Information regarding where in the website the user selected the warranty offer. See [OfferType](#glossary-offer-type)                                                                                                                                                      |
+
+<h2 id="track-offer-removed-from-cart" class="section-function">Extend.trackOfferRemovedFromCart</h2>
+
+---
+
+`Extend.trackOfferRemovedFromCart` takes the `planId` of the Extend warranty, and the associated `productId` of the product the warranty would have covered. This method is used to track when a customer has removed an Extend warranty from the cart. Invoke this method when a customer removes an Extend warranty from the cart for a specific product.
+
+```javascript
+Extend.trackOfferRemovedFromCart({
+  productId: "<PRODUCT_REFERENCE_ID>",
+  planId: "<EXTEND_WARRANTY_PLAN_ID>",
+});
+```
+
+<h3 class="interface">Interface</h3>
+
+```typescript
+interface TrackOfferRemovedFromCart {
+  productId: string;
+  planId: string;
+}
+```
+
+<h3>Attributes</h3>
+
+| Attribute                      | Data type | Description                                                                                                                                                                                                                                                                 |
+| :----------------------------- | :-------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| productId <br/> _**required**_ | string    | The ID of the product associated with the warranty that was added to the cart. The product ID should match the `referenceId` used in the [Create Product](https://developers.extend.com/2021-01-01#tag/Products/paths/~1stores~1{storeId}~1products/post) request to Extend |
+| planId <br/> _**required**_    | string    | The `id` property on the Extend warranty product returned from the [Get Offers](https://developers.extend.com/2021-01-01#operation/getOffer) request                                                                                                                        |
+
+<h2 id="track-offer-updated" class="section-function">Extend.trackOfferUpdated</h2>
+
+---
+
+`Extend.trackOfferUpdated` takes the `planId` of the Extend warranty, and the associated `productId` of the product the warranty covers, as well as an update object containing the set of updates to apply to the warranty offer. This method is used to track when a customer increments or decrements the quantity of a warranty that has already been added to the cart. If the quantity of the warranty is updated to 0, then a [`Extend.trackOfferRemoved`](#track-offer-removed) event is called, and further updates to this planId/productId will result in a no-op until it is re-added via [`Extend.trackOfferAddedToCart`](#track-offer-added-to-cart).
+
+```javascript
+Extend.trackOfferUpdated({
+  productId: "<PRODUCT_REFERENCE_ID>",
+  planId: "<EXTEND_WARRANTY_PLAN_ID>",
+  updates: {
+    warrantyQuantity: "<NEW_WARRANTY_QUANTITY>",
+    productQuantity: "<NEW_PRODUCT_QUANTITY>",
+  },
+});
+```
+
+<h3 class="interface">Interface</h3>
+
+```typescript
+interface TrackOfferUpdatedEvent {
+  productId: string;
+  planId: string;
+  updates: {
+    warrantyQuantity?: number;
+    productQuantity?: number;
+  };
+}
+```
+
+<h3>Attributes</h3>
+
+| Attribute                      | Data type | Description                                                                                                                                                                                                                                                                 |
+| :----------------------------- | :-------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| productId <br/> _**required**_ | string    | The ID of the product associated with the warranty that was added to the cart. The product ID should match the `referenceId` used in the [Create Product](https://developers.extend.com/2021-01-01#tag/Products/paths/~1stores~1{storeId}~1products/post) request to Extend |
+| planId <br/> _**required**_    | string    | The `id` property on the Extend warranty product returned from the [Get Offers](https://developers.extend.com/2021-01-01#operation/getOffer) request                                                                                                                        |
+| updates <br/> _**required**_   | Object    | The set of updates to apply to the offer. Currently, either `warrantyQuantity` or `productQuantity` are values available to be updated.                                                                                                                                     |
+
+<h2 id="track-product-removed-from-cart" class="section-function">Extend.trackProductRemovedFromCart</h2>
+
+---
+
+`Extend.trackProductRemovedFromCart` takes the `productId` of the product being removed from the cart. This method is used to track when a customer removes a product from the cart that does not have a warranty offer associated with it.
+
+```javascript
+Extend.trackProductRemovedFromCart({
+  productId: "<PRODUCT_REFERENCE_ID>",
+});
+```
+
+<h3 class="interface">Interface</h3>
+
+```typescript
+interface TrackProductRemovedEvent {
+  productId: string;
+}
+```
+
+<h3>Attributes</h3>
+
+| Attribute                      | Data type | Description                                                                                                                                                                                                                                                                 |
+| :----------------------------- | :-------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| productId <br/> _**required**_ | string    | The ID of the product associated with the warranty that was added to the cart. The product ID should match the `referenceId` used in the [Create Product](https://developers.extend.com/2021-01-01#tag/Products/paths/~1stores~1{storeId}~1products/post) request to Extend |
+
+<h2 id="track-product-updated" class="section-function">Extend.trackProductUpdated</h2>
+
+---
+
+`Extend.trackProductUpdated` takes the `productId` of the product being updated, as well as an `updates` object containing the set of updates to apply to the product. This method is used to track when a customer increments or decrements the quantity of a product that has already been added to the cart. The product being updated must **not** be associated with a warranty offer. For updating products associated with a warranty offer, see [`Extend.trackOfferUpdated`](#track-offer-updated)
+
+If the `productQuantity` passed into this method is 0, then [`Extend.trackProductRemovedFromCart`](#track-product-removed-from-cart) is implicitly called. The product will no longer be considered tracked. and must be re-added using [`Extend.trackProductAddedToCart`](#track-product-added-to-cart).
+
+```javascript
+Extend.trackProductUpdated({
+  productId: "<PRODUCT_REFERENCE_ID>",
+  updates: {
+    productQuantity: "<NEW_PRODUCT_QUANTITY>",
+  },
+});
+```
+
+<h3 class="interface">Interface</h3>
+
+```typescript
+interface TrackProductUpdatedEvent {
+  productId: string;
+  updates: {
+    productQuantity: number;
+  };
+}
+```
+
+<h3>Attributes</h3>
+
+| Attribute                      | Data type | Description                                                                                                                                                                                                                                                                 |
+| :----------------------------- | :-------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| productId <br/> _**required**_ | string    | The ID of the product associated with the warranty that was added to the cart. The product ID should match the `referenceId` used in the [Create Product](https://developers.extend.com/2021-01-01#tag/Products/paths/~1stores~1{storeId}~1products/post) request to Extend |
+| updates <br/> _**required**_   | Object    | The set of updates to apply to the product. Currently, updating the `productQuantity` is the only available option.                                                                                                                                                         |
+
+<h2 id="track-cart-checkout" class="section-function">Extend.trackCartCheckout</h2>
+
+---
+
+`Extend.trackCartCheckout` captures the resulting set of products and warranties that were tracked in a user's session (via `trackOfferAddedToCart`, `trackProductAddedToCart`, etc.). This method should be called whenever a customer completes a purchase. This will help track the products and Extend warranty offers sold for your store, and optionally, the total cart revenue of the items at checkout.
+
+**Note**: The Analytics SDK leverages the tracked products and items in localStorage to determine what values were purchased at checkout. These values are removed from localStorages once this method is called after the user checks out.
+
+```javascript
+Extend.trackCartCheckout({
+  cartTotal: "<CART_TOTAL>",
+});
+```
+
+<h3>Attributes</h3>
+
+| Attribute                  | Data type | Description                                                                                       |
+| :------------------------- | :-------- | :------------------------------------------------------------------------------------------------ |
+| cartTotal <br/> _optional_ | number    | The total amount of revenue (implicitly represented as USD), of the cart at the time of checkout. |
+
+<h2 id="track-link-clicked" class="section-function">Extend.trackLinkClicked</h2>
+
+---
+
+`Extend.trackLinkClicked` captures customer interactions with "Learn More" and "?" buttons and "See Plan Details" links. This method is used to record details when a customer opens the learn-more modal or navigates to Extend's plan details page.
+
+```javascript
+Extend.trackLinkClicked({
+  linkEvent: "LinkEvent",
+  productId: "<PRODUCT_REFERENCE_ID>",
+  linkType: "LinkType",
+});
+```
+
+<h3 class="interface">Interface</h3>
+
+```typescript
+interface TrackLinkClicked {
+  linkEvent: LinkEvent;
+  productId: string;
+  linkType: LinkType;
+}
+```
+
+<h3>Attributes</h3>
+
+| Attribute                      | Data type | Description                                                                                                                                                                                                                                                                 |
+| :----------------------------- | :-------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| linkEvent <br/> _**required**_ | LinkEvent | Information about what link was clicked. See [LinkEvent](#glossary-link-event)                                                                                                                                                                                              |
+| productId _**required**_       | string    | The ID of the product associated with the warranty that was added to the cart. The product ID should match the `referenceId` used in the [Create Product](https://developers.extend.com/2021-01-01#tag/Products/paths/~1stores~1{storeId}~1products/post) request to Extend |
+| linkType <br/> _**required**_  | LinkType  | Information about where on the website a link was clicked. See [LinkType](#glossary-link-type)                                                                                                                                                                              |
+
+<h2 id="shared-interface-glossary" class="section-function">Shared Interface and Type Glossary</h2>
+
+<h2>OfferType</h2>
+
+<h3 class="interface">Interface</h3>
+
+```typescript
+interface OfferType {
+  area: OfferTypeArea;
+  component: OfferTypeComponent;
+}
+```
+
+<h3>Attributes</h3>
+
+| Attribute                      | Data type          | Description                                                |
+| :----------------------------- | :----------------- | :--------------------------------------------------------- |
+| area <br/> _**required**_      | OfferTypeArea      | Predefined string indicating where the offer was rendered  |
+| component <br/> _**required**_ | OfferTypeComponent | Predefined string indicating which offer type was rendered |
+
+<h2>OfferTypeArea</h2>
+
+<h3 class="interface">Type</h3>
+
+```typescript
+type OfferTypeArea =
+  | "product_page"
+  | "product_modal"
+  | "collection"
+  | "cart_page"
+  | "post_purchase_modal";
+```
+
+<h2>OfferTypeComponent</h2>
+
+<h3 class="interface">Type</h3>
+
+```typescript
+type OfferTypeComponent = "buttons" | "modal";
+```
+
+<h2>LinkEvent</h2>
+
+<h3 class="interface">Type</h3>
+
+```typescript
+type LinkEvent = "learn_more_clicked" | "plan_details_clicked";
+```
+
+<h2>LinkType</h2>
+
+<h3 class="interface">Interface</h3>
+
+```typescript
+interface LinkType {
+  area: LinkTypeArea;
+  component: LinkTypeComponent;
+}
+```
+
+<h3>Attributes</h3>
+
+| Attribute                      | Data type         | Description                                              |
+| :----------------------------- | :---------------- | :------------------------------------------------------- |
+| area <br/> _**required**_      | LinkTypeArea      | Predefined string indicating where the link was clicked  |
+| component <br/> _**required**_ | LinkTypeComponent | Predefined string indicating which link type was clicked |
+
+<h2>LinkTypeArea</h2>
+
+<h3 class="interface">Type</h3>
+
+```typescript
+type LinkTypeArea =
+  | "product_page"
+  | "cart_page"
+  | "learn_more_modal"
+  | "offer_modal"
+  | "simple_offer_modal"
+  | "post_purchase_modal";
+```
+
+<h2>LinkTypeComponent</h2>
+
+<h3 class="interface">Type</h3>
+
+```typescript
+type LinkTypeComponent =
+  | "learn_more_info_icon"
+  | "learn_more_info_link"
+  | "see_plan_details_link";
+```
