@@ -711,6 +711,8 @@ Extend.trackCartCheckout({
 
 `Extend.trackLinkClicked` captures customer interactions with "Learn More" and "?" buttons and "See Plan Details" links. This method is used to record details when a customer opens the learn-more modal or navigates to Extend's plan details page.
 
+<b>NOTE:</b> trackLinkClicked will automatically be called whenever the Extend offer buttons "learn more" link is clicked or whenever the "plan-details" link is clicked on the learn more modal.
+
 ```javascript
 Extend.trackLinkClicked({
   linkEvent: "LinkEvent",
